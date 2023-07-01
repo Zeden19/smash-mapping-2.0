@@ -63,8 +63,8 @@
     <meta name="twitter:description" content="Showing where in-person e-sports are held.">
 
     <meta property="og:url" content="https://www.smash-mapping.com/">
-    <meta property="og:image" content="example.png">
-    <meta name="twitter:image" content="example.png">
+    <meta property="og:image" content="https://i.ibb.co/d2LVJrr/example.png">
+    <meta name="twitter:image" content="https://i.ibb.co/d2LVJrr/example.png">
 </svelte:head>
 
 <body>
@@ -98,7 +98,8 @@
         {/if}
 
         {#if showFilters}
-            <Search delay={delay} bind:state bind:tournaments bind:data bind:geolocated bind:mapResult bind:startDate bind:endDate
+            <Search delay={delay} bind:state bind:tournaments bind:data bind:geolocated bind:mapResult bind:startDate
+                    bind:endDate
                     bind:country bind:minAttendees bind:showShareDialog/>
         {/if}
 
