@@ -6,6 +6,7 @@
     import {onMount} from "svelte";
     import {supabase} from "$lib/supabaseClient";
     import {backOut} from "svelte/easing";
+    import MultiSelect from 'svelte-multiselect'
 
     let minDate = new Date();
     minDate.setDate(minDate.getDate() - 14);
@@ -16,14 +17,17 @@
     export let data;
     export let tournaments;
     let addresses = tournaments.map(({venue_address}) => venue_address);
+    let games = [{label: "Ultimate", id: "1386"}, {label: "Melee", id: "1"},
+        {label: "Project M", id: "5"}, {label: "Street Fighter 6", id: "43868"} ]
 
     export let endDate;
     export let country;
     export let minAttendees = 0;
     export let state;
-    export let game;
+    export let game = [];
     let open;
     export let geolocated;
+
 
     export let mapResult;
 
@@ -119,8 +123,6 @@
             unixStartTime = Math.floor(unixStartTime.getTime() / 1000);
             unixEndTime = Math.floor(unixEndTime.getTime() / 1000);
 
-            let gameSelections = game.split(" ");
-
             const apiVersion = 'alpha';
             const endpoint = 'https://api.start.gg/gql/' + apiVersion;
             const client = new GraphQLClient(endpoint, {
@@ -160,7 +162,7 @@
                 after: unixStartTime,
                 before: unixEndTime,
                 state: state,
-                game: gameSelections
+                game: game.map(({id}) => id)
             };
 
             if (state === "all" || country !== "US") {
@@ -261,7 +263,6 @@
             loading = false;
             console.error('Error:', error);
         }
-
         loading = false;
     }
 
@@ -270,12 +271,9 @@
 <aside in:slide={{delay: 450, duration: 350, axis: 'x', easing: backOut}} out:slide={{duration: 350, axis: 'x'}}>
 
     <div class="filter-item">
-        <label> Game:</label>
-        <select required name="game" bind:value={game}>
-            <option value="1386">Ultimate</option>
-            <option value="1">Melee</option>
-            <option value="1 1386">Both</option>
-        </select>
+        <label>Game(s):</label>
+        <MultiSelect --sms-width="12em" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
+                     --sms-remove-btn-hover-color="red" bind:value={game} options={games}/>
     </div>
 
 
@@ -289,6 +287,7 @@
             <option value="FR">France</option>
             <option value="GB">United Kingdom</option>
             <option value="DE">Germany</option>
+            <option value="DK">Denmark</option>
             <option value="IT">Italy</option>
             <option value="ES">Spain</option>
             <option value="CH">Switzerland</option>

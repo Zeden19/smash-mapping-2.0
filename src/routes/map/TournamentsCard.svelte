@@ -11,47 +11,44 @@
     }
 </script>
 
-{#if mapResult !== undefined}
+<div out:slide={{y: 200, duration: 500}}
+     in:slide={{y: 200, duration: 700}} class="search">
+    <input bind:value={search} type="text" placeholder="Search tournament"/>
+</div>
 
-    <div out:slide={{y: 200, duration: 500}}
-             in:slide={{y: 200, duration: 700}} class="search">
-        <input bind:value={search} type="text" placeholder="Search tournament"/>
-    </div>
+{#each mapResult.filter(tournament =>
+    tournament.name.toLowerCase().includes(search.trimStart().toLowerCase())
+    || tournament.venueAddress.toLowerCase().includes(search.trimStart().toLowerCase()))
+        as tournament}
 
-    {#each mapResult.filter(tournament =>
-        tournament.name.toLowerCase().includes(search.trimStart().toLowerCase())
-        || tournament.venueAddress.toLowerCase().includes(search.trimStart().toLowerCase()))
-            as tournament}
+    <!--Tournament card-->
+    <div out:slide|global={{y: 200, duration: 500}}
+         in:slide|global={{y: 200, duration: 700}}
+         on:click={() => setMapCentre(tournament.lat, tournament.lng)}
+         class="tournament">
 
-        <!--Tournament card-->
-        <div out:slide={{y: 200, duration: 500}}
-             in:slide={{y: 200, duration: 700}}
-             on:click={() => setMapCentre(tournament.lat, tournament.lng)}
-             class="tournament">
+        <a href={tournament.url} target="_blank">{tournament.name}</a>
 
-            <a href={tournament.url} target="_blank">{tournament.name}</a>
+        <p class="address">
+            <img width="30px" height="30px" src="tournament-card-icons/map-marker.png" alt="map-marker">
+            {tournament.venueAddress}
+        </p>
 
-            <p class="address">
-                <img width="30px" height="30px" src="tournament-card-icons/map-marker.png" alt="map-marker">
-                {tournament.venueAddress}
+
+        <div class="attendees-clock">
+            <p class="attendees">
+                <img width="30px" height="30px" src="tournament-card-icons/people.png" alt="people">
+                {tournament.numAttendees}
             </p>
 
-
-            <div class="attendees-clock">
-                <p class="attendees">
-                    <img width="30px" height="30px" src="tournament-card-icons/people.png" alt="people">
-                    {tournament.numAttendees}
-                </p>
-
-                <p class="clock">
-                    <img width="30px" height="30px" src="tournament-card-icons/clock.png" alt="clock">
-                    {tournament.startAt}
-                </p>
-            </div>
-
+            <p class="clock">
+                <img width="30px" height="30px" src="tournament-card-icons/clock.png" alt="clock">
+                {tournament.startAt}
+            </p>
         </div>
-    {/each}
-{/if}
+
+    </div>
+{/each}
 
 
 <style>
@@ -62,6 +59,7 @@
         text-align: left;
         background: black;
         padding: 4px;
+        text-decoration: underline;
     }
 
     a:hover {

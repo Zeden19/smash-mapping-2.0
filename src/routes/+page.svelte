@@ -59,8 +59,8 @@
     <meta name="twitter:title" content="Smash Mapping - A New Way to Find Tournaments">
 
     <meta name="description" content="Showing where in-person e-sports are held.">
-    <meta property="og:description" content="Showing where in-person e-sports are held.">
-    <meta name="twitter:description" content="Showing where in-person e-sports are held.">
+    <meta property="og:description" content="Showing where in-person e-sports are held, faster and easier.">
+    <meta name="twitter:description" content="Showing where in-person e-sports are held, faster and easier.">
 
     <meta property="og:url" content="https://www.smash-mapping.com/">
     <meta property="og:image" content="https://i.ibb.co/d2LVJrr/example.png">
@@ -93,7 +93,7 @@
         </div>
 
 
-        {#if showTournaments}
+        {#if showTournaments && mapResult !== undefined}
             <TournamentsCard mapResult={mapResult} map={map}/>
         {/if}
 
