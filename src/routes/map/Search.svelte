@@ -11,14 +11,13 @@
     let minDate = new Date();
     minDate.setDate(minDate.getDate() - 14);
     minDate = minDate.toISOString().split("T")[0];
-
     export let startDate = new Date().toISOString().split("T")[0];
 
     export let data;
     export let tournaments;
     let addresses = tournaments.map(({venue_address}) => venue_address);
     let games = [{label: "Ultimate", id: "1386"}, {label: "Melee", id: "1"},
-        {label: "Project M", id: "5"}, {label: "Street Fighter 6", id: "43868"} ]
+        {label: "Project M", id: "5"}, {label: "Street Fighter 6", id: "43868"}]
 
     export let endDate;
     export let country;
@@ -27,7 +26,6 @@
     export let game = [];
     let open;
     export let geolocated;
-
 
     export let mapResult;
 
@@ -39,6 +37,7 @@
     let noData = false;
     let cancelled = false;
     let hasSearched = false;
+    let screenSize;
 
     export let delay;
 
@@ -267,13 +266,20 @@
     }
 
 </script>
+<svelte:window bind:innerWidth={screenSize}/>
 
 <aside in:slide={{delay: 450, duration: 350, axis: 'x', easing: backOut}} out:slide={{duration: 350, axis: 'x'}}>
 
     <div class="filter-item">
         <label>Game(s):</label>
-        <MultiSelect --sms-width="12em" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
-                     --sms-remove-btn-hover-color="red" bind:value={game} options={games}/>
+        {#if screenSize > 500}
+            <MultiSelect --sms-width="12em" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
+                         --sms-remove-btn-hover-color="red" bind:value={game} options={games}/>
+        {/if}
+        {#if screenSize <= 500}
+            <MultiSelect --sms-width="35vw" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
+                         --sms-remove-btn-hover-color="red" --sms-font-size="0.7em" bind:value={game} options={games}/>
+        {/if}
     </div>
 
 
@@ -398,7 +404,6 @@
     {/if}
 
 </aside>
-<!--        </form>-->
 
 
 <style>
@@ -422,13 +427,13 @@
         margin-left: auto;
         margin-right: 3em;
         width: 10em;
+        border-radius: 5px;
     }
 
     .error {
         color: red;
         white-space: normal;
     }
-
 
     button {
         background-color: black;
@@ -443,7 +448,6 @@
 
     }
 
-
     button:hover {
         background-color: #555;
     }
@@ -452,5 +456,16 @@
         background-color: grey;
     }
 
+    @media (max-width: 500px) {
+        .filter-item {
+            width: 50vw;
+            white-space: normal;
+        }
 
+        .filter-item select, .filter-item input {
+            margin-left: auto;
+            margin-right: 0;
+            width: 30vw;
+        }
+    }
 </style>

@@ -238,6 +238,7 @@
 
     .tournaments-title > p {
         background-color: #130c0c;
+        margin-top: 3px;
     }
 
     dialog::backdrop {
@@ -248,11 +249,11 @@
     /* small screens */
     @media (max-width: 500px) {
         .sidebar {
-            width: 80%;
+            width: 200vw;
         }
 
         .sidebar.sidebarClosed {
-            margin-left: -66.6%;
+            margin-left: -180vw;
         }
     }
 

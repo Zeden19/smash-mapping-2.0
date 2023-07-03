@@ -40,7 +40,6 @@
         list-style-type: none;
         display: flex;
         flex-wrap: nowrap;
-        overflow: hidden;
         padding-inline-start: 0;
         justify-content: right;
         padding-top: 8px;
@@ -53,9 +52,6 @@
         background: none;
         margin-inline: 10px;
         padding: 2px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         border-radius: 10px;
     }
 
@@ -71,8 +67,34 @@
     nav h2 {
         font-family: Impact, serif;
         font-size: 2.3em;
-        margin: 5px 3em 0 3em;
         font-style: italic;
         color: white;
+        white-space: nowrap;
+    }
+
+    /*small screens*/
+    @media (max-width: 500px) {
+        nav h2 {
+            margin: 5px 8vw 5px 5px;
+            font-size: 2.6vh;
+            white-space: normal;
+            width: 3em;
+        }
+
+        nav li {
+            font-size: 6vw;
+            margin-inline: 12px;
+        }
+
+        nav a {
+            padding: 0
+        }
+    }
+
+    /*large screens*/
+    @media (min-width: 500px) {
+        nav h2 {
+            margin: 5px 3em 0 3em;
+        }
     }
 </style>
