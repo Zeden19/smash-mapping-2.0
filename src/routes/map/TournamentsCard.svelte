@@ -52,7 +52,6 @@
 
 
 <style>
-
     a {
         background: none;
         color: white;
@@ -60,6 +59,7 @@
         background: black;
         padding: 4px;
         text-decoration: underline;
+        word-wrap: break-word;
     }
 
     a:hover {
@@ -77,6 +77,10 @@
         display: grid;
     }
 
+    .search input {
+        font-size: 16px;
+    }
+
     .tournament {
         cursor: pointer;
         background: #1c1c1c;
@@ -91,7 +95,7 @@
         align-items: center;
         text-align: left;
         font-size: 1em;
-        overflow-wrap: break-word;
+        word-break: break-word;
     }
 
     .attendees {

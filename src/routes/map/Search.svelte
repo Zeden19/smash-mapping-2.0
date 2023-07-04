@@ -288,7 +288,7 @@
         {/if}
         {#if screenSize <= 500}
             <MultiSelect --sms-width="35vw" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
-                         --sms-remove-btn-hover-color="red" --sms-font-size="0.7em" bind:value={game} options={games}/>
+                         --sms-remove-btn-hover-color="red" --sms-font-size="16px" bind:value={game} options={games}/>
         {/if}
     </div>
 
