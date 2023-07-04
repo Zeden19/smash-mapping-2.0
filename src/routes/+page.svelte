@@ -3,6 +3,7 @@
     import Search from "./map/Search.svelte";
     import Help from "./map/Help.svelte"
     import TournamentsCard from "./map/TournamentsCard.svelte";
+    import {createClient} from '@supabase/supabase-js'
     import {slide} from "svelte/transition";
     import {backInOut} from "svelte/easing";
 
@@ -15,6 +16,8 @@
     let state;
     let showShareDialog;
     let geolocated = data.geolocated;
+    export let supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co', data.SUPABASE_KEY)
+
 
     let sidebarClosed = false;
     let showFilters = true;
@@ -98,9 +101,8 @@
         {/if}
 
         {#if showFilters}
-            <Search delay={delay} bind:state bind:tournaments bind:data bind:geolocated bind:mapResult bind:startDate
-                    bind:endDate
-                    bind:country bind:minAttendees bind:showShareDialog/>
+            <Search delay={delay} bind:supabase bind:state bind:tournaments bind:data bind:geolocated bind:mapResult
+                    bind:startDate bind:endDate bind:country bind:minAttendees bind:showShareDialog/>
         {/if}
 
         {#if showHelp}

@@ -4,8 +4,8 @@
     import {GraphQLClient} from "graphql-request";
     import {Loader} from "@googlemaps/js-api-loader";
     import {onMount} from "svelte";
-    import {supabase} from "$lib/supabaseClient";
     import {backOut} from "svelte/easing";
+    import {onDestroy} from "svelte";
     import MultiSelect from 'svelte-multiselect'
 
     let minDate = new Date();
@@ -14,6 +14,7 @@
     export let startDate = new Date().toISOString().split("T")[0];
 
     export let data;
+    export let supabase;
     export let tournaments;
     let addresses = tournaments.map(({venue_address}) => venue_address);
     let games = [{label: "Ultimate", id: "1386"}, {label: "Melee", id: "1"},
@@ -93,6 +94,8 @@
             }
         }
     }
+
+
 
 
     export async function updateMap() {

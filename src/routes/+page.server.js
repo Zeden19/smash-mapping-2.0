@@ -1,18 +1,15 @@
 import {GOOGLE_MAPS_API_KEY} from "$env/static/private";
 import {SMASH_GG_API_KEY} from "$env/static/private";
-import {supabase} from "$lib/supabaseClient";
+import {SUPABASE_KEY} from "$env/static/private";
+import {createClient} from '@supabase/supabase-js'
+
+export const supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co',
+    SUPABASE_KEY)
 
 
 export async function load({cookies}) {
+
     const {data} = await supabase.from("tournaments").select();
-    // const {data} = await supabase.channel('custom-insert-channel')
-    //     .on(
-    //         'postgres_changes',
-    //         {event: 'INSERT', schema: 'public', table: 'tournaments'},
-    //         (payload) => {
-    //             console.log('Change received!', payload)
-    //         }
-    //     ).subscribe()
 
     // cookie stuff
     let geolocated = cookies.get('geolocated');
@@ -31,6 +28,7 @@ export async function load({cookies}) {
         visited,
         GOOGLE_MAPS_API_KEY,
         SMASH_GG_API_KEY,
+        SUPABASE_KEY,
         tournaments: data,
     };
 }
