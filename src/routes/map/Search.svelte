@@ -97,12 +97,22 @@
 
     export async function updateMap() {
         if (startDate > endDate) {
-            alert("Start date must be before end date");
+            alert("Start date must be before end date.");
             return;
         }
 
         if (endDate === undefined) {
-            alert("Please enter an end date");
+            alert("Please enter an end date.");
+            return;
+        }
+
+        if (isNaN(minAttendees)) {
+            alert("Please enter a valid number for minimum attendees.");
+            return;
+        }
+
+        if (minAttendees < 0) {
+            alert("Minimum attendees must be greater than or equal to 0.");
             return;
         }
 
@@ -365,18 +375,18 @@
 
     <div class="filter-item">
         <label> From: </label>
-        <input required name="startDate" min={minDate} bind:value={startDate} type="date">
+        <input name="startDate" min={minDate} bind:value={startDate} type="date">
     </div>
 
     <div class="filter-item">
         <label> To: </label>
-        <input required name="endDate" min="{startDate}" bind:value={endDate} type="date">
+        <input name="endDate" min="{startDate}" bind:value={endDate} type="date">
     </div>
 
 
     <div class="filter-item">
         <label>Attendees: </label>
-        <input required name="attendees" type="number" min="0" bind:value={minAttendees}>
+        <input name="attendees" type="number" min="0" step="1" bind:value={minAttendees}>
     </div>
 
 
