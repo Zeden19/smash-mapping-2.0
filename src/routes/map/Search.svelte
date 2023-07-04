@@ -286,7 +286,7 @@
     <div class="filter-item">
         <label>Game(s):</label>
         {#if screenSize > 500}
-            <MultiSelect --sms-width="12em" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
+            <MultiSelect --sms-width="70%" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
                          --sms-remove-btn-hover-color="red" bind:value={game} options={games}/>
         {/if}
         {#if screenSize <= 500}
@@ -421,9 +421,9 @@
 
 <style>
     aside {
-        height: 60%;
+        height: 100%;
         overflow: visible;
-        overflow-x: hidden;
+        overflow-x: scroll;
         font-family: "Kanit", serif;
         padding: 5px 0 5px 5px;
         white-space: nowrap;
@@ -439,7 +439,7 @@
     .filter-item select, .filter-item input {
         margin-left: auto;
         margin-right: 3em;
-        width: 10em;
+        width: 50%;
         border-radius: 5px;
     }
 
@@ -471,7 +471,7 @@
 
     @media (max-width: 500px) {
         .filter-item {
-            width: 50vw;
+            width: 50%;
             white-space: normal;
         }
 

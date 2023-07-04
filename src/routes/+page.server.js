@@ -3,7 +3,7 @@ import {SMASH_GG_API_KEY} from "$env/static/private";
 import {SUPABASE_KEY} from "$env/static/private";
 import {createClient} from '@supabase/supabase-js'
 
-export const supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co',
+const supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co',
     SUPABASE_KEY)
 
 

@@ -262,7 +262,7 @@
     /* large screens */
     @media (min-width: 500px) {
         .sidebar {
-            width: 25%;
+            width: 25vw;
         }
 
         .sidebar.sidebarClosed {
