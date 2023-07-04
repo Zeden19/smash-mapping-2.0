@@ -10,32 +10,41 @@
 
 
 <style>
-    a {
-        font-weight: bold;
-        text-decoration: none;
-        color: white;
-        margin-right: 0;
-    }
-
     div {
         background-size: 1.5em;
         background: #005ea2;
         border-radius: 30px;
-        padding: 0 15px;
-        width: 6em;
+        width: 7.5em;
         height: 2.4em;
         line-height: 2;
         display: flex;
-        justify-content: right;
     }
 
     div:hover {
         background-color: #002844FF;
     }
 
+    a {
+        font-weight: bold;
+        text-decoration: none;
+        color: white;
+        margin-left: auto;
+        margin-right: 0.95em;
+    }
+
     img {
-        justify-content: left;
-        margin-right: 2em;
+        margin-right: auto;
+    }
+
+    @media (max-width: 500px) {
+        div {
+            width: 30vw;
+        }
+
+        img {
+            /*margin-right: 1em;*/
+        }
+
     }
 
 </style>

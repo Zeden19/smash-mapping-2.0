@@ -18,7 +18,7 @@
     to just "see" tournaments in your area. I eventually found my local scene but that difficulty always stuck with me.
     <br><br>
 
-    <img height="70%" width="65%" src="example.png"
+    <img src="example.png"
          alt="example-image">
     At Smash Mapping, the goal is to make finding in-person tournaments far easier than current methods. Smash Mapping
     physically maps tournaments that are listed on <a target="_blank" href="https://www.start.gg/">Start.gg</a> so you
@@ -80,6 +80,8 @@
         border: black solid 3px;
         margin-right: 5px;
         margin-left: 10px;
+        height: 70%;
+        width: 65%;
     }
 
     body {
@@ -91,6 +93,17 @@
         margin: 0;
         padding: 0;
         background-color: #26282B;
+    }
+
+    @media (max-width: 500px) {
+
+        img {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            float: revert;
+        }
+
     }
 
 </style>
