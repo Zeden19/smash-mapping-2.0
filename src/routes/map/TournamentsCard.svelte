@@ -100,6 +100,7 @@
 
     .attendees {
         margin-right: 3em;
+        white-space: nowrap;
     }
 
     .attendees-clock {
