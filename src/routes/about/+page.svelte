@@ -30,9 +30,6 @@
     whole reason why its so hard to find tournaments is because organizers don't have a good way to show their
     tournaments to the public. Hopefully, if Smash Mapping becomes widespread, tournament organizers won't have to worry
     about advertising tournaments, people can just use Smash Mapping and find it themselves. Easy! <br><br>
-
-    <b>Smash Mapping is currently in beta, so there may (and probably will) be bugs. If you find any, please report them
-        to me by <a style="cursor: pointer" href="/contact">contacting.</a></b>
 </p>
 
 </body>
@@ -96,7 +93,6 @@
     }
 
     @media (max-width: 500px) {
-
         img {
             width: 100%;
             height: 100%;
