@@ -270,9 +270,9 @@
                 marker.setIcon('markers/grey-marker.png')
             }
 
-            // if (tournament.name === "Sarnia Smash Series - DBE 66") {
-            //     marker.setIcon('reimu-standing.gif')
-            // }
+            if (tournament.name === "Sarnia Smash Series - Down the Road 7") {
+                marker.setIcon('markers/special-marker.png')
+            }
 
 
             // Add the marker to the array

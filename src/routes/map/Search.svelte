@@ -187,17 +187,6 @@
             let locations = [];
             tournamentsData = resData.tournaments.nodes;
 
-            for (let i of resData.tournaments.nodes) {
-                const timestamp = i.startAt;
-                const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-                i.startAt = date.toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
-            }
-
             tournamentsData = tournamentsData.filter(function (tournament) {
                 return minAttendees <= tournament['numAttendees'];
             });
@@ -241,6 +230,15 @@
                     console.log(e);
                     continue;
                 }
+
+                const timestamp = i.startAt;
+                const date = new Date(timestamp * 1000);
+                i.startAt = date.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
 
                 let url = "https://start.gg" + i.url;
                 if (latlng !== undefined) {
