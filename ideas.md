@@ -51,6 +51,9 @@ Just know that the skys the limits and we have something special here.
 • Help screen for TO's.
 • Discord server (if we get big)
 • Country tags for supabase
+• Schedules for big tournaments (maybe even a list of the big tournaments on the map)
+• Animation for special marker (event listener for when marker is "on screen"?)
+• fix stupid bug with multiple markers on same spot
 
 JUST THINK BIG
 

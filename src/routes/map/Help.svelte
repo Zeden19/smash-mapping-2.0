@@ -5,11 +5,13 @@
 
     let guideOpen = false;
     let legendOpen = false;
+    let TOopen = false;
     export let delay;
 
 </script>
 
 <div in:fly={{y: 150, duration: 400, delay: 400}} out:fly={{y: 100, duration: 400}}>
+
     <div on:click={() => guideOpen = !guideOpen} class="title">
         <div class:guideOpen class="arrow-right"></div>
         Guide
@@ -23,9 +25,9 @@
             Select a start and end date, and any other filters
             and click "search". All the tournaments will be shown on the map. <br><br>
 
-            Clicking on a marker will show all the tournament information. Additonally, clicking on the tournmanet
+            Clicking on a marker will show all the tournament information. Additionally, clicking on the tournament
             icon on the sidebar will show you a list view of the tournaments. You can click on the tournament to pan
-            the camera to that tournament.<br><br>
+            the camera to that tournament. You can search for tournaments by location or name as well.<br><br>
 
 
             Found a bug? <a style="cursor: pointer" href="/contact">Contact</a> me
@@ -65,16 +67,44 @@
                 attendees
             </div>
 
-             <div class="marker">
-                <img src="markers/yellow-marker.png" alt="yellow-pointer">
-                 Another marker is on top of this one
+            <div class="marker">
+                <img src="markers/special-marker.png" alt="grey-pointer"> Special tournaments for special people (:
             </div>
 
-             <div class="marker">
+            <div class="marker">
+                <img src="markers/yellow-marker.png" alt="yellow-pointer">
+                Another marker is on top of this one
+            </div>
+
+            <div class="marker">
                 <img src="markers/grey-marker.png" alt="grey-pointer"> Tournament has ended
             </div>
+
         </aside>
     {/if}
+
+    <div on:click={() => TOopen = !TOopen} class="title">
+        <div class:TOopen class="arrow-right"></div>
+        TO Information
+    </div>
+
+    {#if TOopen}
+        <div transition:slide={{y: 200, duration: 500}} class="content">
+            <p>If you are a TO, getting your tournament onto Smash Mapping is easy (and
+                will boost your attendance!)</p>
+
+            <p>The only step is to host your tournament onto <a target="_blank"
+                                                                href="https://www.start.gg/">Start.gg.</a>
+                Thats all!</p>
+
+            <p>If your tournament isn't on the map, make sure that your tournaments address on Start.gg is a valid
+                address that can be found on Google Maps.</p>
+
+            <p>If you are still having trouble, feel free to
+                <a target="_blank" href="https://twitter.com/ZedenZeder">contact</a> me!</p>
+        </div>
+    {/if}
+
 </div>
 
 
@@ -106,6 +136,7 @@
 
     p {
         margin-block-start: 0;
+        word-break: break-word;
     }
 
     .title {
@@ -136,7 +167,8 @@
     }
 
     .arrow-right.guideOpen,
-    .arrow-right.legendOpen {
+    .arrow-right.legendOpen,
+    .arrow-right.TOopen {
         transform: rotate(90deg);
     }
 

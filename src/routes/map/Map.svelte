@@ -289,7 +289,6 @@
                     var infoContent =
                         '<div style="display: block;\n' +
                         '        text-align: left">' +
-
                         "<h2>" + tournament.name + "</h2>" +
                         "<p><strong>Address: </strong><a target='_blank' href='https://www.google.com/maps/place/" + tournament.venueAddress.replace(" ", "+") + "'>" + tournament.venueAddress + "</a></p>" +
                         "<p><strong>Date: </strong>" + tournament.startAt + "</p>" +

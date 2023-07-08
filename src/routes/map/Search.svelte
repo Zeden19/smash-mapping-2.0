@@ -96,8 +96,6 @@
     }
 
 
-
-
     export async function updateMap() {
         if (startDate > endDate) {
             alert("Start date must be before end date.");
@@ -218,6 +216,15 @@
             for (let i of tournamentsData) {
                 let latlng;
 
+                const timestamp = i.startAt;
+                const date = new Date(timestamp * 1000);
+                i.startAt = date.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
                 if (cancelled) {
                     loading = false;
                     return;
@@ -230,15 +237,6 @@
                     console.log(e);
                     continue;
                 }
-
-                const timestamp = i.startAt;
-                const date = new Date(timestamp * 1000);
-                i.startAt = date.toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
 
                 let url = "https://start.gg" + i.url;
                 if (latlng !== undefined) {
