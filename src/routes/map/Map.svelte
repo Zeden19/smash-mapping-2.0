@@ -223,6 +223,7 @@
                     }],
             });
             map.setOptions({minZoom: 3, maxZoom: 18, zoomControl: true, gestureHandling: "greedy"});
+
             markerCluster = new MarkerClusterer({map, markers, algorithmOptions: {maxZoom: 7}});
         });
     });
@@ -286,7 +287,7 @@
             // Create an info window for the marker
             google.maps.event.addListener(marker, 'click', (function (marker, tournament) {
                 return function () {
-                    var infoContent =
+                    const infoContent =
                         '<div style="display: block;\n' +
                         '        text-align: left">' +
                         "<h2>" + tournament.name + "</h2>" +
@@ -325,7 +326,7 @@
     }
 </script>
 
-<div id="map" style="height: 100%; width: 100%">
+<div id="map" class="map" style="height: 100%; width: 100%">
 </div>
 
 

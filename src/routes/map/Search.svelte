@@ -1,12 +1,12 @@
 <script>
-    import InfoCircle from "./InfoCircle.svelte";
     import {slide} from "svelte/transition";
     import {GraphQLClient} from "graphql-request";
     import {Loader} from "@googlemaps/js-api-loader";
     import {onMount} from "svelte";
     import {backOut} from "svelte/easing";
-    import {onDestroy} from "svelte";
     import MultiSelect from 'svelte-multiselect'
+    import {fade} from 'svelte/transition';
+
 
     let minDate = new Date();
     minDate.setDate(minDate.getDate() - 14);
@@ -313,7 +313,7 @@
 
 
     {#if country === 'US'}
-        <div class="filter-item">
+        <div transition:fade={{duration: 250}} class="filter-item">
             <label>State:</label>
             <select required name="state" bind:value={state}>
                 <option value="AL">Alabama</option>
@@ -417,7 +417,7 @@
 
 <style>
     aside {
-        height: 100%;
+        height: 70%;
         overflow: visible;
         overflow-x: scroll;
         font-family: "Kanit", serif;

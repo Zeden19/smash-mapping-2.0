@@ -169,6 +169,7 @@
         z-index: 1;
         border-bottom: #222223 solid 3px;
         border-top: #222223 solid 3px;
+        position: relative;
     }
 
     .sidebar-buttons {
@@ -236,6 +237,8 @@
         background-color: #130c0c;
         display: flex;
         justify-content: center;
+        position: sticky;
+        top: 0;
     }
 
     .tournaments-title > p {
