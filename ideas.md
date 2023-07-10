@@ -48,7 +48,6 @@ Just know that the skys the limits and we have something special here.
 • Perhaps more countries
 • get that stupid domain fixed (smashmapping.com)
 • Special icons for certified majors
-• Help screen for TO's.
 • Discord server (if we get big)
 • Country tags for supabase
 • Schedules for big tournaments (maybe even a list of the big tournaments on the map)

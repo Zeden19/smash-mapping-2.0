@@ -17,7 +17,7 @@
     export let supabase;
     export let tournaments;
     let addresses = tournaments.map(({venue_address}) => venue_address);
-    let games = [{label: "Ultimate", id: "1386"}, {label: "Melee", id: "1"},
+    let games = [{label: "Ultimate", id: "1386", preselected:true}, {label: "Melee", id: "1"},
         {label: "Project M", id: "5"}, {label: "Street Fighter 6", id: "43868"}]
 
     export let endDate;
@@ -25,7 +25,6 @@
     export let minAttendees = 0;
     export let state;
     export let game = [];
-    let open;
     export let geolocated;
 
     export let mapResult;
@@ -295,18 +294,24 @@
     <div class="filter-item">
         <label>Country: </label>
         <select required name="country" bind:value={country}>
+            <option disabled>---NORTH AMERICA---</option>
             <option value="CA">Canada</option>
             <option value="US">USA</option>
             <option value="MX">Mexico</option>
-            <option value="JP">Japan</option>
-            <option value="FR">France</option>
-            <option value="GB">United Kingdom</option>
-            <option value="DE">Germany</option>
-            <option value="DK">Denmark</option>
-            <option value="IT">Italy</option>
+            <option disabled>---EUROPE---</option>
             <option value="ES">Spain</option>
-            <option value="CH">Switzerland</option>
+            <option value="GB">United Kingdom</option>
+            <option value="FR">France</option>
             <option value="NL">Netherlands</option>
+            <option value="DK">Denmark</option>
+            <option value="DE">Germany</option>
+             <option value="CH">Switzerland</option>
+            <option value="IT">Italy</option>
+            <option value="SE">Sweden</option>
+            <option value="NO">Norway</option>
+            <option value="FI">Finland</option>
+            <option disabled>---OTHER---</option>
+            <option value="JP">Japan</option>
             <option value="AU">Australia</option>
         </select>
     </div>
