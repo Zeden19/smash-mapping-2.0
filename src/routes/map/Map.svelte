@@ -271,7 +271,7 @@
                 marker.setIcon('markers/grey-marker.png')
             }
 
-            if (tournament.name === "Sarnia Smash Series - Down the Road 7") {
+            if (tournament.name === "Get In My Basement Weekly #85") {
                 marker.setIcon('markers/special-marker.png')
             }
 

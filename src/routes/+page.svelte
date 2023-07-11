@@ -4,8 +4,6 @@
     import Help from "./map/Help.svelte"
     import TournamentsCard from "./map/TournamentsCard.svelte";
     import {createClient} from '@supabase/supabase-js'
-    import {slide} from "svelte/transition";
-    import {backInOut} from "svelte/easing";
 
     export let data;
     let mapResult;
@@ -18,7 +16,6 @@
     let geolocated = data.geolocated;
     export let supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co', data.SUPABASE_KEY)
 
-
     let sidebarClosed = false;
     let showFilters = true;
     let showTournaments = false;
@@ -30,7 +27,6 @@
 
     // database stuff
     let {tournaments} = data;
-
     function showSidebar(title) {
         sidebarClosed = false;
         showFilters = title === "Filters:";
@@ -108,8 +104,6 @@
         {#if showHelp}
             <Help delay={delay}/>
         {/if}
-
-
     </div>
 
     <Map bind:map bind:data bind:mapResult/>

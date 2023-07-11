@@ -7,7 +7,6 @@
     import MultiSelect from 'svelte-multiselect'
     import {fade} from 'svelte/transition';
 
-
     let minDate = new Date();
     minDate.setDate(minDate.getDate() - 14);
     minDate = minDate.toISOString().split("T")[0];
@@ -17,7 +16,7 @@
     export let supabase;
     export let tournaments;
     let addresses = tournaments.map(({venue_address}) => venue_address);
-    let games = [{label: "Ultimate", id: "1386", preselected:true}, {label: "Melee", id: "1"},
+    let games = [{label: "Ultimate", id: "1386", preselected: true}, {label: "Melee", id: "1"},
         {label: "Project M", id: "5"}, {label: "Street Fighter 6", id: "43868"}]
 
     export let endDate;
@@ -36,10 +35,7 @@
     let errorMessage = false;
     let noData = false;
     let cancelled = false;
-    let hasSearched = false;
     let screenSize;
-
-    export let delay;
 
     let geocoder;
     const loader = new Loader({
@@ -47,21 +43,56 @@
         version: "weekly",
     });
 
+    const inserts = supabase.channel('table-db-changes').on(
+        'postgres_changes',
+        {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'tournaments',
+        },
+        (payload) => {
+            addresses.push(payload.new.venue_address)
+            tournaments.push(payload.new)
+        }
+    ).subscribe()
+
+    const updates = supabase.channel('custom-update-channel').on(
+        'postgres_changes',
+        {event: 'UPDATE', schema: 'public', table: 'tournaments'},
+        (payload) => {
+            tournaments.find(({id}) => id === payload.new.id).country = payload.new.country;
+        }
+    ).subscribe()
+
     onMount(async () => {
         loader.load().then(async () => {
             geocoder = new google.maps.Geocoder();
         });
     });
 
-    async function geocode_address(tournament) {
-        // if finding the tournament in the database, then returning it from the database (no geocoding)
+    async function geocode_address(tournament, country) {
+        // returning latlng from the database (no geocoding)
         if (addresses.includes(tournament.venueAddress)) {
             let tournamentFound = tournaments.find(({venue_address}) => venue_address === tournament.venueAddress);
             console.log("Found tournament in list");
-            return {lat: tournamentFound['lat'], lng: tournamentFound['lng']};
 
+            // adding tournament country if country is null
+            if (tournamentFound['country'] === null) {
+                console.log("Adding country to tournament");
+                const {error} = await supabase
+                    .from('tournaments')
+                    .update({country: country})
+                    .eq('venue_address', tournament.venueAddress);
+
+                if (error) {
+                    console.log("Error updating country:", error);
+                }
+            }
+
+            return {lat: tournamentFound['lat'], lng: tournamentFound['lng']};
         } else {
             try {
+                //geocding the address
                 console.log("Geocoding address")
                 const results = await geocoder.geocode({'address': tournament.venueAddress});
                 let result = results.results[0].geometry.location;
@@ -78,7 +109,8 @@
                         url: tournament.url,
                         num_attendees: tournament.numAttendees,
                         state: tournament.state,
-                        venue_address: tournament.venueAddress
+                        venue_address: tournament.venueAddress,
+                        country: country
                     });
 
                 if (error) {
@@ -96,6 +128,7 @@
 
 
     export async function updateMap() {
+        const selectedCountry = country;
         if (startDate > endDate) {
             alert("Start date must be before end date.");
             return;
@@ -140,6 +173,7 @@
                 },
             });
 
+            // query
             let query = `
             query TournamentsByCountry($cCode: String!, $perPage: Int!, $after: Timestamp!, $before: Timestamp, $state: String
             $game: [ID]) {
@@ -165,6 +199,7 @@
               }
             }`;
 
+            // query variables
             const variables = {
                 cCode: country,
                 perPage: 151,
@@ -174,32 +209,35 @@
                 game: game.map(({id}) => id)
             };
 
+            // Remove US specific query details
             if (state === "all" || country !== "US") {
                 delete variables.state;
                 query = query.replace(/addrState: \$state,?/, "").replace(", $state: String", "");
             }
 
-
+            // getting the data & filtering by minimum attendees
             let resData = await client.request(query, variables);
             let locations = [];
             tournamentsData = resData.tournaments.nodes;
-
             tournamentsData = tournamentsData.filter(function (tournament) {
                 return minAttendees <= tournament['numAttendees'];
             });
 
+            // returning if no tournaments found
             if (tournamentsData.length === 0) {
                 loading = false;
                 noData = true;
                 return;
             }
 
+            // returning if too many tournaments found
             if (tournamentsData.length > 150) {
                 loading = false;
                 tooManyRequestsError = true;
                 return;
             }
 
+            // If attendees is not known, change the attendees to be unknown
             if (minAttendees !== 0) {
                 tournamentsData = tournamentsData.filter(item => item.numAttendees !== null && item.numAttendees !== undefined);
             } else {
@@ -211,10 +249,11 @@
                 });
             }
 
-
+            // getting the lat/lng for each tournament
             for (let i of tournamentsData) {
                 let latlng;
 
+                // fixing date format
                 const timestamp = i.startAt;
                 const date = new Date(timestamp * 1000);
                 i.startAt = date.toLocaleDateString('en-US', {
@@ -224,19 +263,22 @@
                     year: 'numeric'
                 });
 
+                // cancelling
                 if (cancelled) {
                     loading = false;
                     return;
                 }
 
+                // getting latlng
                 try {
-                    latlng = await geocode_address(i);
+                    latlng = await geocode_address(i, selectedCountry);
 
                 } catch (e) {
                     console.log(e);
                     continue;
                 }
 
+                // pushing data to array
                 let url = "https://start.gg" + i.url;
                 if (latlng !== undefined) {
                     locations.push(
@@ -253,14 +295,6 @@
                         });
                 }
             }
-
-            // updating the database variables with the new data
-            await supabase.from("tournaments").select().then((data) => {
-                tournaments = data.data;
-                addresses = data.data.map(({venue_address}) => venue_address);
-            }).catch((error) => {
-                console.log(error);
-            });
 
             mapResult = locations;
             console.log(mapResult);
@@ -305,7 +339,7 @@
             <option value="NL">Netherlands</option>
             <option value="DK">Denmark</option>
             <option value="DE">Germany</option>
-             <option value="CH">Switzerland</option>
+            <option value="CH">Switzerland</option>
             <option value="IT">Italy</option>
             <option value="SE">Sweden</option>
             <option value="NO">Norway</option>
@@ -313,6 +347,7 @@
             <option disabled>---OTHER---</option>
             <option value="JP">Japan</option>
             <option value="AU">Australia</option>
+            <option value="BR">Brazil</option>
         </select>
     </div>
 

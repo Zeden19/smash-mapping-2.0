@@ -39,21 +39,21 @@ Just know that the skys the limits and we have something special here.
 
 # Features
 • Special animation if a tournament has a top 100 player (and maybe more animations if tournament has numerous top
-100 players)
+100 players) (use math)
 • More games, like overwatch, league of legends, fortnite (and changee the name up at that point)
 • Paid advertising (either like a board at the top that shows tournaments, and/or special icon animation)
 • "Drag and search" where someone can select a radius and drag around to search within that area
 • City Search with a radius selector (this might use up a lot of tokens so consider a "city database")
 • Account system (useful to get this set up now rather than later) (apply benifits)
-• Perhaps more countries
 • get that stupid domain fixed (smashmapping.com)
 • Special icons for certified majors
-• Discord server (if we get big)
 • Country tags for supabase
 • Schedules for big tournaments (maybe even a list of the big tournaments on the map)
 • Animation for special marker (event listener for when marker is "on screen"?)
 • fix stupid bug with multiple markers on same spot
 • Different markers for different games
+• My own tournament hosting system for other countries
+Look into post request for updateMap (reload might not be needed)
 
 JUST THINK BIG
 
