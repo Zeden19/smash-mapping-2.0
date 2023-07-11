@@ -92,10 +92,16 @@
             return {lat: tournamentFound['lat'], lng: tournamentFound['lng']};
         } else {
             try {
-                //geocding the address
+                //geocoding the address
                 console.log("Geocoding address")
                 const results = await geocoder.geocode({'address': tournament.venueAddress});
                 let result = results.results[0].geometry.location;
+
+
+                let attendees = tournament.numAttendees;
+                if (attendees === "unknown") {
+                    attendees = null;
+                }
 
                 // inserting into database
                 const {error} = await supabase
@@ -107,7 +113,7 @@
                         start_at: tournament.startAt,
                         primary_contact: tournament.primaryContact,
                         url: tournament.url,
-                        num_attendees: tournament.numAttendees,
+                        num_attendees: attendees,
                         state: tournament.state,
                         venue_address: tournament.venueAddress,
                         country: country
