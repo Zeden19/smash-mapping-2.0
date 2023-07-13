@@ -5,6 +5,7 @@
     import {slide} from "svelte/transition";
     import {onMount} from "svelte";
     import {Loader} from "@googlemaps/js-api-loader";
+    import Discord from "../contact/Discord.svelte";
 
 
     export let data;
@@ -215,6 +216,9 @@
                         bind:loading bind:errorMessage bind:noData bind:cancelled bind:tooManyRequestsError
                         bind:playerDoesNotExistError bind:selectedPlayer bind:search {createTournamentsArray}/>
     {/if}
+
+    <p>Psst: Wanna stay updated? Join the smach mapping Discord server!</p>
+    <Discord/>
 </div>
 
 
