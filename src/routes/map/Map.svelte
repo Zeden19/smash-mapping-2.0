@@ -11,6 +11,15 @@
     let markerPositions = [];
     let markerCluster;
     let infoWindow;
+    let topPlayers = ["Mkleo", "あcola", "Sparg0", "Light", "Tea", "Onin", "Shuton", "Tweek", "Riddles", "ProtoBanham", "Kurama",
+        "Dabuz", "Kola", "Maister", "Glutonny", "Sonix", "ミーヤー ", "Zomba", "Big D", "ApolloKage", "Bloom4Eva", "Kameme",
+        "Anathema", "Cosmos", "Jakal", "Yoshidora", "Sisqui", "Asimo", "KEN", "Aaron", "Tilde", "Lui$", "Almighty", "HIKARU", "へろー",
+        "Marss", "Ned", "zackray", "MuteAce", "Yaura", "Gackt", "Talking Ben", "Ouch!?", "Sigma", "Skyjay", "Fatality", "Mr.R",
+        "Lima", "Abadango", "Chag", "jaredisking1", "Raflow", "MVD", "Scend", "Puppeh", "Niko", "AlanDiss", "BassMage", "ShinyMark",
+        "T3 DOM", "Jazzh0", "Repo", "SHADIC", "Kome", "Luugi", "WaKa", "Toast", "alice", "Tarik", "quiK", "ChunkyKong", "Zinoto",
+        "Shirayuki", "アカキクス", "Peabnut", "IceMist", "Leon", "Dark Wizzy", "Supahsemmie", "Quandale Dinglelingleton", "Space",
+        "MKBigBoss", "Goblin", "Umeki", "Yei", "Rox", "WaDi", "skittles", "NaetorU", "MASA", "ATATA", "Nietono", "Chronos", "yonni",
+        "Atelier", "Ling", "Regalo", "Mr. E", "Paseriman", "enhancedpv"]
 
     export let mapResult;
 
@@ -244,6 +253,10 @@
         markerPositions = [];
 
         for (const tournament of mapResult) {
+            if (tournament.lat === null || tournament.lng === null) {
+                continue;
+            }
+
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(tournament.lat, tournament.lng),
                 map: map,
@@ -271,13 +284,13 @@
                 marker.setIcon('markers/grey-marker.png')
             }
 
-            if (tournament.name === "Get In My Basement Weekly #85") {
-                marker.setIcon('markers/special-marker.png')
+            if (tournament.participants.includes(topPlayers)) {
+                console.log("top player")
             }
 
 
-            // Add the marker to the array
-            markers.push(marker);
+                // Add the marker to the array
+                markers.push(marker);
             markerPositions.push(marker.getPosition().toString());
 
             const mailTo = (tournament.primaryContact.includes("@")) ?

@@ -21,6 +21,11 @@
     let showTournaments = false;
     let showHelp = false;
 
+    let showSearchPlayer = false;
+    let showSearchTournament = true;
+    let selectedPlayer;
+    let search;
+
     let sidebarTitle = "Filters:";
     let delay;
     let map;
@@ -91,14 +96,14 @@
             </button>
         </div>
 
-
         {#if showTournaments && mapResult !== undefined}
             <TournamentsCard mapResult={mapResult} map={map}/>
         {/if}
 
         {#if showFilters}
             <Search delay={delay} bind:supabase bind:state bind:tournaments bind:data bind:geolocated bind:mapResult
-                    bind:startDate bind:endDate bind:country bind:minAttendees bind:showShareDialog/>
+                    bind:startDate bind:endDate bind:country bind:minAttendees bind:showShareDialog bind:showSearchPlayer
+                    bind:showSearchTournament bind:selectedPlayer bind:search/>
         {/if}
 
         {#if showHelp}

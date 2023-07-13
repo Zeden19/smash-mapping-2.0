@@ -99,12 +99,15 @@
     }
 
     .attendees {
-        margin-right: 3em;
         white-space: nowrap;
     }
 
     .attendees-clock {
         display: flex;
+    }
+
+    .clock {
+        margin-left: 3vw;
     }
 
     img {

@@ -47,13 +47,15 @@ Just know that the skys the limits and we have something special here.
 • Account system (useful to get this set up now rather than later) (apply benifits)
 • get that stupid domain fixed (smashmapping.com)
 • Special icons for certified majors
-• Country tags for supabase
 • Schedules for big tournaments (maybe even a list of the big tournaments on the map)
 • Animation for special marker (event listener for when marker is "on screen"?)
 • fix stupid bug with multiple markers on same spot
 • Different markers for different games
 • My own tournament hosting system for other countries
+• Different map options
 Look into post request for updateMap (reload might not be needed)
 
+
+NOTE FOR GAMERTAG QUERIES: use the smashdata.gg database, it has the tag with the id and thats all i need.
 JUST THINK BIG
 
