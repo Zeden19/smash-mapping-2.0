@@ -217,7 +217,7 @@
                         bind:playerDoesNotExistError bind:selectedPlayer bind:search {createTournamentsArray}/>
     {/if}
 
-    <p>Psst: Wanna stay updated? Join the smach mapping Discord server!</p>
+    <p>Psst: Wanna stay updated? Join the Smash Mapping Discord server!</p>
     <Discord/>
 </div>
 
