@@ -1,6 +1,7 @@
 <script xmlns="http://www.w3.org/1999/html">
     import TwitterFollow from "./TwitterFollow.svelte";
     import MailTo from "./MailTo.svelte";
+    import Discord from "./Discord.svelte";
 </script>
 <svelte:head>
     <title>Smash Mapping: Contact</title>
@@ -15,12 +16,13 @@
         inquiries.</p>
     <br>
 
-    <p>Twitter is my main form of contact, and its also where I post development updates, but you're more than welcome
-        to contact me with any of the other methods</p>
+    <p>Twitter and Discord are my best forms of contact. If you're interested in Smash Mappings development and
+        would like to help out, i'd highly recommend you join my Discord Server (link below).</p>
 
 
     <div class="share-buttons">
         <TwitterFollow/>
+        <Discord/>
         <MailTo/>
     </div>
 
