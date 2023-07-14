@@ -155,8 +155,8 @@
         <label>Country: </label>
         <select required name="country" bind:value={country}>
             <option disabled>---NORTH AMERICA---</option>
+            <option selected value="US">USA</option>
             <option value="CA">Canada</option>
-            <option value="US">USA</option>
             <option value="MX">Mexico</option>
             <option disabled>---EUROPE---</option>
             <option value="ES">Spain</option>

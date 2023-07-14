@@ -231,8 +231,8 @@
                         }]
                     }],
             });
-            map.setOptions({minZoom: 3, maxZoom: 18, zoomControl: true, gestureHandling: "greedy"});
 
+            map.setOptions({minZoom: 3, maxZoom: 18, zoomControl: true, gestureHandling: "greedy"});
             markerCluster = new MarkerClusterer({map, markers, algorithmOptions: {maxZoom: 7}});
         });
     });
