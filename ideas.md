@@ -54,6 +54,10 @@ Just know that the skys the limits and we have something special here.
 • My own tournament hosting system for other countries
 • Different map options
 Look into post request for updateMap (reload might not be needed)
+Change inputs/filters to custom inputs cause rn default html ones aren't that good (searching)
+Current Location query (really good idea)
+Animations when elements move up and down
+Make map show lines between states/countries
 
 
 NOTE FOR GAMERTAG QUERIES: use the smashdata.gg database, it has the tag with the id and thats all i need.
