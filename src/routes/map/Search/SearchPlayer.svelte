@@ -1,8 +1,5 @@
 <script>
     import {GraphQLClient} from "graphql-request";
-    import {Loader} from "@googlemaps/js-api-loader";
-    import MultiSelect from 'svelte-multiselect'
-    import {fade} from 'svelte/transition';
     import { blur } from 'svelte/transition';
 
     export let createTournamentsArray = () => {
@@ -62,6 +59,7 @@
                     url
                     numAttendees
                     isOnline
+                    state
                     participants(query: {}) {
                       nodes {
                         gamerTag

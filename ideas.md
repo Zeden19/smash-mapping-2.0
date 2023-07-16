@@ -42,8 +42,6 @@ Just know that the skys the limits and we have something special here.
 100 players) (use math)
 • More games, like overwatch, league of legends, fortnite (and changee the name up at that point)
 • Paid advertising (either like a board at the top that shows tournaments, and/or special icon animation)
-• "Drag and search" where someone can select a radius and drag around to search within that area
-• City Search with a radius selector (this might use up a lot of tokens so consider a "city database")
 • Account system (useful to get this set up now rather than later) (apply benifits)
 • get that stupid domain fixed (smashmapping.com)
 • Special icons for certified majors
@@ -55,9 +53,14 @@ Just know that the skys the limits and we have something special here.
 • Different map options
 Look into post request for updateMap (reload might not be needed)
 Change inputs/filters to custom inputs cause rn default html ones aren't that good (searching)
+
+# PRIOIRTY
 Current Location query (really good idea)
+use some other way persist variables after component gets deleted
 Animations when elements move up and down
-Make map show lines between states/countries
+City Search with a radius selector (this might use up a lot of tokens so consider a "city database")
+Add little icon for infoboard marker thingy
+
 
 
 NOTE FOR GAMERTAG QUERIES: use the smashdata.gg database, it has the tag with the id and thats all i need.
