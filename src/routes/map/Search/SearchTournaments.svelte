@@ -74,7 +74,7 @@
             return;
         }
 
-        if (state === "Choose State") {
+        if (state === "Choose State" && country === "US") {
             alert("Please select a state.");
             return;
         }
