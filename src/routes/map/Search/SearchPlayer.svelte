@@ -60,6 +60,9 @@
                     numAttendees
                     isOnline
                     state
+                    images(type: "profile") {
+                        url
+                      }
                     participants(query: {}) {
                       nodes {
                         gamerTag

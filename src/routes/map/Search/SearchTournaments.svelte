@@ -14,12 +14,15 @@
     minDate = minDate.toISOString().split("T")[0];
     export let startDate = new Date().toISOString().split("T")[0];
 
+    export let endDate = new Date().setDate(new Date().getDate() + 7);
+    endDate = new Date(endDate).toISOString().split("T")[0];
+
     export let map;
     export let data;
     let games = [{label: "Ultimate", id: "1386"}, {label: "Melee", id: "1"},
         {label: "Project M", id: "5"}, {label: "SF6", id: "43868"}]
 
-    export let endDate;
+
     export let country;
     export let minAttendees = 0;
     export let state;
@@ -74,7 +77,7 @@
             return;
         }
 
-        if (state === "Choose State") {
+        if (state === "Choose State" && country === "US") {
             alert("Please select a state.");
             return;
         }
@@ -116,6 +119,9 @@
                   numAttendees
                   state
                   isOnline
+                   images(type: "profile") {
+                      url
+                   }
                   participants(query: {perPage: 499}) {
                     nodes {
                       gamerTag
@@ -226,6 +232,9 @@
                                   url
                                   numAttendees
                                   state
+                                  images(type: "profile") {
+                                    url
+                                  }
                                   participants(query: {}) {
                                     nodes {
                                       gamerTag

@@ -55,11 +55,12 @@ Look into post request for updateMap (reload might not be needed)
 Change inputs/filters to custom inputs cause rn default html ones aren't that good (searching)
 
 # PRIOIRTY
-Current Location query (really good idea)
 use some other way persist variables after component gets deleted
 Animations when elements move up and down
 City Search with a radius selector (this might use up a lot of tokens so consider a "city database")
-Add little icon for infoboard marker thingy
+bookmark reminder (make this a overlay)
+Find current location and set it to the default when user visits page
+Fix how gettng country to the supabase works (use start.gg api to return country)
 
 
 
