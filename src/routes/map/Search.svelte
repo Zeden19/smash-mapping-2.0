@@ -7,25 +7,35 @@
     import {Loader} from "@googlemaps/js-api-loader";
     import Discord from "../contact/Discord.svelte";
 
+    export let startDate;
+    export let endDate;
+    export let country;
+    export let minAttendees = 0;
+    export let state;
+    export let game;
 
     export let data;
     export let supabase;
     export let tournaments;
     export let mapResult;
+    export let map;
     let addresses = tournaments.map(({venue_address}) => venue_address);
 
     let loading = false;
     let errorMessage = false;
     let noData = false;
     let cancelled = false;
-    let screenSize;
     let tooManyRequestsError = false;
     let playerDoesNotExistError = false;
+    export let circles = [];
+    export let radius;
+
 
     export let showSearchPlayer;
     export let showSearchTournament;
     export let selectedPlayer;
     export let search;
+    export let useCurrentLocationSearch = false;
 
     // loading geocoder
     const loader = new Loader({
@@ -52,7 +62,9 @@
 
     const updates = supabase.channel('custom-update-channel').on(
         'postgres_changes', {event: 'UPDATE', schema: 'public', table: 'tournaments'},
-        (payload) => {tournaments.find(({id}) => id === payload.new.id).country = payload.new.country;}).subscribe()
+        (payload) => {
+            tournaments.find(({id}) => id === payload.new.id).country = payload.new.country;
+        }).subscribe()
 
     async function geocode_address(tournament, country) {
         // returning latlng from the database (no geocoding)
@@ -196,10 +208,8 @@
                     });
             }
         }
-
         mapResult = tournamentsArray;
         console.log(mapResult);
-
     }
 
 </script>
@@ -208,13 +218,14 @@
     {#if showSearchTournament}
         <SearchTournaments {data} {supabase} {tournaments} bind:showSearchTournament bind:showSearchPlayer
                            bind:loading bind:errorMessage bind:noData bind:cancelled bind:tooManyRequestsError
-                           {createTournamentsArray}/>
+                           bind:map bind:circles bind:useCurrentLocationSearch bind:radius
+                           bind:startDate bind:endDate bind:country bind:minAttendees bind:game {createTournamentsArray}/>
     {/if}
 
     {#if showSearchPlayer}
         <SearchPlayer {data} {supabase} {tournaments} bind:showSearchTournament bind:showSearchPlayer
-                        bind:loading bind:errorMessage bind:noData bind:cancelled bind:tooManyRequestsError
-                        bind:playerDoesNotExistError bind:selectedPlayer bind:search {createTournamentsArray}/>
+                      bind:loading bind:errorMessage bind:noData bind:cancelled bind:tooManyRequestsError
+                      bind:playerDoesNotExistError bind:selectedPlayer bind:search {createTournamentsArray}/>
     {/if}
 
     <p>Psst: Wanna stay updated? Join the Smash Mapping Discord server!</p>

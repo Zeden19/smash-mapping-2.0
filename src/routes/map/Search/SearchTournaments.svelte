@@ -4,34 +4,54 @@
     import MultiSelect from 'svelte-multiselect'
     import {fade} from 'svelte/transition';
     import {blur} from "svelte/transition";
-    export let createTournamentsArray = () => {};
+    import {onDestroy} from "svelte";
+
+    export let createTournamentsArray = () => {
+    };
 
     let minDate = new Date();
     minDate.setDate(minDate.getDate() - 14);
     minDate = minDate.toISOString().split("T")[0];
     export let startDate = new Date().toISOString().split("T")[0];
 
+    export let map;
     export let data;
-    let games = [{label: "Ultimate", id: "1386", preselected: true}, {label: "Melee", id: "1"},
-        {label: "Project M", id: "5"}, {label: "Street Fighter 6", id: "43868"}]
+    let games = [{label: "Ultimate", id: "1386"}, {label: "Melee", id: "1"},
+        {label: "Project M", id: "5"}, {label: "SF6", id: "43868"}]
 
     export let endDate;
     export let country;
     export let minAttendees = 0;
     export let state;
-    export let game = [];
+    export let game;
     export let geolocated;
+
 
     export let tooManyRequestsError = false;
     export let loading = false;
     export let errorMessage = false;
     export let noData = false;
     export let cancelled = false;
+    let locationDeniedError = false;
     let screenSize;
 
     export let showSearchTournament;
     export let showSearchPlayer;
+    export let useCurrentLocationSearch = false;
+    export let radius;
 
+    let innerCircle;
+    let outerCircle;
+    export let circles = [];
+
+    // when user selects "Use current Location"
+    $: if (useCurrentLocationSearch) {
+        drawCircles();
+    } else {
+        removeCircles();
+    }
+
+    //fixme split into functions
     export async function updateMap() {
         const selectedCountry = country;
         if (startDate > endDate) {
@@ -54,13 +74,18 @@
             return;
         }
 
+        if (state === "Choose State") {
+            alert("Please select a state.");
+            return;
+        }
+
         try {
             tooManyRequestsError = false;
             errorMessage = false;
             loading = true;
             noData = false;
             cancelled = false;
-
+            locationDeniedError = false;
 
             let tournamentsData;
             let unixStartTime = new Date(startDate.replace(/-/g, "/").replace("T", " "));
@@ -133,27 +158,207 @@
         loading = false;
     }
 
+    async function useCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    map.panTo(pos);
+
+                    if (startDate > endDate) {
+                        alert("Start date must be before end date.");
+                        return;
+                    }
+
+                    if (endDate === undefined) {
+                        alert("Please enter an end date.");
+                        return;
+                    }
+
+                    if (isNaN(minAttendees)) {
+                        alert("Please enter a valid number for minimum attendees.");
+                        return;
+                    }
+
+                    if (minAttendees < 0) {
+                        alert("Minimum attendees must be greater than or equal to 0.");
+                        return;
+                    }
+
+                    try {
+                        tooManyRequestsError = false;
+                        errorMessage = false;
+                        loading = true;
+                        noData = false;
+                        cancelled = false;
+                        locationDeniedError = false;
+
+
+                        let tournamentsData;
+                        let unixStartTime = new Date(startDate.replace(/-/g, "/").replace("T", " "));
+                        let unixEndTime = new Date(endDate.replace(/-/g, "/").replace("T", " "));
+                        unixEndTime.setHours(23, 59, 59);
+                        unixStartTime = Math.floor(unixStartTime.getTime() / 1000);
+                        unixEndTime = Math.floor(unixEndTime.getTime() / 1000);
+
+                        const apiVersion = 'alpha';
+                        const endpoint = 'https://api.start.gg/gql/' + apiVersion;
+                        const client = new GraphQLClient(endpoint, {
+                            headers: {
+                                Authorization: 'Bearer ' + data.SMASH_GG_API_KEY,
+                            },
+                        });
+
+                        // query
+                        let query = `
+                            query TournamentsByLocation($coordinates: String!, $radius: String!, $perPage: Int!, $after: Timestamp!, $before: Timestamp, $game: [ID]) {
+                              tournaments(
+                                query: {perPage: $perPage, filter: {location: {distanceFrom: $coordinates, distance: $radius}, afterDate: $after, beforeDate: $before, videogameIds: $game}}
+                              ) {
+                                nodes {
+                                  name
+                                  venueAddress
+                                  startAt
+                                  primaryContact
+                                  url
+                                  numAttendees
+                                  state
+                                  participants(query: {}) {
+                                    nodes {
+                                      gamerTag
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                            `;
+
+                        // query variables
+                        const variables = {
+                            coordinates: pos.lat + "," + pos.lng,
+                            radius: radius + "mi",
+                            perPage: 151,
+                            after: unixStartTime,
+                            before: unixEndTime,
+                            game: game.map(({id}) => id)
+                        };
+
+                        // Calling the API & filtering by minimum attendees
+                        let resData = await client.request(query, variables);
+
+                        tournamentsData = resData.tournaments.nodes;
+                        tournamentsData = tournamentsData.filter(function (tournament) {
+                            return minAttendees <= tournament['numAttendees'];
+                        });
+
+                        await createTournamentsArray(tournamentsData, null, minAttendees);
+
+                    } catch (error) {
+                        errorMessage = true;
+                        loading = false;
+                        console.error('Error:', error);
+                    }
+                    loading = false;
+                },
+                () => {
+                    console.log("Location denied.");
+                }
+            );
+        } else {
+            locationDeniedError = true;
+        }
+    }
+
+    function removeCircles() {
+        for (const i in circles) {
+            circles[i].setMap(null);
+        }
+        circles = [];
+    }
+
+    function drawCircles() {
+        if (circles.length > 0) {
+            removeCircles();
+        }
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    map.panTo(pos);
+
+                    // inne circle representing the search radius
+                    outerCircle = new google.maps.Circle({
+                        strokeColor: "#000000",
+                        strokeOpacity: 1,
+                        strokeWeight: 2.5,
+                        fillColor: "#FF0000",
+                        fillOpacity: 0.50,
+                        map,
+                        center: pos,
+                        radius: radius * 1609
+                    });
+
+                    // small circle for the current location
+                    innerCircle = new google.maps.Circle({
+                        strokeColor: "#000000",
+                        strokeOpacity: 1,
+                        strokeWeight: 2.5,
+                        fillColor: "#000000",
+                        fillOpacity: 1,
+                        map,
+                        center: pos,
+                        radius: 1000,
+                    });
+
+                    circles.push(innerCircle);
+                    circles.push(outerCircle);
+                },
+
+                () => {
+                    locationDeniedError = true;
+                }
+            );
+
+        } else {
+            locationDeniedError = true;
+        }
+    }
+
+    function handleClick() {
+        if (useCurrentLocationSearch) {
+            useCurrentLocation();
+        } else {
+            updateMap();
+        }
+    }
+
 </script>
 <svelte:window bind:innerWidth={screenSize}/>
 
 <aside in:blur={{duration: 300}}>
 
     <div class="filter-item">
-        <label>Game(s):</label>
+        <p>Game(s):</p>
         {#if screenSize > 500}
             <MultiSelect --sms-width="70%" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
                          --sms-remove-btn-hover-color="red" bind:value={game} options={games}/>
         {/if}
         {#if screenSize <= 500}
-            <MultiSelect --sms-width="35vw" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
+            <MultiSelect --sms-width="39vw" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
                          --sms-remove-btn-hover-color="red" --sms-font-size="16px" bind:value={game} options={games}/>
         {/if}
     </div>
 
 
     <div class="filter-item">
-        <label>Country: </label>
-        <select required name="country" bind:value={country}>
+        <p>Country: </p>
+        <select disabled="{useCurrentLocationSearch}" bind:value={country}>
             <option disabled>---NORTH AMERICA---</option>
             <option selected value="US">USA</option>
             <option value="CA">Canada</option>
@@ -174,15 +379,15 @@
             <option value="JP">Japan</option>
             <option value="AU">Australia</option>
             <option value="BR">Brazil</option>
-            <option value="TW">Taiwan</option>
         </select>
     </div>
 
 
     {#if country === 'US'}
         <div transition:fade={{duration: 250}} class="filter-item">
-            <label>State:</label>
-            <select required name="state" bind:value={state}>
+            <p>State:</p>
+            <select disabled="{useCurrentLocationSearch}" bind:value={state}>
+                <option selected disabled>Choose State</option>
                 <option value="AL">Alabama</option>
                 <option value="AK">Alaska</option>
                 <option value="AZ">Arizona</option>
@@ -239,27 +444,48 @@
         </div>
     {/if}
 
+
     <div class="filter-item">
-        <label> From: </label>
-        <input name="startDate" min={minDate} bind:value={startDate} type="date">
+        <p>Use Current Location:</p>
+        <input class="current-location-checkbox" type="checkbox" bind:checked={useCurrentLocationSearch}/>
+    </div>
+
+    {#if useCurrentLocationSearch}
+        <div transition:fade={{duration: 250}} class="filter-item">
+            <p>Radius: </p>
+            <select on:input={() => drawCircles()} bind:value={radius}>x
+                <option selected value="25">25 miles</option>
+                <option value="50">50 miles</option>
+                <option value="100">100 miles</option>
+                <option value="250">250 miles</option>
+                <option value="500">500 miles</option>
+                <option value="1000">1000 miles</option>
+            </select>
+        </div>
+    {/if}
+
+    <div class="filter-item">
+        <p> From: </p>
+        <input min={minDate} bind:value={startDate} type="date">
     </div>
 
     <div class="filter-item">
-        <label> To: </label>
-        <input name="endDate" min="{startDate}" bind:value={endDate} type="date">
+        <p> To: </p>
+        <input min="{startDate}" bind:value={endDate} type="date">
     </div>
 
-
     <div class="filter-item">
-        <label>Attendees: </label>
+        <p>Attendees: </p>
         <input name="attendees" type="number" min="0" step="1" bind:value={minAttendees}>
     </div>
 
-
     <div class="bottom">
-        <button on:click={async() => await updateMap()} disabled={loading}>Search</button>
+        <button on:click={() => handleClick()} disabled={loading}>Search</button>
 
-        <button disabled={loading} on:click={() => {showSearchPlayer = true; showSearchTournament = false;}}>Player Search</button>
+        <button disabled={loading} on:click={() => {
+            showSearchPlayer = true; showSearchTournament = false; useCurrentLocationSearch = false; removeCircles();}}>
+            Player Search
+        </button>
 
         {#if loading}
             <button on:click={() => {cancelled = true;}}>Cancel</button>
@@ -280,6 +506,10 @@
 
         {#if cancelled}
             <p class="error">Request cancelled</p>
+        {/if}
+
+        {#if locationDeniedError}
+            <p class="error">You must allow location access to use this feature.</p>
         {/if}
     </div>
 </aside>
@@ -304,9 +534,14 @@
 
     .filter-item select, .filter-item input {
         margin-left: auto;
-        margin-right: 3em;
-        width: 50%;
+        margin-right: 2vw;
         border-radius: 5px;
+        width: 10vw;
+    }
+
+    .filter-item p {
+        margin-block-start: 5px;
+        margin-block-end: 5px;
     }
 
     .error {
@@ -342,14 +577,15 @@
 
     @media (max-width: 500px) {
         .filter-item {
-            width: 50%;
             white-space: normal;
         }
 
         .filter-item select, .filter-item input {
-            margin-left: auto;
-            margin-right: 0;
             width: 30vw;
+        }
+
+        .filter-item .current-location-checkbox {
+            width: 5vw;
         }
     }
 </style>

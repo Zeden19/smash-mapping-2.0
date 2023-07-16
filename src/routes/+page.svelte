@@ -12,8 +12,8 @@
     let country;
     let minAttendees = 0;
     let state;
-    let showShareDialog;
-    let geolocated = data.geolocated;
+    let game;
+
     export let supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co', data.SUPABASE_KEY)
 
     let sidebarClosed = false;
@@ -29,6 +29,10 @@
     let sidebarTitle = "Filters:";
     let delay;
     let map;
+
+    let useCurrentLocationSearch = false;
+    let circles = [];
+    let radius;
 
     // database stuff
     let {tournaments} = data;
@@ -101,9 +105,10 @@
         {/if}
 
         {#if showFilters}
-            <Search delay={delay} bind:supabase bind:state bind:tournaments bind:data bind:geolocated bind:mapResult
-                    bind:startDate bind:endDate bind:country bind:minAttendees bind:showShareDialog bind:showSearchPlayer
-                    bind:showSearchTournament bind:selectedPlayer bind:search/>
+            <Search delay={delay} bind:supabase bind:state bind:tournaments bind:data bind:mapResult
+                    bind:startDate bind:endDate bind:country bind:minAttendees bind:showSearchPlayer
+                    bind:showSearchTournament bind:selectedPlayer bind:search bind:map bind:useCurrentLocationSearch
+                    bind:circles bind:radius bind:game/>
         {/if}
 
         {#if showHelp}
