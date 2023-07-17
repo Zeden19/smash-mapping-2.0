@@ -1,5 +1,5 @@
 <script>
-    import {MarkerClusterer} from "@googlemaps/markerclusterer";
+    import {DefaultRenderer, MarkerClusterer} from "@googlemaps/markerclusterer";
     import {Loader} from "@googlemaps/js-api-loader";
     import {onMount} from "svelte";
 
@@ -390,11 +390,42 @@
                 ],
             });
 
+            const renderer = {
+                render: ({count, position}, stats) => {
+                    const color = count > Math.max(10, stats.clusters.markers.mean)
+                        ? "#ff0000"
+                        : "#FFC72C";
+
+
+                    // create svg url with fill color
+                    const svg = window.btoa(`
+                        <svg fill="${color}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+                          <circle cx="120" cy="120" opacity=".6" r="70" />
+                          <circle cx="120" cy="120" opacity=".3" r="90" />
+                          <circle cx="120" cy="120" opacity=".2" r="110" />
+                        </svg>`);
+
+                    // create marker using svg icon
+                    return new google.maps.Marker({
+                        position,
+                        icon: {
+                            url: `data:image/svg+xml;base64,${svg}`,
+                            scaledSize: new google.maps.Size(45, 45),
+                        },
+                        label: {
+                            text: String(count),
+                            color: "rgba(255,255,255,0.9)",
+                            fontSize: "12px",
+                        },
+                        // adjust zIndex to be above other markers
+                        zIndex: 1000 + count,
+                    });
+                }
+            };
             map.setOptions({minZoom: 3, maxZoom: 18, zoomControl: true, gestureHandling: "greedy"});
-            markerCluster = new MarkerClusterer({map, markers, algorithmOptions: {maxZoom: 7}});
+            markerCluster = new MarkerClusterer({map, markers, renderer: renderer, algorithmOptions: {maxZoom: 7}});
         });
     });
-
 
     function hideMarkers() {
         for (let i = 0; i < markers.length; i++) {
@@ -488,6 +519,7 @@
         markerCluster.addMarkers(markers)
     }
 
+    // adding markers whenever mapResult changes (basically after querying and filtering)
     $: {
         if (mapResult) {
             addMarkers(mapResult);
