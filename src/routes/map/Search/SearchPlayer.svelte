@@ -142,7 +142,7 @@
         {/if}
 
         {#if tooManyRequestsError}
-            <p class="error">You cannot search for more than 150 tournaments.</p>
+            <p class="error">You cannot search for more than 90 tournaments.</p>
         {/if}
 
         {#if cancelled}

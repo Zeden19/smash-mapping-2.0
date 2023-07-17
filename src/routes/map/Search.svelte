@@ -139,7 +139,7 @@
         }
 
         // returning if too many tournaments found
-        if (tournamentsData.length > 150) {
+        if (tournamentsData.length > 90) {
             loading = false;
             tooManyRequestsError = true;
             return;
