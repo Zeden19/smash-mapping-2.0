@@ -1,5 +1,5 @@
 <script>
-    import {DefaultRenderer, MarkerClusterer} from "@googlemaps/markerclusterer";
+    import {MarkerClusterer} from "@googlemaps/markerclusterer";
     import {Loader} from "@googlemaps/js-api-loader";
     import {onMount} from "svelte";
 
@@ -22,6 +22,7 @@
         "Atelier", "Ling", "Regalo", "Mr. E", "Paseriman", "enhancedpv"]
 
     export let mapResult;
+    export let circles;
 
     // the loader
     const loader = new Loader({
@@ -503,15 +504,10 @@
 
 
                     // closing infowindow on clic for anywhere
-                    google.maps.event.addListener(map, "click", function (event) {
-                        infoWindow.close();
-                    });
-                    google.maps.event.addListener(map, "drag", function (event) {
-                        infoWindow.close();
-                    });
-                    google.maps.event.addListener(markerCluster, 'click', function (cluster) {
-                        infoWindow.close();
-                    });
+                    google.maps.event.addListener(map, "click", function () {infoWindow.close();});
+                    google.maps.event.addListener(map, "drag", function () {infoWindow.close();});
+                    google.maps.event.addListener(markerCluster, 'click', function () {infoWindow.close();});
+                    google.maps.event.addListener(circles[1], 'click', function () {infoWindow.close();});
                 };
 
             })(marker, tournament));

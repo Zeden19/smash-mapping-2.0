@@ -1,6 +1,7 @@
 <script>
     import {GraphQLClient} from "graphql-request";
     import { blur } from 'svelte/transition';
+    import {SEARCH_BY_PLAYER} from "./queries.js";
 
     export let createTournamentsArray = () => {
     };
@@ -9,7 +10,6 @@
     export let loading = false;
     export let errorMessage = false;
     export let noData = false;
-    export let cancelled = false;
     export let playerDoesNotExistError = false;
     export let selectedPlayer = "";
 
@@ -28,7 +28,6 @@
             errorMessage = false;
             loading = true;
             noData = false;
-            cancelled = false;
             playerDoesNotExistError = false;
 
             let tournamentsData;
@@ -42,36 +41,7 @@
             });
 
             // query
-            let query = `
-            query tournamentByPlayerID($discriminator: String!) {
-              user(slug: $discriminator) {
-                id
-                player {
-                  id
-                  gamerTag
-                }
-                tournaments(query: {filter: {upcoming: true}}) {
-                  nodes {
-                    name
-                    venueAddress
-                    startAt
-                    primaryContact
-                    url
-                    numAttendees
-                    isOnline
-                    state
-                    images(type: "profile") {
-                        url
-                      }
-                    participants(query: {}) {
-                      nodes {
-                        gamerTag
-                      }
-                    }
-                  }
-                }
-              }
-            }`;
+            let query = SEARCH_BY_PLAYER;
             // query variables
             const variables = {
                 discriminator: "user/" + search,
@@ -120,10 +90,7 @@
             Search
         </button>
 
-        {#if loading}
-            <button on:click={() => {cancelled = true;}}>Cancel</button>
-            <p>Loading...</p>
-        {/if}
+        <p>{loading ? "Loading..." : ""}</p>
 
         <div class="info-container">
             <h3 class="info-title">INFO</h3>
@@ -132,26 +99,13 @@
             <a target="_blank" href="hungrybox.png">Click here for example.</a>
         </div>
 
+        <p class="error">{errorMessage ? "There was an error loading the map" : ""}</p>
 
-        {#if errorMessage}
-            <p class="error">There was an error loading the map</p>
-        {/if}
+        <p class="error">{noData ? "No tournaments found" : ""}</p>
 
-        {#if noData}
-            <p class="error">No tournaments found</p>
-        {/if}
+        <p class="error">{tooManyRequestsError ? "You cannot search for more than 90 tournaments" : ""}</p>
 
-        {#if tooManyRequestsError}
-            <p class="error">You cannot search for more than 90 tournaments.</p>
-        {/if}
-
-        {#if cancelled}
-            <p class="error">Request cancelled</p>
-        {/if}
-
-        {#if playerDoesNotExistError}
-            <p class="error">Player does not exist, please see info above on how to get player.</p>
-        {/if}
+        <p class="error">{playerDoesNotExistError ? "Player does not exist, please see info above on how to get player." : ""}</p>
     </div>
 </aside>
 

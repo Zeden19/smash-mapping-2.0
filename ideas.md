@@ -60,8 +60,6 @@ Animations when elements move up and down
 City Search with a radius selector (this might use up a lot of tokens so consider a "city database")
 bookmark reminder (make this a overlay)
 Find current location and set it to the default when user visits page
-Fix how gettng country to the supabase works (use start.gg api to return country)
-
 
 
 NOTE FOR GAMERTAG QUERIES: use the smashdata.gg database, it has the tag with the id and thats all i need.

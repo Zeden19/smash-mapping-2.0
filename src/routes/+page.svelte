@@ -116,7 +116,7 @@
         {/if}
     </div>
 
-    <Map bind:map bind:data bind:mapResult/>
+    <Map bind:map bind:data bind:mapResult bind:circles/>
 </div>
 
 <footer style="height: 30px; display:block;">

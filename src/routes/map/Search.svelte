@@ -24,7 +24,6 @@
     let loading = false;
     let errorMessage = false;
     let noData = false;
-    let cancelled = false;
     let tooManyRequestsError = false;
     let playerDoesNotExistError = false;
     export let circles = [];
@@ -65,6 +64,7 @@
         (payload) => {
             tournaments.find(({id}) => id === payload.new.id).country = payload.new.country;
         }).subscribe()
+
 
     async function geocode_address(tournament, country) {
         // returning latlng from the database (no geocoding)
@@ -171,16 +171,10 @@
                 year: 'numeric'
             });
 
-            // cancelling
-            if (cancelled) {
-                loading = false;
-                return;
-            }
-
             if (tournament.venueAddress !== null) {
                 // getting latlng
                 try {
-                    latlng = await geocode_address(tournament, selectedCountry);
+                    latlng = await geocode_address(tournament, tournament.countryCode);
                 } catch (e) {
                     console.log(e);
                     continue;
@@ -218,22 +212,25 @@
 <div in:slide={{delay: 450, duration: 350, axis: 'x', easing: backOut}} out:slide={{duration: 350, axis: 'x'}}>
     {#if showSearchTournament}
         <SearchTournaments {data} {supabase} {tournaments} bind:showSearchTournament bind:showSearchPlayer
-                           bind:loading bind:errorMessage bind:noData bind:cancelled bind:tooManyRequestsError
+                           bind:loading bind:errorMessage bind:noData bind:tooManyRequestsError
                            bind:map bind:circles bind:useCurrentLocationSearch bind:radius
-                           bind:startDate bind:endDate bind:country bind:minAttendees bind:game {createTournamentsArray}/>
+                           bind:startDate bind:endDate bind:country bind:minAttendees bind:game
+                           {createTournamentsArray}/>
     {/if}
 
     {#if showSearchPlayer}
         <SearchPlayer {data} {supabase} {tournaments} bind:showSearchTournament bind:showSearchPlayer
-                      bind:loading bind:errorMessage bind:noData bind:cancelled bind:tooManyRequestsError
+                      bind:loading bind:errorMessage bind:noData bind:tooManyRequestsError
                       bind:playerDoesNotExistError bind:selectedPlayer bind:search {createTournamentsArray}/>
     {/if}
-
     <p>Psst: Wanna stay updated? Join the Smash Mapping Discord server!</p>
     <Discord/>
 </div>
 
 
 <style>
-
+    p {
+        text-align: left;
+        margin: 5px;
+    }
 </style>

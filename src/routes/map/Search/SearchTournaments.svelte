@@ -1,10 +1,9 @@
 <script>
     import {GraphQLClient} from "graphql-request";
-    import {Loader} from "@googlemaps/js-api-loader";
     import MultiSelect from 'svelte-multiselect'
     import {fade} from 'svelte/transition';
     import {blur} from "svelte/transition";
-    import {onDestroy} from "svelte";
+    import {SEARCH_BY_LOCATION, SEARCH_BY_COUNTRY} from "./queries.js"
 
     export let createTournamentsArray = () => {
     };
@@ -22,7 +21,6 @@
     let games = [{label: "Ultimate", id: "1386"}, {label: "Melee", id: "1"},
         {label: "Project M", id: "5"}, {label: "SF6", id: "43868"}]
 
-
     export let country;
     export let minAttendees = 0;
     export let state;
@@ -34,7 +32,6 @@
     export let loading = false;
     export let errorMessage = false;
     export let noData = false;
-    export let cancelled = false;
     let locationDeniedError = false;
     let screenSize;
 
@@ -47,6 +44,8 @@
     let outerCircle;
     export let circles = [];
 
+    let pos;
+
     // when user selects "Use current Location"
     $: if (useCurrentLocationSearch) {
         drawCircles();
@@ -54,7 +53,6 @@
         removeCircles();
     }
 
-    //fixme split into functions
     export async function updateMap() {
         const selectedCountry = country;
         if (startDate > endDate) {
@@ -87,7 +85,6 @@
             errorMessage = false;
             loading = true;
             noData = false;
-            cancelled = false;
             locationDeniedError = false;
 
             let tournamentsData;
@@ -106,30 +103,7 @@
             });
 
             // query
-            let query = `
-            query TournamentsByCountry($cCode: String!, $perPage: Int!, $after: Timestamp!, $before: Timestamp, $state: String, $game: [ID]) {
-            tournaments(query: {perPage: $perPage, filter: {countryCode: $cCode, afterDate: $after, beforeDate: $before, videogameIds: $game, addrState: $state}})
-            {
-                nodes {
-                  name
-                  venueAddress
-                  startAt
-                  primaryContact
-                  url
-                  numAttendees
-                  state
-                  isOnline
-                   images(type: "profile") {
-                      url
-                   }
-                  participants(query: {perPage: 499}) {
-                    nodes {
-                      gamerTag
-                    }
-                  }
-                }
-              }
-            }`;
+            let query = SEARCH_BY_COUNTRY;
             // query variables
             const variables = {
                 cCode: country,
@@ -148,7 +122,6 @@
 
             // Calling the API & filtering by minimum attendees
             let resData = await client.request(query, variables);
-
             tournamentsData = resData.tournaments.nodes;
             tournamentsData = tournamentsData.filter(function (tournament) {
                 return minAttendees <= tournament['numAttendees'];
@@ -165,120 +138,80 @@
     }
 
     async function useCurrentLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    const pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    };
-                    map.panTo(pos);
+        await getPosition();
+        map.panTo(pos);
 
-                    if (startDate > endDate) {
-                        alert("Start date must be before end date.");
-                        return;
-                    }
-
-                    if (endDate === undefined) {
-                        alert("Please enter an end date.");
-                        return;
-                    }
-
-                    if (isNaN(minAttendees)) {
-                        alert("Please enter a valid number for minimum attendees.");
-                        return;
-                    }
-
-                    if (minAttendees < 0) {
-                        alert("Minimum attendees must be greater than or equal to 0.");
-                        return;
-                    }
-
-                    try {
-                        tooManyRequestsError = false;
-                        errorMessage = false;
-                        loading = true;
-                        noData = false;
-                        cancelled = false;
-                        locationDeniedError = false;
-
-
-                        let tournamentsData;
-                        let unixStartTime = new Date(startDate.replace(/-/g, "/").replace("T", " "));
-                        let unixEndTime = new Date(endDate.replace(/-/g, "/").replace("T", " "));
-                        unixEndTime.setHours(23, 59, 59);
-                        unixStartTime = Math.floor(unixStartTime.getTime() / 1000);
-                        unixEndTime = Math.floor(unixEndTime.getTime() / 1000);
-
-                        const apiVersion = 'alpha';
-                        const endpoint = 'https://api.start.gg/gql/' + apiVersion;
-                        const client = new GraphQLClient(endpoint, {
-                            headers: {
-                                Authorization: 'Bearer ' + data.SMASH_GG_API_KEY,
-                            },
-                        });
-
-                        // query
-                        let query = `
-                            query TournamentsByLocation($coordinates: String!, $radius: String!, $perPage: Int!, $after: Timestamp!, $before: Timestamp!, $game: [ID]) {
-                              tournaments(
-                                query: {perPage: $perPage, filter: {location: {distanceFrom: $coordinates, distance: $radius}, afterDate: $after, beforeDate: $before, videogameIds: $game}}
-                              ) {
-                                nodes {
-                                  name
-                                  venueAddress
-                                  startAt
-                                  primaryContact
-                                  url
-                                  numAttendees
-                                  state
-                                  images(type: "profile") {
-                                    url
-                                  }
-                                  participants(query: {}) {
-                                    nodes {
-                                      gamerTag
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                            `;
-
-                        // query variables
-                        const variables = {
-                            coordinates: pos.lat + "," + pos.lng,
-                            radius: radius + "mi",
-                            perPage: 151,
-                            after: unixStartTime,
-                            before: unixEndTime,
-                            game: game.map(({id}) => id)
-                        };
-
-                        // Calling the API & filtering by minimum attendees
-                        let resData = await client.request(query, variables);
-
-                        tournamentsData = resData.tournaments.nodes;
-                        tournamentsData = tournamentsData.filter(function (tournament) {
-                            return minAttendees <= tournament['numAttendees'];
-                        });
-
-                        await createTournamentsArray(tournamentsData, null, minAttendees);
-
-                    } catch (error) {
-                        errorMessage = true;
-                        loading = false;
-                        console.error('Error:', error);
-                    }
-                    loading = false;
-                },
-                () => {
-                    console.log("Location denied.");
-                }
-            );
-        } else {
-            locationDeniedError = true;
+        if (startDate > endDate) {
+            alert("Start date must be before end date.");
+            return;
         }
+
+        if (endDate === undefined) {
+            alert("Please enter an end date.");
+            return;
+        }
+
+        if (isNaN(minAttendees)) {
+            alert("Please enter a valid number for minimum attendees.");
+            return;
+        }
+
+        if (minAttendees < 0) {
+            alert("Minimum attendees must be greater than or equal to 0.");
+            return;
+        }
+
+        try {
+            tooManyRequestsError = false;
+            errorMessage = false;
+            loading = true;
+            noData = false;
+            locationDeniedError = false;
+
+
+            let tournamentsData;
+            let unixStartTime = new Date(startDate.replace(/-/g, "/").replace("T", " "));
+            let unixEndTime = new Date(endDate.replace(/-/g, "/").replace("T", " "));
+            unixEndTime.setHours(23, 59, 59);
+            unixStartTime = Math.floor(unixStartTime.getTime() / 1000);
+            unixEndTime = Math.floor(unixEndTime.getTime() / 1000);
+
+            const apiVersion = 'alpha';
+            const endpoint = 'https://api.start.gg/gql/' + apiVersion;
+            const client = new GraphQLClient(endpoint, {
+                headers: {
+                    Authorization: 'Bearer ' + data.SMASH_GG_API_KEY,
+                },
+            });
+
+            // query
+            let query = SEARCH_BY_LOCATION;
+
+            // query variables
+            const variables = {
+                coordinates: pos.lat + "," + pos.lng,
+                radius: radius + "mi",
+                perPage: 151,
+                after: unixStartTime,
+                before: unixEndTime,
+                game: game.map(({id}) => id)
+            };
+
+            // Calling the API & filtering by minimum attendees
+            let resData = await client.request(query, variables);
+            tournamentsData = resData.tournaments.nodes;
+            tournamentsData = tournamentsData.filter(function (tournament) {
+                return minAttendees <= tournament['numAttendees'];
+            });
+
+            await createTournamentsArray(tournamentsData, null, minAttendees);
+
+        } catch (error) {
+            errorMessage = true;
+            loading = false;
+            console.error('Error:', error);
+        }
+        loading = false;
     }
 
     function removeCircles() {
@@ -288,65 +221,62 @@
         circles = [];
     }
 
-    function drawCircles() {
+    async function drawCircles() {
         if (circles.length > 0) {
             removeCircles();
         }
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    const pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    };
-                    map.panTo(pos);
 
-                    // inne circle representing the search radius
-                    outerCircle = new google.maps.Circle({
-                        strokeColor: "#000000",
-                        strokeOpacity: 1,
-                        strokeWeight: 2.5,
-                        fillColor: "#FF0000",
-                        fillOpacity: 0.50,
-                        map,
-                        center: pos,
-                        radius: radius * 1609
-                    });
+        await getPosition();
+        map.panTo(pos);
 
-                    // small circle for the current location
-                    innerCircle = new google.maps.Circle({
-                        strokeColor: "#000000",
-                        strokeOpacity: 1,
-                        strokeWeight: 2.5,
-                        fillColor: "#000000",
-                        fillOpacity: 1,
-                        map,
-                        center: pos,
-                        radius: 1000,
-                    });
+        // inne circle representing the search radius
+        outerCircle = new google.maps.Circle({
+            strokeColor: "#000000",
+            strokeOpacity: 1,
+            strokeWeight: 2.5,
+            fillColor: "#FF0000",
+            fillOpacity: 0.50,
+            map,
+            center: pos,
+            radius: radius * 1609
+        });
 
-                    circles.push(innerCircle);
-                    circles.push(outerCircle);
-                },
-
-                () => {
-                    locationDeniedError = true;
-                }
-            );
-
-        } else {
-            locationDeniedError = true;
-        }
+        // small circle for the current location
+        innerCircle = new google.maps.Circle({
+            strokeColor: "#000000",
+            strokeOpacity: 1,
+            strokeWeight: 2.5,
+            fillColor: "#000000",
+            fillOpacity: 1,
+            map,
+            center: pos,
+            radius: 1000,
+        });
+        circles.push(innerCircle);
+        circles.push(outerCircle);
     }
 
-    function handleClick() {
-        if (useCurrentLocationSearch) {
-            useCurrentLocation();
-        } else {
-            updateMap();
-        }
+    function getPosition() {
+        return new Promise((resolve, reject) => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        };
+                        resolve(pos);
+                    },
+                    (error) => {
+                        locationDeniedError = true;
+                        reject(error);
+                    }
+                );
+            } else {
+                reject(new Error('Geolocation is not supported in this browser.'));
+            }
+        });
     }
-
 </script>
 <svelte:window bind:innerWidth={screenSize}/>
 
@@ -489,37 +419,24 @@
     </div>
 
     <div class="bottom">
-        <button on:click={() => handleClick()} disabled={loading}>Search</button>
+        <button on:click={useCurrentLocationSearch ? useCurrentLocation() : updateMap()} disabled={loading}>Search
+        </button>
 
         <button disabled={loading} on:click={() => {
             showSearchPlayer = true; showSearchTournament = false; useCurrentLocationSearch = false; removeCircles();}}>
             Player Search
         </button>
 
-        {#if loading}
-            <button on:click={() => {cancelled = true;}}>Cancel</button>
-            <p>Loading...</p>
-        {/if}
+        <p>{loading ? "Loading..." : ""}</p>
 
-        {#if errorMessage}
-            <p class="error">There was an error loading the map</p>
-        {/if}
+        <p class="error">{errorMessage ? "There was an error loading the map" : ""}</p>
 
-        {#if noData}
-            <p class="error">No tournaments found</p>
-        {/if}
+        <p class="error">{noData ? "No tournaments found" : ""}</p>
 
-        {#if tooManyRequestsError}
-            <p class="error">You cannot search for more than 90 tournaments.</p>
-        {/if}
+        <p class="error">{tooManyRequestsError ? "You cannot search for more than 90 tournaments" : ""}</p>
 
-        {#if cancelled}
-            <p class="error">Request cancelled</p>
-        {/if}
+        <p class="error">{locationDeniedError ? "You must allow location access to use this feature" : ""}</p>
 
-        {#if locationDeniedError}
-            <p class="error">You must allow location access to use this feature.</p>
-        {/if}
     </div>
 </aside>
 
