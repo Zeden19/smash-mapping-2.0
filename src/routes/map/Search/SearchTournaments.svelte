@@ -433,7 +433,7 @@
 
         <p class="error">{noData ? "No tournaments found" : ""}</p>
 
-        <p class="error">{tooManyRequestsError ? "You cannot search for more than 90 tournaments" : ""}</p>
+        <p class="error">{tooManyRequestsError ? "You cannot search for more than 150 tournaments" : ""}</p>
 
         <p class="error">{locationDeniedError ? "You must allow location access to use this feature" : ""}</p>
 

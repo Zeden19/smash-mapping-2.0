@@ -424,7 +424,7 @@
                 }
             };
             map.setOptions({minZoom: 3, maxZoom: 18, zoomControl: true, gestureHandling: "greedy"});
-            markerCluster = new MarkerClusterer({map, markers, renderer: renderer, algorithmOptions: {maxZoom: 7}});
+            markerCluster = new MarkerClusterer({map, markers, renderer: renderer, algorithmOptions: {maxZoom: 6}});
         });
     });
 
@@ -434,7 +434,6 @@
         }
         markers.length = 0;
     }
-
 
     function addMarkers(mapResult) {
         hideMarkers();
