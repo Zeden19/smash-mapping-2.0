@@ -504,10 +504,18 @@
 
 
                     // closing infowindow on clic for anywhere
-                    google.maps.event.addListener(map, "click", function () {infoWindow.close();});
-                    google.maps.event.addListener(map, "drag", function () {infoWindow.close();});
-                    google.maps.event.addListener(markerCluster, 'click', function () {infoWindow.close();});
-                    google.maps.event.addListener(circles[1], 'click', function () {infoWindow.close();});
+                    google.maps.event.addListener(map, "click", function () {
+                        infoWindow.close();
+                    });
+                    google.maps.event.addListener(map, "drag", function () {
+                        infoWindow.close();
+                    });
+                    google.maps.event.addListener(markerCluster, 'click', function () {
+                        infoWindow.close();
+                    });
+                    if (circles[1]) google.maps.event.addListener(circles[1], 'click', function () {
+                        infoWindow.close();
+                    });
                 };
 
             })(marker, tournament));
