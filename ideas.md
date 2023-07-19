@@ -53,13 +53,16 @@ Just know that the skys the limits and we have something special here.
 • Different map options
 Look into post request for updateMap (reload might not be needed)
 Change inputs/filters to custom inputs cause rn default html ones aren't that good (searching)
-
-# PRIOIRTY
+City Search with a radius selector (this might use up a lot of tokens so consider a "city database")
 use some other way persist variables after component gets deleted
 Animations when elements move up and down
-City Search with a radius selector (this might use up a lot of tokens so consider a "city database")
-bookmark reminder (make this a overlay)
 Find current location and set it to the default when user visits page
+
+# PRIOIRTY
+Fix search players being bad
+bookmark reminder (make this a overlay)
+Make video
+
 
 
 NOTE FOR GAMERTAG QUERIES: use the smashdata.gg database, it has the tag with the id and thats all i need.

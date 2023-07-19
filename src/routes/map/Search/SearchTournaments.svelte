@@ -19,7 +19,8 @@
     export let map;
     export let data;
     let games = [{label: "Ultimate", id: "1386"}, {label: "Melee", id: "1"},
-        {label: "Project M", id: "5"}, {label: "SF6", id: "43868"}]
+        {label: "Project +", id: "33602"}, {label: "SF6", id: "43868"}, {label: "GG: Strive", id: 33945},
+    ]
 
     export let country;
     export let minAttendees = 0;
