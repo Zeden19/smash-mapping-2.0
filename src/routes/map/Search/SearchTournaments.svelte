@@ -26,8 +26,6 @@
     export let minAttendees = 0;
     export let state;
     export let game;
-    export let geolocated;
-
 
     export let tooManyRequestsError = false;
     export let loading = false;

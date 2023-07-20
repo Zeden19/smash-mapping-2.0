@@ -211,7 +211,7 @@
 
 <div in:slide={{delay: 450, duration: 350, axis: 'x', easing: backOut}} out:slide={{duration: 350, axis: 'x'}}>
     {#if showSearchTournament}
-        <SearchTournaments {data} {supabase} {tournaments} bind:showSearchTournament bind:showSearchPlayer
+        <SearchTournaments {data} bind:showSearchTournament bind:showSearchPlayer
                            bind:loading bind:errorMessage bind:noData bind:tooManyRequestsError
                            bind:map bind:circles bind:useCurrentLocationSearch bind:radius
                            bind:startDate bind:endDate bind:country bind:minAttendees bind:game
@@ -219,7 +219,7 @@
     {/if}
 
     {#if showSearchPlayer}
-        <SearchPlayer {data} {supabase} {tournaments} bind:showSearchTournament bind:showSearchPlayer
+        <SearchPlayer {data} bind:showSearchTournament bind:showSearchPlayer
                       bind:loading bind:errorMessage bind:noData bind:tooManyRequestsError
                       bind:playerDoesNotExistError bind:selectedPlayer bind:search {createTournamentsArray}/>
     {/if}

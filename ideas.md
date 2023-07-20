@@ -59,9 +59,11 @@ Animations when elements move up and down
 Find current location and set it to the default when user visits page
 
 # PRIOIRTY
+Fix tablet support
 Fix search players being bad
 bookmark reminder (make this a overlay)
 Make video
+Use cookies to query data
 
 
 

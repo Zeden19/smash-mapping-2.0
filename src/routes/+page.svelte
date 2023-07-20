@@ -4,6 +4,7 @@
     import Help from "./map/Help.svelte"
     import TournamentsCard from "./map/TournamentsCard.svelte";
     import {createClient} from '@supabase/supabase-js'
+    import {onMount} from "svelte";
 
     export let data;
     let mapResult;
@@ -36,6 +37,9 @@
 
     // database stuff
     let {tournaments} = data;
+
+    let showBookmarksDialog;
+
     function showSidebar(title) {
         sidebarClosed = false;
         showFilters = title === "Filters:";
@@ -51,6 +55,16 @@
             delay = 0;
         }
     }
+
+    onMount(() => {
+        if (document.cookie === '') {
+            document.cookie = "visited=false;";
+        }
+        if (document.cookie === 'visited=false') {
+            showBookmarksDialog.showModal();
+            document.cookie = "visited=true; path=/";
+        }
+    })
 </script>
 <svelte:head>
     <title>Smash Mapping: Map</title>
@@ -77,6 +91,11 @@
 
 <body>
 <div class="map">
+    <dialog bind:this={showBookmarksDialog}>
+        <h3>Make sure to bookmark this page and use Smash Mapping whenever you want to find tournaments!</h3>
+
+        <button on:click={() => showBookmarksDialog.close()}>Close</button>
+    </dialog>
 
     <div class="sidebar-buttons">
         <button class:sidebarSelected="{showFilters}" on:click={() => showSidebar("Filters:")}>
@@ -105,7 +124,7 @@
         {/if}
 
         {#if showFilters}
-            <Search delay={delay} bind:supabase bind:state bind:tournaments bind:data bind:mapResult
+            <Search bind:supabase bind:state bind:tournaments bind:data bind:mapResult
                     bind:startDate bind:endDate bind:country bind:minAttendees bind:showSearchPlayer
                     bind:showSearchTournament bind:selectedPlayer bind:search bind:map bind:useCurrentLocationSearch
                     bind:circles bind:radius bind:game/>
@@ -130,6 +149,38 @@
         margin: 0;
         padding: 0;
         background-color: #26282B;
+    }
+
+    dialog {
+        background: white;
+        font-family: "Kanit", serif;
+        width: 30%;
+        border: black 5px solid;
+        border-radius: 10px;
+        margin: 10px 10px 0 auto;
+        padding: 5px;
+    }
+
+    dialog > * {
+        background: white;
+    }
+
+    dialog > button {
+        background: #26282B;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    dialog > button:hover {
+        background: #3a4142;
+    }
+
+    dialog::backdrop {
+        background: rgba(0, 0, 0, 0.5);
     }
 
     footer {
@@ -250,10 +301,6 @@
         margin-top: 3px;
     }
 
-    dialog::backdrop {
-        background: rgba(0, 0, 0, 0.5);
-    }
-
 
     /* small screens */
     @media (max-width: 500px) {
@@ -263,6 +310,10 @@
 
         .sidebar.sidebarClosed {
             margin-left: -180vw;
+        }
+
+        dialog {
+            width: 60%;
         }
     }
 
