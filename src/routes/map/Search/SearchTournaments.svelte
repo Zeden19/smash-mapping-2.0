@@ -19,7 +19,7 @@
     export let map;
     export let data;
     let games = [{label: "Ultimate", id: "1386"}, {label: "Melee", id: "1"},
-        {label: "Project +", id: "33602"}, {label: "SF6", id: "43868"}, {label: "GG: Strive", id: 33945},
+        {label: "Project +", id: "33602"}, {label: "SF6", id: "43868"}, {label: "GG: Strive", id: '33945'},
     ]
 
     export let country;
@@ -53,6 +53,12 @@
     }
 
     export async function updateMap() {
+        if (game.length === 0) {
+            game = games;
+        }
+
+        console.log(game)
+
         const selectedCountry = country;
         if (startDate > endDate) {
             alert("Start date must be before end date.");

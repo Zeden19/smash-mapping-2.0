@@ -199,7 +199,7 @@
                         numAttendees: tournament.numAttendees,
                         state: tournament.state,
                         participants: tournament.participants.nodes.map(({gamerTag}) => gamerTag),
-                        image: tournament.images[0] ? tournament.images[0].url : null
+                        image: tournament.images[0] ? tournament.images[0].url : "/trophy.png",
                     });
             }
         }
