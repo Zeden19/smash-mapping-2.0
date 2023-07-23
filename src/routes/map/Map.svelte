@@ -453,8 +453,7 @@
             });
 
             if (markerPositions.includes(marker.position.toString())) {
-                marker.setIcon("markers/yellow-marker.png")
-                marker.setPosition(new google.maps.LatLng(mapResult.lat + 0.0001, mapResult.lng + 0.0001));
+                marker.setPosition(new google.maps.LatLng(tournament.lat + 0.001, tournament.lng + 0.001));
             }
 
             if (tournament.numAttendees > 50) {
@@ -472,6 +471,12 @@
             if (tournament.state === 3) {
                 marker.setIcon('markers/grey-marker.png')
             }
+
+            if (tournament.name === 'Riptide 2023') {
+                marker.setIcon('markers/riptide-marker.png')
+            }
+
+            console.log(tournament.name)
 
 
             // Add the marker to the array
