@@ -53,7 +53,11 @@
             // Calling the API & filtering by minimum attendees
             let resData = await client.request(query, variables);
 
-            console.log(resData)
+            if (resData.player.user === null) {
+                playerDoesNotExistError = true;
+                loading = false;
+                return;
+            }
 
             tournamentsData = resData.player.user.tournaments.nodes;
             selectedPlayer = resData.player;
@@ -141,7 +145,7 @@
 
         <p class="error">{tooManyRequestsError ? "You cannot search for more than 90 tournaments" : ""}</p>
 
-        <p class="error">{playerDoesNotExistError ? "Player does not exist, please see info above on how to get player." : ""}</p>
+        <p class="error">{playerDoesNotExistError ? "Player does not exist, please select a different player." : ""}</p>
     </div>
 
 </aside>
