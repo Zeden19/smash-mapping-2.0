@@ -57,10 +57,11 @@ City Search with a radius selector (this might use up a lot of tokens so conside
 use some other way persist variables after component gets deleted
 Animations when elements move up and down
 Find current location and set it to the default when user visits page
+Make animations for markers so they don't just "pop" in
 
 # PRIOIRTY
 Fix tablet support
-Fix search players being bad
+Fix search players being bad (use database, use url, show character, countrys show profile image)
 Make video
 Use cookies to query data
 

@@ -221,10 +221,11 @@
     {#if showSearchPlayer}
         <SearchPlayer {data} bind:showSearchTournament bind:showSearchPlayer
                       bind:loading bind:errorMessage bind:noData bind:tooManyRequestsError
-                      bind:playerDoesNotExistError bind:selectedPlayer bind:search {createTournamentsArray}/>
+                      bind:playerDoesNotExistError bind:selectedPlayer bind:search bind:supabase {createTournamentsArray}/>
     {/if}
-    <p>Psst: Wanna stay updated? Join the Smash Mapping Discord server!</p>
-    <Discord/>
+    <div class="discord"><p>Psst: Wanna stay updated? Join the Smash Mapping Discord server!</p>
+        <Discord/>
+    </div>
 </div>
 
 
@@ -232,5 +233,10 @@
     p {
         text-align: left;
         margin: 5px;
+    }
+
+    .discord {
+        position: relative;
+        z-index: 0;
     }
 </style>

@@ -50,33 +50,42 @@ export let SEARCH_BY_LOCATION = 'query TournamentsByLocation($coordinates: Strin
     '            }' +
     '            ';
 
-export let SEARCH_BY_PLAYER = 'query tournamentByPlayerID($discriminator: String!) {' +
-    '              user(slug: $discriminator) {' +
-    '                id' +
-    '                player {' +
-    '                  id' +
-    '                  gamerTag' +
-    '                }' +
-    '                tournaments(query: {filter: {upcoming: true}}) {' +
-    '                  nodes {' +
-    '                    name' +
-    '                    venueAddress' +
-    '                    startAt' +
-    '                    primaryContact' +
-    '                    url' +
-    '                    numAttendees' +
-    '                    isOnline' +
-    '                    countryCode' +
-    '                    state' +
-    '                    images(type: "profile") {' +
-    '                        url' +
-    '                      }' +
-    '                    participants(query: {}) {' +
-    '                      nodes {' +
-    '                        gamerTag' +
-    '                      }' +
-    '                    }' +
-    '                  }' +
-    '                }' +
-    '              }' +
-    '            }';
+export let SEARCH_BY_PLAYER = 'query tournamentByPlayerID($id: ID!) {' +
+    '  player(id: $id) {' +
+    '    gamerTag' +
+    '    user {' +
+    '      slug' +
+    '      tournaments(query: {filter: {upcoming: true}}) {' +
+    '        nodes {' +
+    '          name' +
+    '          venueAddress' +
+    '          startAt' +
+    '          primaryContact' +
+    '          url' +
+    '          numAttendees' +
+    '          state' +
+    '          isOnline' +
+    '          countryCode' +
+    '          images(type: "profile") {' +
+    '            url' +
+    '          }' +
+    '          participants(query: {}) {' +
+    '            nodes {' +
+    '              gamerTag' +
+    '            }' +
+    '          }' +
+    '        }' +
+    '      }' +
+    '    }' +
+    '  }' +
+    '}';
+
+export let CHECK_USER_EXISTS = 'query checkUser($id: ID!) {\n' +
+    '  player(id: $id) {\n' +
+    '    gamerTag\n' +
+    '    prefix\n' +
+    '    user {\n' +
+    '      slug\n' +
+    '    }\n' +
+    '  }\n' +
+    '}\n '

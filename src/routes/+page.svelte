@@ -99,13 +99,13 @@
 
     <div class="sidebar-buttons">
         <button class:sidebarSelected="{showFilters}" on:click={() => showSidebar("Filters:")}>
-            <img src="filter.png" style="width: 40px; height: 45px" alt="filter-image"></button>
+            <img src="sidebar-icons/filter.png" style="width: 40px; height: 45px" alt="filter-image"></button>
 
         <button class:sidebarSelected="{showTournaments}" on:click={() =>  showSidebar("Tournaments:")}>
-            <img src="tournaments.png" style="width: 40px; height: 45px" alt="tournaments-image"></button>
+            <img src="sidebar-icons/tournaments.png" style="width: 40px; height: 45px" alt="tournaments-image"></button>
 
         <button class:sidebarSelected="{showHelp}" on:click={() =>  showSidebar("Help:")}>
-            <img src="questionmark.png" style="width: 40px; height: 40px" alt="tournaments-image"></button>
+            <img src="sidebar-icons/questionmark.png" style="width: 40px; height: 40px" alt="tournaments-image"></button>
     </div>
 
     <div class="sidebar" class:sidebarClosed id="tournaments-sidebar">
