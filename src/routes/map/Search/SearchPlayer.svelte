@@ -14,8 +14,8 @@
     export let playerDoesNotExistError = false;
 
     export let selectedPlayer = "";
-    export let selectedResult;
     export let showResults = false;
+    let searchResultsContainer;
 
     export let showSearchTournament;
     export let showSearchPlayer;
@@ -54,6 +54,8 @@
             let resData = await client.request(query, variables);
 
             if (resData.player.user === null) {
+                const {errors} = await supabase.from('players').delete().eq('id', id);
+
                 playerDoesNotExistError = true;
                 loading = false;
                 return;
@@ -73,10 +75,37 @@
     }
 
     let promise;
+    let playersList;
+    let selectedPlayerIndex = -1;
 
     async function searchPlayers(player) {
         let {data: players} = await supabase.from('players').select('*').eq('tag', player);
+        playersList = players;
         return players;
+    }
+
+    function handleKeyDown(event) {
+        const totalPlayers = playersList.length;
+        if (event.key === "ArrowDown") {
+            selectedPlayerIndex = (selectedPlayerIndex + 1) % totalPlayers;
+        } else if (event.key === "ArrowUp") {
+            selectedPlayerIndex = (selectedPlayerIndex - 1 + totalPlayers) % totalPlayers;
+        }
+
+        console.log(selectedPlayerIndex)
+
+        // Prevent scrolling the page when arrow keys are pressed
+        event.preventDefault();
+    }
+
+    function handleSearchResultsBlur() {
+        // Use a timeout to check if the focus has moved to the search results container
+        setTimeout(() => {
+            if (!searchResultsContainer.contains(document.activeElement)) {
+                showResults = false;
+                selectedPlayerIndex = null;
+            }
+        }, 100);
     }
 </script>
 
@@ -86,20 +115,23 @@
 
     <div class="search">
         <input bind:value={search} on:focus={() => showResults = true}
-               on:focusout={() => { setTimeout(() => { showResults = false; }, 100);}}
-               on:keydown={(key) => {if (key.key === "Enter") promise = searchPlayers(search, key) }}
+               on:focusout={() => handleSearchResultsBlur()}
+               on:keydown={(key) => {if (key.key === "Enter") promise = searchPlayers(search);}}
                type="text" placeholder="Search by Player tag"/>
 
-        <div class="search-results">
+        <div class="search-results" bind:this={searchResultsContainer} on:keydown={() => handleKeyDown}
+             on:blur={() => (selectedPlayerIndex = null)}>
             {#await promise}
                 <p>Searching...</p>
             {:then data}
                 {#if showResults && data && data.length > 0}
-                    {#each data as player}
-                        <div class="player" on:click={() => updateMap(player.id)} class:red={selectedResult === player}>
-                            {#if player.prefixes[0]}
-                                <p class="prefix">{player.prefixes[0]}
-                            {/if}
+                    {#each data as player, index}
+                        <div tabindex="0" class="player"
+                             on:keydown={(key) => {if (key.key === 'Enter') {updateMap(player.id); showResults = false;}}}
+                             on:click={() => {updateMap(player.id); showResults = false;}}
+                             class:red={selectedPlayerIndex === index}>
+
+                            {#if player.prefixes[0]} <p class="prefix">{player.prefixes[0]}{/if}
 
                             <p>{player.tag}</p>
 

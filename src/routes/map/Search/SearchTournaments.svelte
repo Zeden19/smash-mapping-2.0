@@ -419,7 +419,7 @@
         <input min="{startDate}" bind:value={endDate} type="date">
     </div>
 
-    <div class="filter-item">
+    <div class="filter-item attendees-filter">
         <p>Attendees: </p>
         <input name="attendees" type="number" min="0" step="1" bind:value={minAttendees}>
     </div>
@@ -492,6 +492,10 @@
         transition: right 0.5s ease-in-out;
         font-family: "Bebas Neue", serif;
 
+    }
+
+    .attendees-filter {
+        font-size: 16px;
     }
 
     button:hover {

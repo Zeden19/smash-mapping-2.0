@@ -214,7 +214,7 @@
         <SearchTournaments {data} bind:showSearchTournament bind:showSearchPlayer
                            bind:loading bind:errorMessage bind:noData bind:tooManyRequestsError
                            bind:map bind:circles bind:useCurrentLocationSearch bind:radius
-                           bind:startDate bind:endDate bind:country bind:minAttendees bind:game
+                           bind:startDate bind:endDate bind:country bind:minAttendees bind:game bind:state
                            {createTournamentsArray}/>
     {/if}
 
