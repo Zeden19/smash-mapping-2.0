@@ -20,6 +20,8 @@
         "Shirayuki", "アカキクス", "Peabnut", "IceMist", "Leon", "Dark Wizzy", "Supahsemmie", "Quandale Dinglelingleton", "Space",
         "MKBigBoss", "Goblin", "Umeki", "Yei", "Rox", "WaDi", "skittles", "NaetorU", "MASA", "ATATA", "Nietono", "Chronos", "yonni",
         "Atelier", "Ling", "Regalo", "Mr. E", "Paseriman", "enhancedpv"]
+    let superMajors = [{label:"Evo 2023", marker:"evo-marker.png"}, {label:"Riptide 2023", marker: "riptide-marker.png"},
+        {label:"Super Smash Con 2023", marker:"ssc-marker.png"}]
 
     export let mapResult;
     export let circles;
@@ -472,12 +474,10 @@
                 marker.setIcon('markers/grey-marker.png')
             }
 
-            if (tournament.name === 'Riptide 2023') {
-                marker.setIcon('markers/riptide-marker.png')
+
+            if (superMajors.map(x => x.label).includes(tournament.name)) {
+                marker.setIcon('markers/' + superMajors.find(x => x.label === tournament.name).marker)
             }
-
-            console.log(tournament.name)
-
 
             // Add the marker to the array
             markers.push(marker);
