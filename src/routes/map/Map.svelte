@@ -20,8 +20,12 @@
         "Shirayuki", "アカキクス", "Peabnut", "IceMist", "Leon", "Dark Wizzy", "Supahsemmie", "Quandale Dinglelingleton", "Space",
         "MKBigBoss", "Goblin", "Umeki", "Yei", "Rox", "WaDi", "skittles", "NaetorU", "MASA", "ATATA", "Nietono", "Chronos", "yonni",
         "Atelier", "Ling", "Regalo", "Mr. E", "Paseriman", "enhancedpv"]
-    let superMajors = [{label:"Evo 2023", marker:"evo-marker.png"}, {label:"Riptide 2023", marker: "riptide-marker.png"},
-        {label:"Super Smash Con 2023", marker:"ssc-marker.png"}]
+    let superMajors = [{label: "Evo 2023", marker: "evo-marker.png"},
+        {label: "Riptide 2023", marker: "riptide-marker.png"},
+        {label: "Super Smash Con 2023", marker: "ssc-marker.png"},
+        {label: "Delfino Maza 2023", marker: "delfino-maza-marker.png"},
+        {label: "Tera", marker: "tera-marker.png"},
+        {label: "Rise 'N Grind 2023", marker: "rng-marker.png"}]
 
     export let mapResult;
     export let circles;

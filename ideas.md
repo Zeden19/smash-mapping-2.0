@@ -47,26 +47,19 @@ Just know that the skys the limits and we have something special here.
 • Special icons for certified majors
 • Schedules for big tournaments (maybe even a list of the big tournaments on the map)
 • Animation for special marker (event listener for when marker is "on screen"?)
-• fix stupid bug with multiple markers on same spot
 • Different markers for different games
 • My own tournament hosting system for other countries
 • Different map options
 Look into post request for updateMap (reload might not be needed)
 Change inputs/filters to custom inputs cause rn default html ones aren't that good (searching)
 City Search with a radius selector (this might use up a lot of tokens so consider a "city database")
-use some other way persist variables after component gets deleted
 Animations when elements move up and down
 Find current location and set it to the default when user visits page
 Make animations for markers so they don't just "pop" in
 
 # PRIOIRTY
 Fix tablet support
-Fix search players being bad (use database, use url, show character, countrys show profile image)
 Make video
 Use cookies to query data
-
-
-
-NOTE FOR GAMERTAG QUERIES: use the smashdata.gg database, it has the tag with the id and thats all i need.
-JUST THINK BIG
-
+fix stupid bug with multiple markers on same spot
+Make the Twitter Page
