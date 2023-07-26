@@ -524,4 +524,18 @@
             width: 5vw;
         }
     }
+
+    @media (min-width: 500px) and (max-width: 1000px) {
+        .filter-item {
+            white-space: normal;
+        }
+
+        .filter-item select, .filter-item input {
+            width: 20vw;
+        }
+
+        .filter-item .current-location-checkbox {
+            width: 5vw;
+        }
+    }
 </style>

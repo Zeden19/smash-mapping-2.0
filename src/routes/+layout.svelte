@@ -67,6 +67,7 @@
         white-space: nowrap;
         display: flex;
         align-items: center;
+        margin: 5px 3em 0 3em;
     }
 
     .title-marker {
@@ -109,10 +110,25 @@
         }
     }
 
-    /*large screens*/
-    @media (min-width: 500px) {
+    /*tablets*/
+    @media (max-width: 1000px) and (min-width: 500px ) {
         nav h2 {
-            margin: 5px 3em 0 3em;
+            margin: 0 13vw 0 20px;
+            font-size: 2.6vh;
+        }
+
+        .title-marker {
+            flex-shrink: 0;
+            margin-left: 0;
+        }
+
+        nav li {
+            font-size: 4vw;
+            margin-inline: 20px;
+        }
+
+        nav a {
+            padding: 0
         }
     }
 </style>

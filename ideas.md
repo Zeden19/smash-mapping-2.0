@@ -62,4 +62,3 @@ Fix tablet support
 Make video
 Use cookies to query data
 fix stupid bug with multiple markers on same spot
-Make the Twitter Page

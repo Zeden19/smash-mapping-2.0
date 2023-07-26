@@ -327,4 +327,14 @@
             margin-left: -24.5%;
         }
     }
+    /*tablet support*/
+    @media (min-width: 500px) and (max-width: 1000px) {
+        .sidebar {
+            width: 60vw;
+        }
+
+        .sidebar.sidebarClosed {
+            margin-left: -60vw;
+        }
+    }
 </style>
