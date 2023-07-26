@@ -40,11 +40,11 @@
     onMount(async () => {
         loader.load().then(async () => {
             const {Map} = await google.maps.importLibrary("maps");
-            let center = {lat: 43.73758865859436, lng: -79.50304080536894};
+            let center = {lat: 39.8283, lng: -98.5795};
             infoWindow = new google.maps.InfoWindow();
             map = new google.maps.Map(document.getElementById("map"), {
                 center: center,
-                zoom: 8,
+                zoom: 4,
                 styles: [
                     {
                         "featureType": "all",
