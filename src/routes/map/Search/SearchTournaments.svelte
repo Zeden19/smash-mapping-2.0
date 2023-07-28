@@ -481,29 +481,8 @@
         white-space: normal;
     }
 
-    button {
-        background-color: black;
-        border: none;
-        color: white;
-        padding: 10px 20px 8px 20px;
-        font-size: 1.4em;
-        margin: 5px 5px 5px 5px;
-        border-radius: 20%;
-        transition: right 0.5s ease-in-out;
-        font-family: "Bebas Neue", serif;
-
-    }
-
     .attendees-filter {
         font-size: 16px;
-    }
-
-    button:hover {
-        background-color: #555;
-    }
-
-    button:disabled {
-        background-color: grey;
     }
 
     .bottom {

@@ -5,6 +5,7 @@
     import TournamentsCard from "./map/TournamentsCard.svelte";
     import {createClient} from '@supabase/supabase-js'
     import {onMount} from "svelte";
+    import Account from "./map/Account.svelte";
 
     export let data;
     let mapResult;
@@ -21,6 +22,7 @@
     let showFilters = true;
     let showTournaments = false;
     let showHelp = false;
+    let showAccount = false;
 
     let showSearchPlayer = false;
     let showSearchTournament = true;
@@ -37,7 +39,6 @@
 
     // database stuff
     let {tournaments} = data;
-
     let showBookmarksDialog;
 
     function showSidebar(title) {
@@ -45,6 +46,7 @@
         showFilters = title === "Filters:";
         showTournaments = title === "Tournaments:";
         showHelp = title === "Help:";
+        showAccount = title === "Account:";
         sidebarTitle = title;
 
         if (showFilters) {
@@ -104,8 +106,15 @@
         <button class:sidebarSelected="{showTournaments}" on:click={() =>  showSidebar("Tournaments:")}>
             <img src="sidebar-icons/tournaments.png" style="width: 40px; height: 45px" alt="tournaments-image"></button>
 
+        <button class:sidebarSelected="{showAccount}" on:click={() =>  showSidebar("Account:")}>
+            <img src="sidebar-icons/account.png" style="width: 40px; height: 40px" alt="tournaments-image">
+        </button>
+
         <button class:sidebarSelected="{showHelp}" on:click={() =>  showSidebar("Help:")}>
-            <img src="sidebar-icons/questionmark.png" style="width: 40px; height: 40px" alt="tournaments-image"></button>
+            <img src="sidebar-icons/questionmark.png" style="width: 40px; height: 40px" alt="tournaments-image">
+        </button>
+
+
     </div>
 
     <div class="sidebar" class:sidebarClosed id="tournaments-sidebar">
@@ -128,6 +137,10 @@
                     bind:startDate bind:endDate bind:country bind:minAttendees bind:showSearchPlayer
                     bind:showSearchTournament bind:selectedPlayer bind:search bind:map bind:useCurrentLocationSearch
                     bind:circles bind:radius bind:game/>
+        {/if}
+
+        {#if showAccount}
+            <Account/>
         {/if}
 
         {#if showHelp}
@@ -238,7 +251,7 @@
 
     .sidebar-buttons > button {
         display: block;
-        margin-top: 0.5em;
+        margin: 5px;
         background: #181818;
         border-bottom: #2b2b31 solid 2px;
         border-top: #2b2b31 solid 2px;
@@ -327,6 +340,7 @@
             margin-left: -24.5%;
         }
     }
+
     /*tablet support*/
     @media (min-width: 500px) and (max-width: 1000px) {
         .sidebar {

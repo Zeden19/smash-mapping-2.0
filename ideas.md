@@ -58,7 +58,7 @@ Find current location and set it to the default when user visits page
 Make animations for markers so they don't just "pop" in
 
 # PRIOIRTY
-Fix tablet support
 Make video
 Use cookies to query data
 fix stupid bug with multiple markers on same spot
+Look into and implement "lib" stuff for database (cause this way is no bueno)
