@@ -22,7 +22,6 @@
 
 <slot/>
 
-
 <style>
     nav {
         background-color: #26282B;

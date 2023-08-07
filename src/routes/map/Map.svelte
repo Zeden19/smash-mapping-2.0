@@ -462,25 +462,19 @@
                 marker.setPosition(new google.maps.LatLng(tournament.lat + 0.001, tournament.lng + 0.001));
             }
 
-            if (tournament.numAttendees > 50) {
-                marker.setIcon('markers/green-marker.png')
-            }
-
-            if (tournament.numAttendees > 100) {
-                marker.setIcon('markers/blue-marker.png')
-            }
-
-            if (tournament.numAttendees > 500) {
-                marker.setIcon('markers/purple-marker.png')
-            }
-
             if (tournament.state === 3) {
-                marker.setIcon('markers/grey-marker.png')
-            }
-
-
-            if (superMajors.map(x => x.label).includes(tournament.name)) {
-                marker.setIcon('markers/' + superMajors.find(x => x.label === tournament.name).marker)
+                marker.setIcon('markers/grey-marker.png');
+            } else if (superMajors.some(major => major.label === tournament.name)) {
+                const majorMarker = superMajors.find(major => major.label === tournament.name).marker;
+                marker.setIcon(`markers/${majorMarker}`);
+            } else if (tournament.numAttendees > 500) {
+                marker.setIcon('markers/purple-marker.png');
+            } else if (tournament.numAttendees > 300) {
+                marker.setIcon('markers/orange-marker.png');
+            } else if (tournament.numAttendees > 150) {
+                marker.setIcon('markers/blue-marker.png');
+            } else if (tournament.numAttendees > 50) {
+                marker.setIcon('markers/green-marker.png');
             }
 
             // Add the marker to the array
@@ -528,6 +522,7 @@
 
             })(marker, tournament));
         }
+
         markerCluster.addMarkers(markers)
     }
 

@@ -56,8 +56,12 @@ City Search with a radius selector (this might use up a lot of tokens so conside
 Animations when elements move up and down
 Find current location and set it to the default when user visits page
 Make animations for markers so they don't just "pop" in
+Switch to advanced markers (?)
 
 # PRIOIRTY
+Make query filter with attendee count (to avoid missing out on tournaments)
+Challonge (?)
+"Featured tournaments" bar
 Make video
 Use cookies to query data
 fix stupid bug with multiple markers on same spot

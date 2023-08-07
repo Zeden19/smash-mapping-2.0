@@ -51,15 +51,15 @@
             </div>
 
             <div class="marker">
-                <img src="markers/green-marker.png" alt="green-pointer"> Between 51
-                and
-                100 attendees
+                <img src="markers/green-marker.png" alt="green-pointer"> Between 51 and 150 attendees
             </div>
 
             <div class="marker">
-                <img src="markers/blue-marker.png" alt="blue-pointer"> Between 101
-                and
-                500 attendees
+                <img src="markers/blue-marker.png" alt="blue-pointer"> Between 151 and 300 attendees
+            </div>
+
+            <div class="marker">
+                <img src="markers/orange-marker.png" alt="orange-pointer"> Between 301 and 500 attendees
             </div>
 
             <div class="marker">
@@ -72,12 +72,7 @@
             </div>
 
             <div class="marker">
-                <img src="markers/yellow-marker.png" alt="yellow-pointer">
-                Another marker is on top of this one
-            </div>
-
-            <div class="marker">
-                <img src="markers/grey-marker.png" alt="grey-pointer"> Tournament has ended
+                <img src="markers/grey-marker.png" alt="grey-pointer"> Tournament is over
             </div>
 
         </aside>

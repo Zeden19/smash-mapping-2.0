@@ -113,7 +113,7 @@
             // query variables
             const variables = {
                 cCode: country,
-                perPage: 151,
+                perPage: 300,
                 after: unixStartTime,
                 before: unixEndTime,
                 state: state,
