@@ -40,11 +40,9 @@ Just know that the skys the limits and we have something special here.
 # Features
 • Special animation if a tournament has a top 100 player (and maybe more animations if tournament has numerous top
 100 players) (use math)
-• More games, like overwatch, league of legends, fortnite (and changee the name up at that point)
 • Paid advertising (either like a board at the top that shows tournaments, and/or special icon animation)
 • Account system (useful to get this set up now rather than later) (apply benifits)
 • get that stupid domain fixed (smashmapping.com)
-• Special icons for certified majors
 • Schedules for big tournaments (maybe even a list of the big tournaments on the map)
 • Animation for special marker (event listener for when marker is "on screen"?)
 • Different markers for different games
@@ -57,9 +55,12 @@ Animations when elements move up and down
 Find current location and set it to the default when user visits page
 Make animations for markers so they don't just "pop" in
 Switch to advanced markers (?)
+Make query filter with attendee count (or some other way such as sortin)
+Find a way to have "weekly" schedules, as if autmatically finding tournaments that are happenign every week
+
 
 # PRIOIRTY
-Make query filter with attendee count (to avoid missing out on tournaments)
+Make tournaments with special markers not go in cluster
 Challonge (?)
 "Featured tournaments" bar
 Make video

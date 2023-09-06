@@ -1,7 +1,13 @@
+* {
+    margin: 0;
+    padding: 0;
+}
 
 p {
     font-family: "Kanit", serif;
     font-size: 1.1em;
+    margin-block-start: 0;
+    margin-block-end: 0;
 }
 
 a {
@@ -22,6 +28,10 @@ a:hover {
 
 body {
     overflow-y: auto;
+}
+
+h2 {
+    font-family: "Bebas Neue", serif;
 }
 
 button {

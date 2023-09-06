@@ -20,6 +20,8 @@
 		"@supabase/supabase-js": "^2.26.0",
 		"@sveltejs/adapter-vercel": "^3.0.1",
 		"@vercel/analytics": "^1.0.1",
+		"firebase": "^10.1.0",
+		"firebase-admin": "^11.10.1",
 		"graphql-request": "^6.1.0",
 		"svelte-multiselect": "^10.0.0"
 	}

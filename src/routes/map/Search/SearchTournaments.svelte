@@ -197,7 +197,7 @@
             const variables = {
                 coordinates: pos.lat + "," + pos.lng,
                 radius: radius + "mi",
-                perPage: 151,
+                perPage: 300,
                 after: unixStartTime,
                 before: unixEndTime,
                 game: game.map(({id}) => id)
@@ -206,6 +206,8 @@
             // Calling the API & filtering by minimum attendees
             let resData = await client.request(query, variables);
             tournamentsData = resData.tournaments.nodes;
+
+            console.log(tournamentsData)
             tournamentsData = tournamentsData.filter(function (tournament) {
                 return minAttendees <= tournament['numAttendees'];
             });

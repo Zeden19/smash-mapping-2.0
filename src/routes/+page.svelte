@@ -5,7 +5,7 @@
     import TournamentsCard from "./map/TournamentsCard.svelte";
     import {createClient} from '@supabase/supabase-js'
     import {onMount} from "svelte";
-    import Account from "./map/Account.svelte";
+    import Account from "./map/account/Account.svelte";
 
     export let data;
     let mapResult;
