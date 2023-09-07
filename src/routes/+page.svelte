@@ -71,20 +71,21 @@
 <svelte:head>
     <title>Smash Mapping: Map</title>
     <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@ZedenZeder">
 
-    <meta property="og:site_name" content="Smash Mapping - A New Way to Find Tournaments">
-    <meta property="og:title" content="Smash Mapping - A New Way to Find Tournaments">
-    <meta name="twitter:title" content="Smash Mapping - A New Way to Find Tournaments">
+    <meta property="og:site_name" content="Smash Mapping - Finding Tournaments Near You">
+    <meta property="og:title" content="Smash Mapping - Finding Tournaments Near You">
+    <meta name="twitter:title" content="Smash Mapping - Finding Tournaments Near You">
 
-    <meta name="description" content="Showing where in-person e-sports are held.">
-    <meta property="og:description" content="Showing where in-person e-sports are held, faster and easier.">
-    <meta name="twitter:description" content="Showing where in-person e-sports are held, faster and easier.">
+    <meta name="description"
+          content="Finding in-person tournaments for Smash Bros., Street Fighter, Guilty Gear and more.">
+    <meta property="og:description" content="Finding in-person e-sports tournaments, faster and easier.">
+    <meta name="twitter:description" content="Finding in-person e-sports tournaments, faster and easier.">
 
     <meta property="og:url" content="https://www.smash-mapping.com/">
     <meta property="og:image" content="https://i.ibb.co/d2LVJrr/example.png">
