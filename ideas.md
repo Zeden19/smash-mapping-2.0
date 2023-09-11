@@ -44,7 +44,6 @@ Just know that the skys the limits and we have something special here.
 • Paid advertising (either like a board at the top that shows tournaments, and/or special icon animation)
 • Account system (useful to get this set up now rather than later) (apply benifits)
 • get that stupid domain fixed (smashmapping.com)
-• Special icons for certified majors
 • Schedules for big tournaments (maybe even a list of the big tournaments on the map)
 • Animation for special marker (event listener for when marker is "on screen"?)
 • Different markers for different games
@@ -59,8 +58,8 @@ Make animations for markers so they don't just "pop" in
 Switch to advanced markers (?)
 
 # PRIOIRTY
+ADD JSDOC
 Make query filter with attendee count (to avoid missing out on tournaments)
-Challonge (?)
 "Featured tournaments" bar
 Make video
 Use cookies to query data
