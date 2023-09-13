@@ -322,6 +322,7 @@
             <option value="FI">Finland</option>
             <option disabled>---OTHER---</option>
             <option value="JP">Japan</option>
+            <option value="CN">China</option>
             <option value="AU">Australia</option>
             <option value="BR">Brazil</option>
         </select>
