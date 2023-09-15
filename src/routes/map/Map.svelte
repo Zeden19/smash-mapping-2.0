@@ -455,7 +455,8 @@
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(tournament.lat, tournament.lng),
                 map: map,
-                icon: "markers/red-marker.png"
+                icon: "markers/red-marker.png",
+                animation: google.maps.Animation.DROP
             });
 
             if (markerPositions.includes(marker.position.toString())) {
@@ -505,7 +506,7 @@
                     infoWindow.open(map, marker);
 
 
-                    // closing infowindow on clic for anywhere
+                    // closing infowindow on click for anywhere
                     google.maps.event.addListener(map, "click", function () {
                         infoWindow.close();
                     });
