@@ -1,4 +1,5 @@
 <script>
+    import {error} from '@sveltejs/kit';
     import {MarkerClusterer} from "@googlemaps/markerclusterer";
     import {Loader} from "@googlemaps/js-api-loader";
     import {onMount} from "svelte";
@@ -29,6 +30,9 @@
 
     export let mapResult;
     export let circles;
+
+    export let loading;
+    export let errorMessage;
 
     // the loader
     const loader = new Loader({
@@ -529,8 +533,13 @@
 
     // adding markers whenever mapResult changes (basically after querying and filtering)
     $: {
-        if (mapResult) {
-            addMarkers(mapResult);
+        try {
+            if (mapResult) {
+                addMarkers(mapResult);
+            }
+        } catch (e) {
+            loading = false
+            errorMessage = true;
         }
     }
 </script>

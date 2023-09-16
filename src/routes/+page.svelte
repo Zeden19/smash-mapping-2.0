@@ -15,6 +15,8 @@
     let minAttendees = 0;
     let state;
     let game;
+    let loading;
+    let errorMessage;
 
     export let supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co', data.SUPABASE_KEY)
 
@@ -102,20 +104,18 @@
 
     <div class="sidebar-buttons">
         <button class:sidebarSelected="{showFilters}" on:click={() => showSidebar("Filters:")}>
-            <img src="sidebar-icons/filter.png" style="width: 40px; height: 45px" alt="filter-image"></button>
+            <img src="sidebar-icons/filter.png" style="width: 40px; height: 45px" alt="filter"></button>
 
         <button class:sidebarSelected="{showTournaments}" on:click={() =>  showSidebar("Tournaments:")}>
-            <img src="sidebar-icons/tournaments.png" style="width: 40px; height: 45px" alt="tournaments-image"></button>
+            <img src="sidebar-icons/tournaments.png" style="width: 40px; height: 45px" alt="tournaments"></button>
 
         <button class:sidebarSelected="{showAccount}" on:click={() =>  showSidebar("Account:")}>
-            <img src="sidebar-icons/account.png" style="width: 40px; height: 40px" alt="tournaments-image">
+            <img src="sidebar-icons/account.png" style="width: 40px; height: 40px" alt="accounts">
         </button>
 
         <button class:sidebarSelected="{showHelp}" on:click={() =>  showSidebar("Help:")}>
-            <img src="sidebar-icons/questionmark.png" style="width: 40px; height: 40px" alt="tournaments-image">
+            <img src="sidebar-icons/questionmark.png" style="width: 40px; height: 40px" alt="question mark">
         </button>
-
-
     </div>
 
     <div class="sidebar" class:sidebarClosed id="tournaments-sidebar">
@@ -137,7 +137,7 @@
             <Search bind:supabase bind:state bind:tournaments bind:data bind:mapResult
                     bind:startDate bind:endDate bind:country bind:minAttendees bind:showSearchPlayer
                     bind:showSearchTournament bind:selectedPlayer bind:search bind:map bind:useCurrentLocationSearch
-                    bind:circles bind:radius bind:game/>
+                    bind:circles bind:radius bind:game bind:loading bind:errorMessage/>
         {/if}
 
         {#if showAccount}
@@ -149,7 +149,7 @@
         {/if}
     </div>
 
-    <Map bind:map bind:data bind:mapResult bind:circles/>
+    <Map bind:map bind:data bind:mapResult bind:circles bind:loading bind:errorMessage/>
 </div>
 
 <footer style="height: 30px; display:block;">

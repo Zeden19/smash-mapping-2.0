@@ -12,7 +12,7 @@
 
 <div in:fly={{y: 150, duration: 400, delay: 400}} out:fly={{y: 100, duration: 400}}>
 
-    <div on:click={() => guideOpen = !guideOpen} class="title">
+    <div role="button" tabindex="-2" on:click={() => guideOpen = !guideOpen} class="title">
         <div class:guideOpen class="arrow-right"></div>
         Guide
     </div>
@@ -34,7 +34,7 @@
         </p>
     {/if}
 
-    <div on:click={() => legendOpen = !legendOpen} class="title">
+    <div role="button" tabindex="-1" on:click={() => legendOpen = !legendOpen} class="title">
         <div class:legendOpen class="arrow-right"></div>
         Legend
     </div>
@@ -78,7 +78,7 @@
         </aside>
     {/if}
 
-    <div on:click={() => TOopen = !TOopen} class="title">
+    <div role="button" tabindex="0" on:click={() => TOopen = !TOopen} class="title">
         <div class:TOopen class="arrow-right"></div>
         TO Information
     </div>

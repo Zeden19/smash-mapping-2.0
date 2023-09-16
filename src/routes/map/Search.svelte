@@ -21,8 +21,8 @@
     export let map;
     let addresses = tournaments.map(({venue_address}) => venue_address);
 
-    let loading = false;
-    let errorMessage = false;
+    export let loading = false;
+    export let errorMessage = false;
     let noData = false;
     let tooManyRequestsError = false;
     let playerDoesNotExistError = false;
@@ -84,8 +84,8 @@
                     console.log("Error updating country:", error);
                 }
             }
-
             return {lat: tournamentFound['lat'], lng: tournamentFound['lng']};
+
         } else {
             try {
                 //geocoding the address
@@ -128,7 +128,7 @@
         }
     }
 
-    // made this a function to be used in (insert player search component here)
+    // made this a function to be used in SearchPlayer and SearchTournaments
     async function createTournamentsArray(tournamentsData, selectedCountry, minAttendees) {
         let tournamentsArray = [];
         // returning if no tournaments found
@@ -185,7 +185,7 @@
             }
 
             // pushing data to array
-            let url = "https://start.gg" + tournament.url;
+            const url = "https://start.gg" + tournament.url;
             if (latlng !== undefined) {
                 tournamentsArray.push(
                     {
@@ -203,10 +203,10 @@
                     });
             }
         }
+
         mapResult = tournamentsArray;
         console.log(mapResult);
     }
-
 </script>
 
 <div in:slide={{delay: 450, duration: 350, axis: 'x', easing: backOut}} out:slide={{duration: 350, axis: 'x'}}>
@@ -221,9 +221,11 @@
     {#if showSearchPlayer}
         <SearchPlayer {data} bind:showSearchTournament bind:showSearchPlayer
                       bind:loading bind:errorMessage bind:noData bind:tooManyRequestsError
-                      bind:playerDoesNotExistError bind:selectedPlayer bind:search bind:supabase {createTournamentsArray}/>
+                      bind:playerDoesNotExistError bind:selectedPlayer bind:search bind:supabase
+                      {createTournamentsArray}/>
     {/if}
-    <div class="discord"><p>Psst: Wanna stay updated? Join the Smash Mapping Discord server!</p>
+
+    <div class="discord"><p>Psst wanna stay updated? Join the Smash Mapping Discord server!</p>
         <Discord/>
     </div>
 </div>
