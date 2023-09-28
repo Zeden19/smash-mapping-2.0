@@ -311,6 +311,7 @@
             <option disabled>---EUROPE---</option>
             <option value="ES">Spain</option>
             <option value="GB">United Kingdom</option>
+            <option value="IE">Ireland</option>
             <option value="FR">France</option>
             <option value="NL">Netherlands</option>
             <option value="DK">Denmark</option>
