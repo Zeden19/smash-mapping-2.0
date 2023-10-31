@@ -58,10 +58,12 @@ Make animations for markers so they don't just "pop" in
 Switch to advanced markers (?)
 
 # PRIOIRTY
+Weekly Finder
+Carpooling
+
 ADD JSDOC
 Make query filter with attendee count (to avoid missing out on tournaments)
 "Featured tournaments" bar
 Make video
-Use cookies to query data
 fix stupid bug with multiple markers on same spot
 Look into and implement "lib" stuff for database (cause this way is no bueno)
