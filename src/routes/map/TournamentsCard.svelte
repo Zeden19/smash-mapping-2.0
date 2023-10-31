@@ -18,9 +18,9 @@
 
 {#each mapResult.filter(tournament =>
     tournament.name.toLowerCase().includes(search.trimStart().toLowerCase())
-    || tournament.venueAddress.toLowerCase().includes(search.trimStart().toLowerCase()))
+    || tournament.venueAddress.toLowerCase().includes(search.trimStart().toLowerCase())
+    || tournament.participants.join(" ").toLowerCase().includes(search.trimStart().toLowerCase()))
         as tournament}
-
     <!--Tournament card-->
     <div out:slide|global={{y: 200, duration: 500}}
          in:slide|global={{y: 200, duration: 700}}
