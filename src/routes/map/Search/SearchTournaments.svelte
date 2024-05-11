@@ -459,6 +459,7 @@
         white-space: nowrap;
         justify-items: left;
         text-align: left;
+        scrollbar-color: #20252b #2c343c;
     }
 
     .filter-item {
