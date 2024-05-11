@@ -4,6 +4,7 @@
     import {fade} from 'svelte/transition';
     import {blur} from "svelte/transition";
     import {SEARCH_BY_LOCATION, SEARCH_BY_COUNTRY} from "./queries.js"
+    import GamesSlot from "./GamesSlot.svelte";
 
     export let createTournamentsArray = () => {
     };
@@ -18,9 +19,12 @@
 
     export let map;
     export let data;
-    let games = [{label: "Ultimate", id: "1386"}, {label: "Melee", id: "1"},
-        {label: "Project +", id: "33602"}, {label: "SF6", id: "43868"}, {label: "GG: Strive", id: '33945'},
-        {label: "MK: 11", id: "3200"},
+    let games = [{label: "Ultimate", id: "1386", src: "game-icons/ultimate.png"},
+        {label: "Melee", id: "1", src: "game-icons/melee.png"},
+        {label: "Project +", id: "33602", src: "game-icons/p+.png"}, {label: "SF6", id: "43868" , src: "game-icons/SF6.png"},
+        {label: "GG: Strive", id: '33945', src: "game-icons/GGS.png"},
+        {label: "MK 1", id: "48599", src: "game-icons/MK1.png"},
+        {label: "Tekken 8", id: "49783", src: "game-icons/tekken8.png"}
     ]
 
     export let country;
@@ -57,8 +61,6 @@
         if (game.length === 0) {
             game = games;
         }
-
-        console.log(game)
 
         const selectedCountry = country;
         if (startDate > endDate) {
@@ -292,11 +294,18 @@
         <p>Game(s):</p>
         {#if screenSize > 500}
             <MultiSelect --sms-width="70%" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
-                         --sms-remove-btn-hover-color="red" bind:value={game} options={games}/>
+                         --sms-remove-btn-hover-color="red" placeholder="Select Game(s)" --sms-border="1.5px solid black"
+                         --sms-options-border="1px solid black" bind:value={game} -- options={games} let:idx let:option >
+                <GamesSlot {idx} {option} gap="1ex"/>
+            </MultiSelect>
         {/if}
         {#if screenSize <= 500}
             <MultiSelect --sms-width="39vw" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
-                         --sms-remove-btn-hover-color="red" --sms-font-size="16px" bind:value={game} options={games}/>
+                         --sms-remove-btn-hover-color="red" --sms-font-size="16px" placeholder="Select Game(s)"
+                         bind:value={game} options={games} let:idx let:option>
+                <GamesSlot {idx} {option} gap="1ex"/>
+            </MultiSelect>
+
         {/if}
     </div>
 
@@ -472,6 +481,7 @@
         margin-right: 2vw;
         border-radius: 5px;
         width: 10vw;
+        border: 1.5px solid black;
     }
 
     .filter-item p {
@@ -491,6 +501,10 @@
     .bottom {
         display: block;
         white-space: normal;
+    }
+
+    :global(div.multiselect > ul.options > li) {
+        border-bottom: 1px black solid;
     }
 
     @media (max-width: 500px) {
