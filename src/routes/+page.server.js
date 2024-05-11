@@ -8,13 +8,10 @@ const supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co',
     SUPABASE_KEY)
 
 export async function load({cookies}) {
-    const {data} = await supabase.from("tournaments").select();
-
     return {
         GOOGLE_MAPS_API_KEY,
         SMASH_GG_API_KEY,
         SUPABASE_KEY,
-        tournaments: data,
     };
 }
 

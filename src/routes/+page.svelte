@@ -40,7 +40,6 @@
     let radius;
 
     // database stuff
-    let {tournaments} = data;
     let showBookmarksDialog;
 
     function showSidebar(title) {
@@ -134,7 +133,7 @@
         {/if}
 
         {#if showFilters}
-            <Search bind:supabase bind:state bind:tournaments bind:data bind:mapResult
+            <Search bind:supabase bind:state bind:data bind:mapResult
                     bind:startDate bind:endDate bind:country bind:minAttendees bind:showSearchPlayer
                     bind:showSearchTournament bind:selectedPlayer bind:search bind:map bind:useCurrentLocationSearch
                     bind:circles bind:radius bind:game bind:loading bind:errorMessage/>

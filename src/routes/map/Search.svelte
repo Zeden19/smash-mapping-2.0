@@ -16,10 +16,8 @@
 
     export let data;
     export let supabase;
-    export let tournaments;
     export let mapResult;
     export let map;
-    let addresses = tournaments.map(({venue_address}) => venue_address);
 
     export let loading = false;
     export let errorMessage = false;
@@ -48,32 +46,15 @@
         });
     });
 
-    const inserts = supabase.channel('table-db-changes').on(
-        'postgres_changes', {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'tournaments',
-        },
-        (payload) => {
-            addresses.push(payload.new.venue_address)
-            tournaments.push(payload.new)
-        }).subscribe()
-
-    const updates = supabase.channel('custom-update-channel').on(
-        'postgres_changes', {event: 'UPDATE', schema: 'public', table: 'tournaments'},
-        (payload) => {
-            tournaments.find(({id}) => id === payload.new.id).country = payload.new.country;
-        }).subscribe()
-
 
     async function geocode_address(tournament, country) {
+
+        const {data} = await supabase.from('tournaments').select().eq('venue_address', tournament.venueAddress);
         // returning latlng from the database (no geocoding)
-        if (addresses.includes(tournament.venueAddress)) {
-            let tournamentFound = tournaments.find(({venue_address}) => venue_address === tournament.venueAddress);
-            console.log("Found tournament in list");
+        if (data.length !== 0) {
 
             // adding tournament country if country is null
-            if (tournamentFound['country'] === null) {
+            if (data[0]['country'] === null) {
                 console.log("Adding country to tournament");
                 const {error} = await supabase
                     .from('tournaments')
@@ -84,7 +65,7 @@
                     console.log("Error updating country:", error);
                 }
             }
-            return {lat: tournamentFound['lat'], lng: tournamentFound['lng']};
+            return {lat: data[0]['lat'], lng: data[0]['lng']};
 
         } else {
             try {
