@@ -238,6 +238,7 @@
         border-bottom: #222223 solid 3px;
         border-top: #222223 solid 3px;
         position: relative;
+        scrollbar-width: none;
     }
 
     .sidebar-buttons {
@@ -307,6 +308,7 @@
         justify-content: center;
         position: sticky;
         top: 0;
+        z-index: 9;
     }
 
     .tournaments-title > p {
@@ -318,11 +320,11 @@
     /* small screens */
     @media (max-width: 500px) {
         .sidebar {
-            width: 200vw;
+            width: 240%;
         }
 
         .sidebar.sidebarClosed {
-            margin-left: -180vw;
+            margin-left: -185%;
         }
 
         dialog {
@@ -333,22 +335,22 @@
     /* large screens */
     @media (min-width: 500px) {
         .sidebar {
-            width: 25vw;
+            width: 30%;
         }
 
         .sidebar.sidebarClosed {
-            margin-left: -24.5%;
+            margin-left: -26.5%;
         }
     }
 
     /*tablet support*/
     @media (min-width: 500px) and (max-width: 1000px) {
         .sidebar {
-            width: 60vw;
+            width: 70%;
         }
 
         .sidebar.sidebarClosed {
-            margin-left: -60vw;
+            margin-left: -60%;
         }
     }
 </style>

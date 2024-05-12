@@ -1,6 +1,8 @@
 <script>
     export let activePage;
+    import {page} from "$app/stores";
 
+    console.log($page.url.pathname)
 </script>
 
 
@@ -18,8 +20,7 @@
     to just "see" tournaments in your area. I eventually found my local scene but that difficulty always stuck with me.
     <br><br>
 
-    <img src="example.png"
-         alt="example-image">
+    <img src="example.png" alt="example">
     At Smash Mapping, the goal is to make finding in-person tournaments far easier than current methods. Smash Mapping
     physically maps tournaments that are listed on <a target="_blank" href="https://www.start.gg/">Start.gg</a> so you
     can easily see what tournaments are near you. By using the filters, you can easily search for tournaments that you

@@ -4,6 +4,9 @@ import {SUPABASE_KEY} from "$env/static/private";
 import {createClient} from '@supabase/supabase-js'
 import {fail} from "@sveltejs/kit";
 
+export const prerender = false;
+export const trailingSlash = 'never';
+
 const supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co',
     SUPABASE_KEY)
 

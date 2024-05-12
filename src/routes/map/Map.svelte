@@ -1,26 +1,19 @@
 <script>
-    import {error} from '@sveltejs/kit';
-    import {MarkerClusterer} from "@googlemaps/markerclusterer";
-    import {Loader} from "@googlemaps/js-api-loader";
+    import * as GMaps from "@googlemaps/js-api-loader";
+    import * as MC from "@googlemaps/markerclusterer"
+
     import {onMount} from "svelte";
 
-    export let data;
+    const {Loader} = GMaps;
+    const {MarkerClusterer} = MC;
 
+    export let data;
     export let map;
     let markers = [];
     let marker;
     let markerPositions = [];
     let markerCluster;
     let infoWindow;
-    let topPlayers = ["Mkleo", "あcola", "Sparg0", "Light", "Tea", "Onin", "Shuton", "Tweek", "Riddles", "ProtoBanham", "Kurama",
-        "Dabuz", "Kola", "Maister", "Glutonny", "Sonix", "ミーヤー ", "Zomba", "Big D", "ApolloKage", "Bloom4Eva", "Kameme",
-        "Anathema", "Cosmos", "Jakal", "Yoshidora", "Sisqui", "Asimo", "KEN", "Aaron", "Tilde", "Lui$", "Almighty", "HIKARU", "へろー",
-        "Marss", "Ned", "zackray", "MuteAce", "Yaura", "Gackt", "Talking Ben", "Ouch!?", "Sigma", "Skyjay", "Fatality", "Mr.R",
-        "Lima", "Abadango", "Chag", "jaredisking1", "Raflow", "MVD", "Scend", "Puppeh", "Niko", "AlanDiss", "BassMage", "ShinyMark",
-        "T3 DOM", "Jazzh0", "Repo", "SHADIC", "Kome", "Luugi", "WaKa", "Toast", "alice", "Tarik", "quiK", "ChunkyKong", "Zinoto",
-        "Shirayuki", "アカキクス", "Peabnut", "IceMist", "Leon", "Dark Wizzy", "Supahsemmie", "Quandale Dinglelingleton", "Space",
-        "MKBigBoss", "Goblin", "Umeki", "Yei", "Rox", "WaDi", "skittles", "NaetorU", "MASA", "ATATA", "Nietono", "Chronos", "yonni",
-        "Atelier", "Ling", "Regalo", "Mr. E", "Paseriman", "enhancedpv"]
     let superMajors = [{label: "Evo 2023", marker: "evo-marker.png"},
         {label: "Riptide 2023", marker: "riptide-marker.png"},
         {label: "Super Smash Con 2023", marker: "ssc-marker.png"},
@@ -505,8 +498,8 @@
                         "<p><strong>Attendees: </strong>" + tournament.numAttendees + "</p>" +
                         "<p><strong>Contact Info: </strong>" + mailTo + "</p>" +
                         "<p><strong>Start.gg site: </strong><a target='_blank' href='" + tournament.url + "'>" + tournament.url + "</a></p>" +
-                        "<p style='overflow-wrap: break-word'><strong>Participants: </strong>" + participants  +"</p>"
-                        "</div>";
+                        "<p style='overflow-wrap: break-word'><strong>Participants: </strong>" + participants + "</p>"
+                    "</div>";
 
                     infoWindow.setContent(infoContent);
                     infoWindow.open(map, marker);
