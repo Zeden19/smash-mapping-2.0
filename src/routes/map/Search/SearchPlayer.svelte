@@ -204,7 +204,7 @@
         text-align: left;
         position: relative;
         z-index: 0;
-         scrollbar-color: #20252b #2c343c;
+        scrollbar-color: #20252b #2c343c;
     }
 
     .search {
