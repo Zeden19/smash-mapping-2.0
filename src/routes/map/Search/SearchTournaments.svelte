@@ -21,7 +21,11 @@
     export let data;
     let games = [{label: "Ultimate", id: "1386", src: "game-icons/ultimate.png"},
         {label: "Melee", id: "1", src: "game-icons/melee.png"},
-        {label: "Project +", id: "33602", src: "game-icons/p+.png"}, {label: "SF6", id: "43868" , src: "game-icons/SF6.png"},
+        {label: "Project +", id: "33602", src: "game-icons/p+.png"}, {
+            label: "SF6",
+            id: "43868",
+            src: "game-icons/SF6.png"
+        },
         {label: "GG: Strive", id: '33945', src: "game-icons/GGS.png"},
         {label: "MK 1", id: "48599", src: "game-icons/MK1.png"},
         {label: "Tekken 8", id: "49783", src: "game-icons/tekken8.png"}
@@ -58,11 +62,17 @@
     }
 
     export async function updateMap() {
+        const selectedCountry = country;
         if (game.length === 0) {
             game = games;
         }
 
-        const selectedCountry = country;
+        if (useCurrentLocationSearch) {
+            await getPosition();
+            map.panTo(pos);
+        }
+
+
         if (startDate > endDate) {
             alert("Start date must be before end date.");
             return;
@@ -83,7 +93,7 @@
             return;
         }
 
-        if (state === "Choose State" && country === "US") {
+        if (state === "Choose State" && country === "US" && !useCurrentLocationSearch) {
             alert("Please select a state.");
             return;
         }
@@ -110,22 +120,37 @@
                 },
             });
 
-            // query
-            let query = SEARCH_BY_COUNTRY;
-            // query variables
-            const variables = {
-                cCode: country,
-                perPage: 300,
-                after: unixStartTime,
-                before: unixEndTime,
-                state: state,
-                game: game.map(({id}) => id)
-            };
+            let query, variables;
 
-            // Remove US specific query details
-            if (state === "all" || country !== "US") {
-                delete variables.state;
-                query = query.replace(/addrState: \$state,?/, "").replace(", $state: String", "");
+            // Using current location
+            if (useCurrentLocationSearch) {
+                // query
+                query = SEARCH_BY_LOCATION;
+                variables = {
+                    coordinates: pos.lat + "," + pos.lng,
+                    radius: radius + "mi",
+                    perPage: 151,
+                    after: unixStartTime,
+                    before: unixEndTime,
+                    game: game.map(({id}) => id)
+                };
+                // Using country
+            } else {
+                // query
+                query = SEARCH_BY_COUNTRY;
+                variables = {
+                    cCode: country,
+                    perPage: 300,
+                    after: unixStartTime,
+                    before: unixEndTime,
+                    state: state,
+                    game: game.map(({id}) => id)
+                };
+                // Remove US specific query details
+                if (state === "all" || country !== "US") {
+                    delete variables.state;
+                    query = query.replace(/addrState: \$state,?/, "").replace(", $state: String", "");
+                }
             }
 
             // Calling the API & filtering by minimum attendees
@@ -135,9 +160,15 @@
                 return minAttendees <= tournament['numAttendees'];
             });
 
-            await createTournamentsArray(tournamentsData, selectedCountry, minAttendees);
+            if (useCurrentLocationSearch) {
+                createTournamentsArray(tournamentsData, null, minAttendees);
+            } else {
+                createTournamentsArray(tournamentsData, selectedCountry, minAttendees);
+            }
 
-        } catch (error) {
+
+        } catch
+            (error) {
             errorMessage = true;
             loading = false;
             console.error('Error:', error);
@@ -145,82 +176,6 @@
         loading = false;
     }
 
-    async function useCurrentLocation() {
-        await getPosition();
-        map.panTo(pos);
-
-        if (startDate > endDate) {
-            alert("Start date must be before end date.");
-            return;
-        }
-
-        if (endDate === undefined) {
-            alert("Please enter an end date.");
-            return;
-        }
-
-        if (isNaN(minAttendees)) {
-            alert("Please enter a valid number for minimum attendees.");
-            return;
-        }
-
-        if (minAttendees < 0) {
-            alert("Minimum attendees must be greater than or equal to 0.");
-            return;
-        }
-
-        try {
-            tooManyRequestsError = false;
-            errorMessage = false;
-            loading = true;
-            noData = false;
-            locationDeniedError = false;
-
-
-            let tournamentsData;
-            let unixStartTime = new Date(startDate.replace(/-/g, "/").replace("T", " "));
-            let unixEndTime = new Date(endDate.replace(/-/g, "/").replace("T", " "));
-            unixEndTime.setHours(23, 59, 59);
-            unixStartTime = Math.floor(unixStartTime.getTime() / 1000);
-            unixEndTime = Math.floor(unixEndTime.getTime() / 1000);
-
-            const apiVersion = 'alpha';
-            const endpoint = 'https://api.start.gg/gql/' + apiVersion;
-            const client = new GraphQLClient(endpoint, {
-                headers: {
-                    Authorization: 'Bearer ' + data.SMASH_GG_API_KEY,
-                },
-            });
-
-            // query
-            let query = SEARCH_BY_LOCATION;
-
-            // query variables
-            const variables = {
-                coordinates: pos.lat + "," + pos.lng,
-                radius: radius + "mi",
-                perPage: 151,
-                after: unixStartTime,
-                before: unixEndTime,
-                game: game.map(({id}) => id)
-            };
-
-            // Calling the API & filtering by minimum attendees
-            let resData = await client.request(query, variables);
-            tournamentsData = resData.tournaments.nodes;
-            tournamentsData = tournamentsData.filter(function (tournament) {
-                return minAttendees <= tournament['numAttendees'];
-            });
-
-            await createTournamentsArray(tournamentsData, null, minAttendees);
-
-        } catch (error) {
-            errorMessage = true;
-            loading = false;
-            console.error('Error:', error);
-        }
-        loading = false;
-    }
 
     function removeCircles() {
         for (const i in circles) {
@@ -278,7 +233,8 @@
                     (error) => {
                         locationDeniedError = true;
                         reject(error);
-                    }
+                    },
+                    {timeout: 10000, enableHighAccuracy: true}
                 );
             } else {
                 reject(new Error('Geolocation is not supported in this browser.'));
@@ -294,8 +250,9 @@
         <p>Game(s):</p>
         {#if screenSize > 500}
             <MultiSelect --sms-width="70%" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
-                         --sms-remove-btn-hover-color="red" placeholder="Select Game(s)" --sms-border="1.5px solid black"
-                         --sms-options-border="1px solid black" bind:value={game} -- options={games} let:idx let:option >
+                         --sms-remove-btn-hover-color="red" placeholder="Select Game(s)"
+                         --sms-border="1.5px solid black"
+                         --sms-options-border="1px solid black" bind:value={game} -- options={games} let:idx let:option>
                 <GamesSlot {idx} {option} gap="1ex"/>
             </MultiSelect>
         {/if}
@@ -310,6 +267,7 @@
     </div>
 
 
+    <!--Country-->
     <div class="filter-item">
         <p>Country: </p>
         <select disabled="{useCurrentLocationSearch}" bind:value={country}>
@@ -338,7 +296,7 @@
         </select>
     </div>
 
-
+    <!--State-->
     {#if country === 'US'}
         <div transition:fade={{duration: 250}} class="filter-item">
             <p>State:</p>
@@ -400,12 +358,13 @@
         </div>
     {/if}
 
-
+    <!--Using Current Location-->
     <div class="filter-item">
         <p>Use Current Location:</p>
         <input class="current-location-checkbox" type="checkbox" bind:checked={useCurrentLocationSearch}/>
     </div>
 
+    <!--Radius-->
     {#if useCurrentLocationSearch}
         <div transition:fade={{duration: 250}} class="filter-item">
             <p>Radius: </p>
@@ -420,23 +379,27 @@
         </div>
     {/if}
 
+    <!--From Date-->
     <div class="filter-item">
         <p> From: </p>
         <input min={minDate} bind:value={startDate} type="date">
     </div>
 
+    <!--To Date-->
     <div class="filter-item">
         <p> To: </p>
         <input min="{startDate}" bind:value={endDate} type="date">
     </div>
 
+    <!--Attendees-->
     <div class="filter-item attendees-filter">
         <p>Attendees: </p>
         <input name="attendees" type="number" min="0" step="1" bind:value={minAttendees}>
     </div>
 
+
     <div class="bottom">
-        <button on:click={useCurrentLocationSearch ? useCurrentLocation() : updateMap()} disabled={loading}>Search
+        <button on:click={updateMap} disabled={loading}>Search
         </button>
 
         <button disabled={loading} on:click={() => {
@@ -468,7 +431,7 @@
         white-space: nowrap;
         justify-items: left;
         text-align: left;
-        scrollbar-color: #20252b #2c343c;
+        scrollbar-color: #20252b #161b1e;
     }
 
     .filter-item {
