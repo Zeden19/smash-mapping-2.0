@@ -433,7 +433,7 @@
         markers.length = 0;
     }
 
-    function addMarkers(mapResult) {
+    export function addMarkers(mapResult) {
         hideMarkers();
         markerCluster?.clearMarkers()
         markers = [];
@@ -534,6 +534,8 @@
         }
     }
 </script>
+
+
 
 <div id="map" class="map" style="height: 100%; width: 100%">
 </div>

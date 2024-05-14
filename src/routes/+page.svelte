@@ -30,14 +30,6 @@
         showHelp = title === "Help:";
         showAccount = title === "Account:";
         sidebarTitle = title;
-
-        if (showFilters) {
-            delay = 0;
-        } else if (showTournaments) {
-            delay = 0;
-        } else if (showHelp) {
-            delay = 0;
-        }
     }
 
     onMount(() => {

@@ -30,19 +30,6 @@
         const {data} = await supabase.from('tournaments').select().eq('venue_address', tournament.venueAddress);
         // returning latlng from the database (no geocoding)
         if (data.length !== 0) {
-
-            // adding tournament country if country is null
-            if (data[0]['country'] === null) {
-                console.log("Adding country to tournament");
-                const {error} = await supabase
-                    .from('tournaments')
-                    .update({country: country})
-                    .eq('venue_address', tournament.venueAddress);
-
-                if (error) {
-                    console.log("Error updating country:", error);
-                }
-            }
             return {lat: data[0]['lat'], lng: data[0]['lng']};
 
         } else {
@@ -88,7 +75,7 @@
     }
 
     // made this a function to be used in SearchPlayer and SearchTournaments
-    async function createTournamentsArray(tournamentsData, selectedCountry, minAttendees) {
+    async function createTournamentsArray(tournamentsData, minAttendees) {
         let tournamentsArray = [];
         // returning if no tournaments found
         if (tournamentsData.length === 0) {
@@ -164,6 +151,7 @@
         }
 
         $mapResult = tournamentsArray;
+        addMarkers(mapResult);
         console.log($mapResult);
     }
 </script>

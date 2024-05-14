@@ -56,7 +56,6 @@
     let pos;
 
     export async function updateMap() {
-        const selectedCountry = $country;
         if ($game.length === 0) {
             $game = games;
         }
@@ -155,11 +154,10 @@
             });
 
             // use await here to prevent $loading = false executing too quickly
-            console.log($game)
             if ($useCurrentLocationSearch) {
-                await createTournamentsArray(tournamentsData, null, $minAttendees);
+                await createTournamentsArray(tournamentsData, $minAttendees);
             } else {
-                await createTournamentsArray(tournamentsData, selectedCountry, $minAttendees);
+                await createTournamentsArray(tournamentsData, $minAttendees);
             }
 
 
