@@ -14,11 +14,6 @@ export let SEARCH_BY_COUNTRY = 'query TournamentsByCountry($cCode: String!, $per
     '                   images(type: "profile") {' +
     '                      url' +
     '                   }' +
-    '                  participants(query: {perPage: 499}) {' +
-    '                    nodes {' +
-    '                      gamerTag' +
-    '                    }' +
-    '                  }' +
     '                }' +
     '              }' +
     '            }';
@@ -39,11 +34,6 @@ export let SEARCH_BY_LOCATION = 'query TournamentsByLocation($coordinates: Strin
     '                  countryCode' +
     '                  images(type: "profile") {' +
     '                    url' +
-    '                  }' +
-    '                  participants(query: {}) {' +
-    '                    nodes {' +
-    '                      gamerTag' +
-    '                    }' +
     '                  }' +
     '                }' +
     '              }' +
@@ -68,11 +58,6 @@ export let SEARCH_BY_PLAYER = 'query tournamentByPlayerID($id: ID!) {' +
     '          countryCode' +
     '          images(type: "profile") {' +
     '            url' +
-    '          }' +
-    '          participants(query: {}) {' +
-    '            nodes {' +
-    '              gamerTag' +
-    '            }' +
     '          }' +
     '        }' +
     '      }' +

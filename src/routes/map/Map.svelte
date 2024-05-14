@@ -477,7 +477,6 @@
             const mailTo = (tournament.primaryContact.includes("@")) ?
                 "<a href=\"mailto:" + tournament.primaryContact + "\" target=\"_blank\">" + tournament.primaryContact + "</a>" :
                 "<a href=\"" + tournament.primaryContact + "\" target=\"_blank\">" + tournament.primaryContact + "</a>";
-            const participants = tournament.participants.join(', ')
 
             // Create an info window for the marker
             google.maps.event.addListener(marker, 'click', (function (marker, tournament) {
@@ -492,8 +491,7 @@
                         "<p><strong>Date: </strong>" + tournament.startAt + "</p>" +
                         "<p><strong>Attendees: </strong>" + tournament.numAttendees + "</p>" +
                         "<p><strong>Contact Info: </strong>" + mailTo + "</p>" +
-                        "<p><strong>Start.gg site: </strong><a target='_blank' href='" + tournament.url + "'>" + tournament.url + "</a></p>" +
-                        "<p style='overflow-wrap: break-word'><strong>Participants: </strong>" + participants + "</p>"
+                        "<p><strong>Start.gg site: </strong><a target='_blank' href='" + tournament.url + "'>" + tournament.url + "</a></p>"
                     "</div>";
 
                     infoWindow.setContent(infoContent);
