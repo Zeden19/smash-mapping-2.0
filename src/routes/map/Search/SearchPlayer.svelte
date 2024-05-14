@@ -2,36 +2,35 @@
     import {GraphQLClient} from "graphql-request";
     import {blur} from 'svelte/transition';
     import {CHECK_USER_EXISTS, SEARCH_BY_PLAYER} from "./queries.js";
+    import {
+        loading,
+        errorMessage,
+        noData,
+        playerDoesNotExistError,
+        tooManyRequestsError,
+        showSearchPlayer,
+        showSearchTournament,
+        selectedPlayer,
+        search
+    } from "../../stores.js"
 
     export let supabase;
     export let createTournamentsArray = () => {
     };
 
-    export let tooManyRequestsError = false;
-    export let loading = false;
-    export let errorMessage = false;
-    export let noData = false;
-    export let playerDoesNotExistError = false;
-
-    export let selectedPlayer = "";
     export let showResults = false;
     let searchResultsContainer;
-
-    export let showSearchTournament;
-    export let showSearchPlayer;
 
     export let data;
     let screenSize;
 
-    export let search;
-
     export async function updateMap(id) {
         try {
-            tooManyRequestsError = false;
-            errorMessage = false;
-            loading = true;
-            noData = false;
-            playerDoesNotExistError = false;
+            $tooManyRequestsError = false;
+            $errorMessage = false;
+            $loading = true;
+            $noData = false;
+            $playerDoesNotExistError = false;
             let tournamentsData;
 
 
@@ -56,22 +55,22 @@
             if (resData.player.user === null) {
                 const {errors} = await supabase.from('players').delete().eq('id', id);
 
-                playerDoesNotExistError = true;
-                loading = false;
+                $playerDoesNotExistError = true;
+                $loading = false;
                 return;
             }
 
             tournamentsData = resData.player.user.tournaments.nodes;
-            selectedPlayer = resData.player;
+            $selectedPlayer = resData.player;
 
             await createTournamentsArray(tournamentsData, null, 0);
 
         } catch (error) {
-            errorMessage = true;
-            loading = false;
+            $errorMessage = true;
+            $loading = false;
             console.error('Error:', error);
         }
-        loading = false;
+        $loading = false;
     }
 
     let promise;
@@ -114,9 +113,9 @@
 <aside in:blur={{duration: 300}}>
 
     <div class="search">
-        <input bind:value={search} on:focus={() => showResults = true}
+        <input bind:value={$search} on:focus={() => showResults = true}
                on:focusout={() => handleSearchResultsBlur()}
-               on:keydown={(key) => {if (key.key === "Enter") promise = searchPlayers(search);}}
+               on:keydown={(key) => {if (key.key === "Enter") promise = searchPlayers($search);}}
                type="text" placeholder="Search by Player tag"/>
 
         <div class="search-results" bind:this={searchResultsContainer} on:keydown={() => handleKeyDown}
@@ -157,27 +156,27 @@
         </div>
     </div>
 
-    {#if selectedPlayer}
+    {#if $selectedPlayer}
         <p>Selected Player: <a target="_blank"
-                               href="https://www.start.gg/{selectedPlayer.user.slug}">{selectedPlayer.gamerTag}</a></p>
+                               href="https://www.start.gg/{$selectedPlayer.user.slug}">{$selectedPlayer.gamerTag}</a></p>
     {:else}
         <p>No player selected</p>
     {/if}
 
     <div class="bottom">
-        <button disabled={loading} on:click={() => {showSearchPlayer = false; showSearchTournament = true;}}>
+        <button disabled={$loading} on:click={() => {$showSearchPlayer = false; $showSearchTournament = true;}}>
             Tournament Search
         </button>
 
-        <p>{loading ? "Loading..." : ""}</p>
+        <p>{$loading ? "Loading..." : ""}</p>
 
-        <p class="error">{errorMessage ? "There was an error loading the map" : ""}</p>
+        <p class="error">{$errorMessage ? "There was an error loading the map" : ""}</p>
 
-        <p class="error">{noData ? "No tournaments found" : ""}</p>
+        <p class="error">{$noData ? "No tournaments found" : ""}</p>
 
-        <p class="error">{tooManyRequestsError ? "You cannot search for more than 90 tournaments" : ""}</p>
+        <p class="error">{$tooManyRequestsError ? "You cannot search for more than 90 tournaments" : ""}</p>
 
-        <p class="error">{playerDoesNotExistError ? "Player does not exist, please select a different player." : ""}</p>
+        <p class="error">{$playerDoesNotExistError ? "Player does not exist, please select a different player." : ""}</p>
     </div>
 
 </aside>

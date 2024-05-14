@@ -4,8 +4,6 @@
   export let height = `20px`
   export let gap = `5pt`
 
-  $: lang = option
-
   let hidden = false
 
 </script>

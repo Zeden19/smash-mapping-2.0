@@ -1,23 +1,14 @@
-<script xmlns="http://www.w3.org/1999/html">
+<script>
     import Map from "./map/Map.svelte";
     import Search from "./map/Search.svelte";
     import Help from "./map/Help.svelte"
     import TournamentsCard from "./map/TournamentsCard.svelte";
     import {createClient} from '@supabase/supabase-js'
-    import {onMount} from "svelte";
+    import {onMount, onDestroy} from "svelte";
     import Account from "./map/Account.svelte";
+    import {loading, mapResult} from "./stores.js"
 
     export let data;
-    let mapResult;
-    let startDate;
-    let endDate;
-    let country;
-    let minAttendees = 0;
-    let state;
-    let game;
-    let loading;
-    let errorMessage;
-
     export let supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co', data.SUPABASE_KEY)
 
     let sidebarClosed = false;
@@ -26,18 +17,8 @@
     let showHelp = false;
     let showAccount = false;
 
-    let showSearchPlayer = false;
-    let showSearchTournament = true;
-    let selectedPlayer;
-    let search;
-
     let sidebarTitle = "Filters:";
-    let delay;
     let map;
-
-    let useCurrentLocationSearch = false;
-    let circles = [];
-    let radius;
 
     // database stuff
     let showBookmarksDialog;
@@ -67,6 +48,10 @@
             showBookmarksDialog.showModal();
             document.cookie = "visited=true; path=/";
         }
+    })
+
+    onDestroy(() => {
+        $loading = false;
     })
 </script>
 <svelte:head>
@@ -128,15 +113,12 @@
             </button>
         </div>
 
-        {#if showTournaments && mapResult !== undefined}
-            <TournamentsCard mapResult={mapResult} map={map}/>
+        {#if showTournaments && $mapResult !== undefined}
+            <TournamentsCard map={map}/>
         {/if}
 
         {#if showFilters}
-            <Search bind:supabase bind:state bind:data bind:mapResult
-                    bind:startDate bind:endDate bind:country bind:minAttendees bind:showSearchPlayer
-                    bind:showSearchTournament bind:selectedPlayer bind:search bind:map bind:useCurrentLocationSearch
-                    bind:circles bind:radius bind:game bind:loading bind:errorMessage/>
+            <Search bind:supabase bind:data bind:map/>
         {/if}
 
         {#if showAccount}
@@ -144,11 +126,11 @@
         {/if}
 
         {#if showHelp}
-            <Help delay={delay}/>
+            <Help/>
         {/if}
     </div>
 
-    <Map bind:map bind:data bind:mapResult bind:circles bind:loading bind:errorMessage/>
+    <Map bind:map bind:data/>
 </div>
 
 <footer style="height: 30px; display:block;">

@@ -6,33 +6,11 @@
     import {onMount} from "svelte";
     import {Loader} from "@googlemaps/js-api-loader";
     import Discord from "../contact/Discord.svelte";
-
-    export let startDate;
-    export let endDate;
-    export let country;
-    export let minAttendees = 0;
-    export let state;
-    export let game;
+    import {loading, noData, tooManyRequestsError, showSearchPlayer, showSearchTournament, mapResult} from "../stores";
 
     export let data;
     export let supabase;
-    export let mapResult;
     export let map;
-
-    export let loading = false;
-    export let errorMessage = false;
-    let noData = false;
-    let tooManyRequestsError = false;
-    let playerDoesNotExistError = false;
-    export let circles = [];
-    export let radius;
-
-
-    export let showSearchPlayer;
-    export let showSearchTournament;
-    export let selectedPlayer;
-    export let search;
-    export let useCurrentLocationSearch = false;
 
     // loading geocoder
     const loader = new Loader({
@@ -114,15 +92,15 @@
         let tournamentsArray = [];
         // returning if no tournaments found
         if (tournamentsData.length === 0) {
-            loading = false;
-            noData = true;
+            $loading = false;
+            $noData = true;
             return;
         }
 
         // returning if too many tournaments found
         if (tournamentsData.length > 150) {
-            loading = false;
-            tooManyRequestsError = true;
+            $loading = false;
+            $tooManyRequestsError = true;
             return;
         }
 
@@ -185,25 +163,18 @@
             }
         }
 
-        mapResult = tournamentsArray;
-        console.log(mapResult);
+        $mapResult = tournamentsArray;
+        console.log($mapResult);
     }
 </script>
 
 <div in:slide={{delay: 450, duration: 350, axis: 'x', easing: backOut}} out:slide={{duration: 350, axis: 'x'}}>
-    {#if showSearchTournament}
-        <SearchTournaments {data} bind:showSearchTournament bind:showSearchPlayer
-                           bind:loading bind:errorMessage bind:noData bind:tooManyRequestsError
-                           bind:map bind:circles bind:useCurrentLocationSearch bind:radius
-                           bind:startDate bind:endDate bind:country bind:minAttendees bind:game bind:state
-                           {createTournamentsArray}/>
+    {#if $showSearchTournament}
+        <SearchTournaments {data} bind:map {createTournamentsArray}/>
     {/if}
 
-    {#if showSearchPlayer}
-        <SearchPlayer {data} bind:showSearchTournament bind:showSearchPlayer
-                      bind:loading bind:errorMessage bind:noData bind:tooManyRequestsError
-                      bind:playerDoesNotExistError bind:selectedPlayer bind:search bind:supabase
-                      {createTournamentsArray}/>
+    {#if $showSearchPlayer}
+        <SearchPlayer {data} bind:supabase {createTournamentsArray}/>
     {/if}
 
     <div class="discord"><p>Psst wanna stay updated? Join the Smash Mapping Discord server!</p>

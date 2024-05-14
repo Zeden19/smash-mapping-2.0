@@ -5,6 +5,24 @@
     import {blur} from "svelte/transition";
     import {SEARCH_BY_LOCATION, SEARCH_BY_COUNTRY} from "./queries.js"
     import GamesSlot from "./GamesSlot.svelte";
+    import {
+        startDate,
+        endDate,
+        country,
+        errorMessage,
+        minAttendees,
+        state,
+        game,
+        loading,
+        noData,
+        tooManyRequestsError,
+        showSearchPlayer,
+        showSearchTournament,
+        useCurrentLocationSearch,
+        circles,
+        radius
+    } from "../../stores.js";
+    import {onMount} from "svelte";
 
     export let createTournamentsArray = () => {
     };
@@ -12,10 +30,8 @@
     let minDate = new Date();
     minDate.setDate(minDate.getDate() - 14);
     minDate = minDate.toISOString().split("T")[0];
-    export let startDate = new Date().toISOString().split("T")[0];
 
-    export let endDate = new Date().setDate(new Date().getDate() + 7);
-    endDate = new Date(endDate).toISOString().split("T")[0];
+    $endDate = new Date($endDate).toISOString().split("T")[0];
 
     export let map;
     export let data;
@@ -31,83 +47,61 @@
         {label: "Tekken 8", id: "49783", src: "game-icons/tekken8.png"}
     ]
 
-    export let country;
-    export let minAttendees = 0;
-    export let state;
-    export let game;
 
-    export let tooManyRequestsError = false;
-    export let loading = false;
-    export let errorMessage = false;
-    export let noData = false;
     let locationDeniedError = false;
     let screenSize;
 
-    export let showSearchTournament;
-    export let showSearchPlayer;
-    export let useCurrentLocationSearch = false;
-    export let radius;
-
     let innerCircle;
     let outerCircle;
-    export let circles = [];
-
     let pos;
 
-    // when user selects "Use current Location"
-    $: if (useCurrentLocationSearch) {
-        drawCircles();
-    } else {
-        removeCircles();
-    }
-
     export async function updateMap() {
-        const selectedCountry = country;
-        if (game.length === 0) {
-            game = games;
+        const selectedCountry = $country;
+        if ($game.length === 0) {
+            $game = games;
         }
 
-        if (useCurrentLocationSearch) {
+        if ($useCurrentLocationSearch) {
             await getPosition();
             map.panTo(pos);
         }
 
 
-        if (startDate > endDate) {
+        if ($startDate > $endDate) {
             alert("Start date must be before end date.");
             return;
         }
 
-        if (endDate === undefined) {
+        if ($endDate === undefined) {
             alert("Please enter an end date.");
             return;
         }
 
-        if (isNaN(minAttendees)) {
+        if (isNaN($minAttendees)) {
             alert("Please enter a valid number for minimum attendees.");
             return;
         }
 
-        if (minAttendees < 0) {
+        if ($minAttendees < 0) {
             alert("Minimum attendees must be greater than or equal to 0.");
             return;
         }
 
-        if (state === "Choose State" && country === "US" && !useCurrentLocationSearch) {
-            alert("Please select a state.");
+        if ($state === "Choose State" && $country === "US" && !$useCurrentLocationSearch) {
+            alert("Please select a $state.");
             return;
         }
 
         try {
-            tooManyRequestsError = false;
-            errorMessage = false;
-            loading = true;
-            noData = false;
+            $tooManyRequestsError = false;
+            $errorMessage = false;
+            $loading = true;
+            $noData = false;
             locationDeniedError = false;
 
             let tournamentsData;
-            let unixStartTime = new Date(startDate.replace(/-/g, "/").replace("T", " "));
-            let unixEndTime = new Date(endDate.replace(/-/g, "/").replace("T", " "));
+            let unixStartTime = new Date($startDate.replace(/-/g, "/").replace("T", " "));
+            let unixEndTime = new Date($endDate.replace(/-/g, "/").replace("T", " "));
             unixEndTime.setHours(23, 59, 59);
             unixStartTime = Math.floor(unixStartTime.getTime() / 1000);
             unixEndTime = Math.floor(unixEndTime.getTime() / 1000);
@@ -123,31 +117,31 @@
             let query, variables;
 
             // Using current location
-            if (useCurrentLocationSearch) {
+            if ($useCurrentLocationSearch) {
                 // query
                 query = SEARCH_BY_LOCATION;
                 variables = {
                     coordinates: pos.lat + "," + pos.lng,
-                    radius: radius + "mi",
+                    radius: $radius + "mi",
                     perPage: 151,
                     after: unixStartTime,
                     before: unixEndTime,
-                    game: game.map(({id}) => id)
+                    game: $game.map(({id}) => id)
                 };
                 // Using country
             } else {
                 // query
                 query = SEARCH_BY_COUNTRY;
                 variables = {
-                    cCode: country,
+                    cCode: $country,
                     perPage: 300,
                     after: unixStartTime,
                     before: unixEndTime,
-                    state: state,
-                    game: game.map(({id}) => id)
+                    state: $state,
+                    game: $game.map(({id}) => id)
                 };
                 // Remove US specific query details
-                if (state === "all" || country !== "US") {
+                if ($state === "all" || $country !== "US") {
                     delete variables.state;
                     query = query.replace(/addrState: \$state,?/, "").replace(", $state: String", "");
                 }
@@ -157,35 +151,36 @@
             let resData = await client.request(query, variables);
             tournamentsData = resData.tournaments.nodes;
             tournamentsData = tournamentsData.filter(function (tournament) {
-                return minAttendees <= tournament['numAttendees'];
+                return $minAttendees <= tournament['numAttendees'];
             });
 
-            if (useCurrentLocationSearch) {
-                createTournamentsArray(tournamentsData, null, minAttendees);
+            // use await here to prevent $loading = false executing too quickly
+            console.log($game)
+            if ($useCurrentLocationSearch) {
+                await createTournamentsArray(tournamentsData, null, $minAttendees);
             } else {
-                createTournamentsArray(tournamentsData, selectedCountry, minAttendees);
+                await createTournamentsArray(tournamentsData, selectedCountry, $minAttendees);
             }
 
 
         } catch
             (error) {
-            errorMessage = true;
-            loading = false;
+            $errorMessage = true;
+            $loading = false;
             console.error('Error:', error);
         }
-        loading = false;
+        $loading = false;
     }
 
-
     function removeCircles() {
-        for (const i in circles) {
-            circles[i].setMap(null);
+        for (const i in $circles) {
+            $circles[i].setMap(null);
         }
-        circles = [];
+        $circles = [];
     }
 
     async function drawCircles() {
-        if (circles.length > 0) {
+        if ($circles.length > 0) {
             removeCircles();
         }
 
@@ -201,7 +196,7 @@
             fillOpacity: 0.50,
             map,
             center: pos,
-            radius: radius * 1609
+            radius: $radius * 1609
         });
 
         // small circle for the current location
@@ -215,8 +210,8 @@
             center: pos,
             radius: 1000,
         });
-        circles.push(innerCircle);
-        circles.push(outerCircle);
+        $circles.push(innerCircle);
+        $circles.push(outerCircle);
     }
 
     function getPosition() {
@@ -241,6 +236,10 @@
             }
         });
     }
+
+    onMount(() => {
+        $useCurrentLocationSearch ? drawCircles() : removeCircles()
+    })
 </script>
 <svelte:window bind:innerWidth={screenSize}/>
 
@@ -252,14 +251,14 @@
             <MultiSelect --sms-width="70%" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
                          --sms-remove-btn-hover-color="red" placeholder="Select Game(s)"
                          --sms-border="1.5px solid black"
-                         --sms-options-border="1px solid black" bind:value={game} -- options={games} let:idx let:option>
+                         --sms-options-border="1px solid black" bind:value={$game} options={games} let:idx let:option>
                 <GamesSlot {idx} {option} gap="1ex"/>
             </MultiSelect>
         {/if}
         {#if screenSize <= 500}
             <MultiSelect --sms-width="39vw" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
                          --sms-remove-btn-hover-color="red" --sms-font-size="16px" placeholder="Select Game(s)"
-                         bind:value={game} options={games} let:idx let:option>
+                         bind:value={$game} options={games} let:idx let:option>
                 <GamesSlot {idx} {option} gap="1ex"/>
             </MultiSelect>
 
@@ -270,7 +269,7 @@
     <!--Country-->
     <div class="filter-item">
         <p>Country: </p>
-        <select disabled="{useCurrentLocationSearch}" bind:value={country}>
+        <select disabled="{$useCurrentLocationSearch}" bind:value={$country}>
             <option disabled>---NORTH AMERICA---</option>
             <option selected value="US">USA</option>
             <option value="CA">Canada</option>
@@ -297,10 +296,10 @@
     </div>
 
     <!--State-->
-    {#if country === 'US'}
+    {#if $country === 'US'}
         <div transition:fade={{duration: 250}} class="filter-item">
             <p>State:</p>
-            <select disabled="{useCurrentLocationSearch}" bind:value={state}>
+            <select disabled="{$useCurrentLocationSearch}" bind:value={$state}>
                 <option selected disabled>Choose State</option>
                 <option value="AL">Alabama</option>
                 <option value="AK">Alaska</option>
@@ -361,14 +360,17 @@
     <!--Using Current Location-->
     <div class="filter-item">
         <p>Use Current Location:</p>
-        <input class="current-location-checkbox" type="checkbox" bind:checked={useCurrentLocationSearch}/>
+        <!-- reverse value of  useCurrentLocationSearch because on:input gets run b4 varaible changes -->
+        <input class="current-location-checkbox" type="checkbox" bind:checked={$useCurrentLocationSearch}
+               on:input={() => !$useCurrentLocationSearch ? drawCircles() : removeCircles()}/>
+
     </div>
 
     <!--Radius-->
-    {#if useCurrentLocationSearch}
+    {#if $useCurrentLocationSearch}
         <div transition:fade={{duration: 250}} class="filter-item">
             <p>Radius: </p>
-            <select on:input={() => drawCircles()} bind:value={radius}>x
+            <select on:input={() => drawCircles()} bind:value={$radius}>x
                 <option selected value="25">25 miles</option>
                 <option value="50">50 miles</option>
                 <option value="100">100 miles</option>
@@ -382,38 +384,38 @@
     <!--From Date-->
     <div class="filter-item">
         <p> From: </p>
-        <input min={minDate} bind:value={startDate} type="date">
+        <input min={minDate} bind:value={$startDate} type="date">
     </div>
 
     <!--To Date-->
     <div class="filter-item">
         <p> To: </p>
-        <input min="{startDate}" bind:value={endDate} type="date">
+        <input min="{$startDate}" bind:value={$endDate} type="date">
     </div>
 
     <!--Attendees-->
     <div class="filter-item attendees-filter">
         <p>Attendees: </p>
-        <input name="attendees" type="number" min="0" step="1" bind:value={minAttendees}>
+        <input name="attendees" type="number" min="0" step="1" bind:value={$minAttendees}>
     </div>
 
 
     <div class="bottom">
-        <button on:click={updateMap} disabled={loading}>Search
+        <button on:click={updateMap} disabled={$loading}>Search
         </button>
 
-        <button disabled={loading} on:click={() => {
-            showSearchPlayer = true; showSearchTournament = false; useCurrentLocationSearch = false; removeCircles();}}>
+        <button disabled={$loading} on:click={() => {
+            $showSearchPlayer = true; $showSearchTournament = false; $useCurrentLocationSearch = false; removeCircles();}}>
             Player Search
         </button>
 
-        <p>{loading ? "Loading..." : ""}</p>
+        <p>{$loading ? "Loading..." : ""}</p>
 
-        <p class="error">{errorMessage ? "There was an error loading the map" : ""}</p>
+        <p class="error">{$errorMessage ? "There was an error loading the map" : ""}</p>
 
-        <p class="error">{noData ? "No tournaments found" : ""}</p>
+        <p class="error">{$noData ? "No tournaments found" : ""}</p>
 
-        <p class="error">{tooManyRequestsError ? "You cannot search for more than 150 tournaments" : ""}</p>
+        <p class="error">{$tooManyRequestsError ? "You cannot search for more than 150 tournaments" : ""}</p>
 
         <p class="error">{locationDeniedError ? "You must allow location access to use this feature" : ""}</p>
 

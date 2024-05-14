@@ -1,6 +1,7 @@
 <script>
     import * as GMaps from "@googlemaps/js-api-loader";
     import * as MC from "@googlemaps/markerclusterer"
+    import {loading, errorMessage, circles, mapResult} from "../stores.js"
 
     import {onMount} from "svelte";
 
@@ -20,12 +21,6 @@
         {label: "Delfino Maza 2023", marker: "delfino-maza-marker.png"},
         {label: "Tera", marker: "tera-marker.png"},
         {label: "Rise 'N Grind 2023", marker: "rng-marker.png"}]
-
-    export let mapResult;
-    export let circles;
-
-    export let loading;
-    export let errorMessage;
 
     // the loader
     const loader = new Loader({
@@ -440,7 +435,7 @@
 
     function addMarkers(mapResult) {
         hideMarkers();
-        markerCluster.clearMarkers()
+        markerCluster?.clearMarkers()
         markers = [];
         markerPositions = [];
 
@@ -515,7 +510,7 @@
                     google.maps.event.addListener(markerCluster, 'click', function () {
                         infoWindow.close();
                     });
-                    if (circles[1]) google.maps.event.addListener(circles[1], 'click', function () {
+                    if ($circles[1]) google.maps.event.addListener($circles[1], 'click', function () {
                         infoWindow.close();
                     });
                 };
@@ -523,18 +518,19 @@
             })(marker, tournament));
         }
 
-        markerCluster.addMarkers(markers)
+        markerCluster?.addMarkers(markers)
     }
 
     // adding markers whenever mapResult changes (basically after querying and filtering)
     $: {
         try {
-            if (mapResult) {
-                addMarkers(mapResult);
+            if ($mapResult) {
+                addMarkers($mapResult);
             }
         } catch (e) {
-            loading = false
-            errorMessage = true;
+            $loading = false
+            $errorMessage = true;
+            console.log(e)
         }
     }
 </script>

@@ -6,7 +6,6 @@
     let guideOpen = false;
     let legendOpen = false;
     let TOopen = false;
-    export let delay;
 
 </script>
 

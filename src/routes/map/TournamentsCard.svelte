@@ -1,7 +1,7 @@
 <script>
     import {slide} from "svelte/transition";
+    import {mapResult} from "../stores.js";
 
-    export let mapResult;
     export let map;
     let search = "";
 
@@ -16,7 +16,7 @@
     <input bind:value={search} type="text" placeholder="Search tournament"/>
 </div>
 
-{#each mapResult.filter(tournament =>
+{#each $mapResult.filter(tournament =>
     tournament.name.toLowerCase().includes(search.trimStart().toLowerCase())
     || tournament.venueAddress.toLowerCase().includes(search.trimStart().toLowerCase())
     || tournament.participants.join(" ").toLowerCase().includes(search.trimStart().toLowerCase()))
