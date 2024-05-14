@@ -9,7 +9,7 @@
 </script>
 
 <span style:gap>
-  <img src={option.src} {height} alt={option} {hidden} on:error={() => (hidden = true)} />
+  <img src={option.src} {height} alt={option.label} {hidden} on:error={() => (hidden = true)} />
   {option.label}
 </span>
 

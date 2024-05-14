@@ -65,7 +65,6 @@
             map.panTo(pos);
         }
 
-
         if ($startDate > $endDate) {
             alert("Start date must be before end date.");
             return;
@@ -146,7 +145,14 @@
                 }
             }
 
-            // Calling the API & filtering by minimum attendees
+            // // Calling the API & filtering by minimum attendees
+            // const resData = await fetch('/apiRoutes/getTournaments', {
+            //     method: 'POST',
+            //     body: JSON.stringify({query, variables}),
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     }
+            // });
             let resData = await client.request(query, variables);
             tournamentsData = resData.tournaments.nodes;
             tournamentsData = tournamentsData.filter(function (tournament) {
@@ -159,7 +165,6 @@
             } else {
                 await createTournamentsArray(tournamentsData, $minAttendees);
             }
-
 
         } catch
             (error) {
@@ -239,6 +244,7 @@
         $useCurrentLocationSearch ? drawCircles() : removeCircles()
     })
 </script>
+
 <svelte:window bind:innerWidth={screenSize}/>
 
 <aside in:blur={{duration: 300}}>
@@ -248,8 +254,8 @@
         {#if screenSize > 500}
             <MultiSelect --sms-width="70%" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
                          --sms-remove-btn-hover-color="red" placeholder="Select Game(s)"
-                         --sms-border="1.5px solid black"
-                         --sms-options-border="1px solid black" bind:value={$game} options={games} let:idx let:option>
+                         --sms-border="1.5px solid black" --sms-options-border="1px solid black"
+                         bind:selected={$game} options={games} let:idx let:option>
                 <GamesSlot {idx} {option} gap="1ex"/>
             </MultiSelect>
         {/if}

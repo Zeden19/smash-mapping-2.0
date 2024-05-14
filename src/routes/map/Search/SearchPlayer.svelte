@@ -90,9 +90,6 @@
         } else if (event.key === "ArrowUp") {
             selectedPlayerIndex = (selectedPlayerIndex - 1 + totalPlayers) % totalPlayers;
         }
-
-        console.log(selectedPlayerIndex)
-
         // Prevent scrolling the page when arrow keys are pressed
         event.preventDefault();
     }

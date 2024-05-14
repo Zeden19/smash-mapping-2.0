@@ -151,7 +151,6 @@
         }
 
         $mapResult = tournamentsArray;
-        addMarkers(mapResult);
         console.log($mapResult);
     }
 </script>
