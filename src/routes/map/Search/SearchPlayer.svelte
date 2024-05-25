@@ -187,7 +187,6 @@
     }
 
     .search-results {
-        margin-left: 2px;
         overflow-y: scroll;
         width: 95%;
         background: white;
