@@ -1,6 +1,5 @@
 <script>
     import {page} from '$app/stores';
-    import Discord from "./contact/Discord.svelte";
 </script>
 
 <body>

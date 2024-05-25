@@ -1,7 +1,6 @@
 <script>
     import {fade} from "svelte/transition";
     import {enhance} from "$app/forms";
-
     export let form;
 </script>
 

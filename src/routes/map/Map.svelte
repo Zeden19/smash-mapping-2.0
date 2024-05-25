@@ -1,7 +1,7 @@
 <script>
     import * as GMaps from "@googlemaps/js-api-loader";
     import * as MC from "@googlemaps/markerclusterer"
-    import {loading, errorMessage, circles, mapResult} from "../stores.js"
+    import {circles} from "../stores.js"
 
     import {onMount} from "svelte";
 
@@ -433,7 +433,7 @@
         markers.length = 0;
     }
 
-    export function addMarkers(mapResult) {
+    export const addMarkers = (mapResult) => {
         hideMarkers();
         markerCluster?.clearMarkers()
         markers = [];
@@ -517,19 +517,7 @@
         }
 
         markerCluster?.addMarkers(markers)
-    }
-
-    // adding markers whenever mapResult changes (basically after querying and filtering)
-    $: {
-        try {
-            if ($mapResult) {
-                addMarkers($mapResult);
-            }
-        } catch (e) {
-            $loading = false
-            $errorMessage = true;
-            console.log(e)
-        }
+        return ""
     }
 </script>
 

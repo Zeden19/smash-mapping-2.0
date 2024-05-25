@@ -9,7 +9,9 @@
     import {loading, mapResult} from "./stores.js"
 
     export let data;
+    export let form;
     export let supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co', data.SUPABASE_KEY)
+    let addMarkers;
 
     let sidebarClosed = false;
     let showFilters = true;
@@ -18,9 +20,9 @@
     let showAccount = false;
 
     let sidebarTitle = "Filters:";
+    let sidebarTitleHeight;
     let map;
 
-    // database stuff
     let showBookmarksDialog;
 
     function showSidebar(title) {
@@ -40,11 +42,20 @@
             showBookmarksDialog.showModal();
             document.cookie = "visited=true; path=/";
         }
+
+        sidebarTitleHeight = document.getElementById("sidebar-title").offsetHeight;
     })
 
     onDestroy(() => {
         $loading = false;
     })
+
+    $: {
+        if (form?.data) {
+            addMarkers(form.data);
+            $mapResult = form.data;
+        }
+    }
 </script>
 <svelte:head>
     <title>Smash Mapping: Map</title>
@@ -71,6 +82,7 @@
 </svelte:head>
 
 <body>
+
 <div class="map">
     <dialog bind:this={showBookmarksDialog}>
         <h3>Make sure to bookmark this page and use Smash Mapping whenever you want to find tournaments!</h3>
@@ -82,7 +94,7 @@
         <button class:sidebarSelected="{showFilters}" on:click={() => showSidebar("Filters:")}>
             <img src="sidebar-icons/filter.png" style="width: 40px; height: 45px" alt="filter"></button>
 
-        <button class:sidebarSelected="{showTournaments}" on:click={() =>  showSidebar("Tournaments:")}>
+        <button class:sidebarSelected="{showTournaments}" on:click={() => showSidebar("Tournaments:")}>
             <img src="sidebar-icons/tournaments.png" style="width: 40px; height: 45px" alt="tournaments"></button>
 
         <button class:sidebarSelected="{showAccount}" on:click={() =>  showSidebar("Account:")}>
@@ -96,7 +108,7 @@
 
     <div class="sidebar" class:sidebarClosed id="tournaments-sidebar">
 
-        <div class="tournaments-title">
+        <div id="sidebar-title" class="tournaments-title">
             <p style="margin-left: auto">{sidebarTitle}</p>
 
             <button class:sidebarClosed class="tournaments-sidebar-close-button"
@@ -105,12 +117,12 @@
             </button>
         </div>
 
-        {#if showTournaments && $mapResult !== undefined}
-            <TournamentsCard map={map}/>
+        {#if showFilters}
+            <Search bind:form bind:supabase bind:data bind:map/>
         {/if}
 
-        {#if showFilters}
-            <Search bind:supabase bind:data bind:map/>
+        {#if showTournaments && $mapResult !== undefined}
+            <TournamentsCard {sidebarTitleHeight} map={map}/>
         {/if}
 
         {#if showAccount}
@@ -122,7 +134,7 @@
         {/if}
     </div>
 
-    <Map bind:map bind:data/>
+    <Map bind:map bind:data bind:addMarkers={addMarkers}/>
 </div>
 
 <footer style="height: 30px; display:block;">

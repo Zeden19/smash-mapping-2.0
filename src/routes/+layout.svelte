@@ -113,7 +113,7 @@
     @media (max-width: 1000px) and (min-width: 500px ) {
         nav h2 {
             margin: 0 13vw 0 20px;
-            font-size: 2.6vh;
+            font-size: 2em;
         }
 
         .title-marker {
