@@ -162,7 +162,10 @@
         $errorMessage = false;
         $noData = false;
         $locationDeniedError = false;
-        form.error = undefined
+
+        if (form?.error) {
+            form.error = undefined
+        }
         $loading = true;
         $selectedPlayer = "";
 

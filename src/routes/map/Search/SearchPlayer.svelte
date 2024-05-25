@@ -21,6 +21,7 @@
     let promise;
     let timer;
     let searchResults;
+    let searchInput;
 
 
     const debounce = (key) => {
@@ -30,6 +31,11 @@
                 inputElement.requestSubmit();
             }
         }, 750);
+    }
+
+    function handleFocusOut(event) {
+        console.log(event.target)
+
     }
 
     $: if (form?.playerData) {
@@ -57,61 +63,64 @@
                 await update({reset: false});
                 $loading = false;
                 showResults = true;
+                searchInput.focus()
             };
         }}>
-            <input autofocus bind:value={$search} on:focus={() => showResults = true}
-                   on:focusout={() => showResults = searchResults.hasFocus()} type="text"
+            <input bind:value={$search} bind:this={searchInput} on:focus={() => showResults=true}
+                   on:focusout={(event) => handleFocusOut(event)}
+                   type="text"
                    placeholder="Search by Player tag"
                    name="playerTagSearched" on:keyup={({key}) => debounce(key)}/>
         </form>
 
 
-        {#if showResults}
-            <div bind:this={searchResults} role="searchbox" tabindex="0" class="search-results">
-                {#await promise}
-                    <p>Searching...</p>
-                {:then data}
-                    {#if data && data.length > 0}
-                        {#each data as player}
-                            <form action="?/playerSearch" method="POST"
-                                  use:enhance={async ({}) => {
+        <div hidden="{!showResults}" on:focusout={() => showResults=false}
+             bind:this={searchResults} role="searchbox" tabindex="0" class="search-results">
+            {#await promise}
+                <p>Searching...</p>
+            {:then data}
+                {#if data && data.length > 0}
+                    {#each data as player}
+                        <form action="?/playerSearch" method="POST"
+                              use:enhance={async ({}) => {
                                       $loading = true;
                                       form.error = undefined;
                                       return async ({update}) => {
                                           await update({reset: false});
                                           $loading = false;
+                                          searchInput.focus()
                                     };
                                   }}>
-                                <input hidden="hidden" name="playerId" value={player.id}>
+                            <input hidden="hidden" name="playerId" value={player.id}>
 
 
-                                <button class="player">
-                                    {#if player.prefixes[0]}
-                                        <p class="prefix">{player.prefixes[0]}{/if}
+                            <button class="player">
+                                {#if player.prefixes[0]}
+                                    <p class="prefix">{player.prefixes[0]}{/if}
 
-                                    <p>{player.tag}</p>
+                                <p>{player.tag}</p>
 
-                                    {#if player.characters}
-                                        <img class="icons characters" alt="character"
-                                             src="character-icons/{Object.keys(player.characters).reduce((prevKey, currentKey) => {
+                                {#if player.characters}
+                                    <img class="icons characters" alt="character"
+                                         src="character-icons/{Object.keys(player.characters).reduce((prevKey, currentKey) => {
                                         return player.characters[currentKey] > player.characters[prevKey] ? currentKey : prevKey;
                                     })}.svg">
-                                    {/if}
-                                    {#if player.country_code}
-                                        <img alt="flag" src="flag-icons/{player.country_code.toLowerCase()}.svg"
-                                             class="icons flags">
-                                    {/if}
-                                </button>
-                            </form>
-                        {/each}
-                    {:else if data && data.length === 0}
-                        <p>No results found</p>
-                    {/if}
-                {:catch error}
-                    <p>There was an error.</p>
-                {/await}
-            </div>
-        {/if}
+                                {/if}
+                                {#if player.country_code}
+                                    <img alt="flag" src="flag-icons/{player.country_code.toLowerCase()}.svg"
+                                         class="icons flags">
+                                {/if}
+                            </button>
+                        </form>
+                    {/each}
+                {:else if data && data.length === 0}
+                    <p>No results found</p>
+                {/if}
+            {:catch error}
+                <p>There was an error.</p>
+            {/await}
+        </div>
+
     </div>
 
 
