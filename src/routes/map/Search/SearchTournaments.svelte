@@ -127,9 +127,10 @@
                             lat: position.coords.latitude,
                             lng: position.coords.longitude,
                         };
+                        resolve(pos)
                         $locationDeniedError = false;
                         $loading = false;
-                        resolve(pos);
+
                     },
                     (error) => {
                         $locationDeniedError = true;
@@ -137,7 +138,7 @@
                         $loading = false;
                         reject(error);
                     },
-                    {timeout: 3000, enableHighAccuracy: true}
+                    {timeout: 3000, enableHighAccuracy: true, maximumAge:60000}
                 );
             } else {
                 $loading = false;
@@ -321,7 +322,7 @@
 
         <!--Radius-->
         {#if $useCurrentLocationSearch}
-            <div transition:fade={{duration: 250}} class="filter-item">
+                <div transition:fade={{duration: 150}} class="filter-item">
                 <p>Radius: </p>
                 <select name="radius" on:input={() => drawCircles()} bind:value={$radius}>x
                     <option selected value="25">25 miles</option>

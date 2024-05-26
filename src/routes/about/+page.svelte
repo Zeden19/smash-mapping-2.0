@@ -1,11 +1,3 @@
-<script>
-    export let activePage;
-    import {page} from "$app/stores";
-
-    console.log($page.url.pathname)
-</script>
-
-
 <svelte:head>
     <title>Smash Mapping: About</title>
 </svelte:head>

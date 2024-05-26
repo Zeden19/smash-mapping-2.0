@@ -34,7 +34,6 @@
     }
 
     function handleFocusOut(event) {
-        console.log(event.target)
 
     }
 
