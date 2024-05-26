@@ -24,7 +24,7 @@ body {
     overflow-y: auto;
 }
 
-button {
+.search-button {
     background-color: black;
     border: none;
     color: white;

@@ -8,16 +8,17 @@
 </svelte:head>
 
 <body>
-<h2>Contact</h2>
+<h2 class="border-gradient border">Contact</h2>
 
 
-<div>
+<div class="content border border-gradient">
     <p>Below you'll find links to contact me, please contact if you have bug reports, suggestions, or any other
         inquiries.</p>
     <br>
 
     <p>Twitter and Discord are my best forms of contact. If you're interested in Smash Mappings development and
         would like to help out, i'd highly recommend you join my Discord Server (link below).</p>
+    <br>
 
 
     <div class="share-buttons">
@@ -35,38 +36,6 @@
 </body>
 
 <style>
-    div {
-        background-color: #2c343c;
-        height: fit-content(100%);
-        padding: 10px;
-        margin: 10px 2em;
-    }
-
-    h2 {
-        letter-spacing: 1px;
-        text-align: center;
-        font-family: 'Impact', sans-serif;
-        font-size: 50px;
-        color: white;
-        font-style: italic;
-        background-color: #2c343c;
-        margin: 5px 2em 0;
-        padding: 10px;
-    }
-
-    p {
-        text-align: center;
-
-        color: white;
-    }
-
-    img {
-        float: right;
-        border: black solid 3px;
-        margin-right: 5px;
-        margin-left: 10px;
-    }
-
     body {
         background-color: #26282B;
         height: 100vh;
@@ -77,12 +46,58 @@
         padding: 0;
     }
 
+    .content {
+        background-color: #2c343c;
+        padding: 10px;
+        margin: 10px 10%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h2 {
+        letter-spacing: 1px;
+        text-align: center;
+        font-family: 'Impact', sans-serif;
+        font-size: 50px;
+        color: white;
+        font-style: italic;
+        background-color: #2c343c;
+        margin: 5px 15% 0;
+        padding: 10px;
+
+
+    }
+
+    .border {
+        border: 10px solid;
+        border-image-slice: 1;
+    }
+
+    .border-gradient {
+        border-image-source: radial-gradient(circle, #2c343c 0, #3c4450 50%, #26282B 100%);
+    }
+
+    p {
+        text-align: center;
+        color: white;
+        font-size: 1.2em;
+    }
+
+    img {
+        float: right;
+        border: black solid 3px;
+        margin-right: 5px;
+        margin-left: 10px;
+    }
+
     .share-buttons {
         display: flex;
         justify-content: center;
         align-items: center;
         border: none;
         gap: 10px;
+        width: 60%;
     }
 
     .reimu-div {

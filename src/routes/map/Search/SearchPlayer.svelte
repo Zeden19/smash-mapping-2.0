@@ -134,7 +134,7 @@
     {/if}
 
     <div class="bottom">
-        <button disabled={$loading} on:click={() => {$showSearchPlayer = false; $showSearchTournament = true;}}>
+        <button class="search-button" disabled={$loading} on:click={() => {$showSearchPlayer = false; $showSearchTournament = true;}}>
             Tournament Search
         </button>
 

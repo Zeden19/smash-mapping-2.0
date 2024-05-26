@@ -11,10 +11,10 @@
 
 <div in:fly={{y: 150, duration: 400, delay: 400}} out:fly={{y: 100, duration: 400}}>
 
-    <div role="button" tabindex="-2" on:click={() => guideOpen = !guideOpen} class="title">
+    <button tabindex="0" on:click={() => guideOpen = !guideOpen} class="title">
         <div class:guideOpen class="arrow-right"></div>
         Guide
-    </div>
+    </button>
 
     {#if guideOpen}
         <p transition:slide={{y: 200, duration: 500}} class="content">
@@ -33,10 +33,10 @@
         </p>
     {/if}
 
-    <div role="button" tabindex="-1" on:click={() => legendOpen = !legendOpen} class="title">
+    <button tabindex="0" on:click={() => legendOpen = !legendOpen} class="title">
         <div class:legendOpen class="arrow-right"></div>
         Legend
-    </div>
+    </button>
 
     {#if legendOpen}
         <aside transition:slide={{y: 200, duration: 500}} class="content">
@@ -77,10 +77,10 @@
         </aside>
     {/if}
 
-    <div role="button" tabindex="0" on:click={() => TOopen = !TOopen} class="title">
+    <button tabindex="0" on:click={() => TOopen = !TOopen} class="title">
         <div class:TOopen class="arrow-right"></div>
         TO Information
-    </div>
+    </button>
 
     {#if TOopen}
         <div transition:slide={{y: 200, duration: 500}} class="content">
@@ -141,7 +141,8 @@
         margin: 5px 5px 0 5px;
         background: maroon;
         box-shadow: 0 0 6px black;
-        align-items: center;
+        width: 98%;
+        border: none;
 
     }
 

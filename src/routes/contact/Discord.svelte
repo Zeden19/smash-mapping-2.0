@@ -3,10 +3,10 @@
 </script>
 
 
-<div on:click={() => window.open("https://discord.gg/3a9TryUejD")}>
+<a class="box" href="https://discord.gg/3a9TryUejD">
     <img alt="Discord" src="discord.png">
-    <a target="_blank" href="https://discord.gg/3a9TryUejD">Discord</a>
-</div>
+    <p>Discord</p>
+</a>
 
 
 <style>
@@ -15,43 +15,40 @@
         src: url("UniSansHeavyItalic.otf") format("opentype");
     }
 
-    div {
-        background-size: 1.5em;
+    .box {
         background: #7289da;
         border-radius: 30px;
-        width: 7.5em;
-        height: 2.4em;
-        line-height: 2.3;
+        width: 6.5em;
+        height: 2.2em;
+        padding: 0 10px;
         display: flex;
-    }
+        border: black solid 2px;
+        align-items: center;
 
-    div:hover {
-        background-color: #333d62;
-    }
-
-    a {
         font-weight: bold;
         text-decoration: none;
         color: white;
         margin-left: auto;
-        margin-right: 5%;
+        margin-right: 7px;
+
+    }
+
+    .box:hover {
+        background-color: #333d62;
+    }
+
+    .box > p {
+        margin-left: auto;
         font-family: "Uni Sans", "sans-serif";
-        flex-shrink: 2;
+        font-size: 1em;
+        margin-top: 20px;
+
     }
 
     img {
-        margin: 7px auto 9px 7px;
+        width: 30px;
+        height: 25px;
     }
 
-    @media (max-width: 500px) {
-        div {
-            width: 30vw;
-        }
-
-        img {
-            /*margin-right: 1em;*/
-        }
-
-    }
 
 </style>

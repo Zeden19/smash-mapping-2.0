@@ -353,14 +353,14 @@
             <input required name="attendees" type="number" min="0" step="1" bind:value={$minAttendees}>
         </div>
 
-        <button disabled={$loading}>Search</button>
+        <button class="search-button" disabled={$loading}>Search</button>
     </form>
 
 
     <div class="bottom">
 
 
-        <button disabled={$loading} on:click={() => {
+        <button class="search-button" disabled={$loading} on:click={() => {
             $showSearchPlayer = true; $showSearchTournament = false; $useCurrentLocationSearch = false; removeCircles();}}>
             Player Search
         </button>

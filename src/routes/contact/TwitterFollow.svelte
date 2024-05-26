@@ -22,6 +22,7 @@
         width: 5em;
         height: 2.2em;
         line-height: 2;
+        border: 2px solid black;
     }
 
     a:hover {

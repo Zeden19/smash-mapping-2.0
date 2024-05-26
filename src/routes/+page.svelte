@@ -91,13 +91,13 @@
     </dialog>
 
     <div class="sidebar-buttons">
-        <button class:sidebarSelected="{showFilters}" on:click={() => showSidebar("Filters:")}>
+        <button tabindex="0" class:sidebarSelected="{showFilters}" on:click={() => showSidebar("Filters:")}>
             <img src="sidebar-icons/filter.png" style="width: 40px; height: 45px" alt="filter"></button>
 
-        <button class:sidebarSelected="{showTournaments}" on:click={() => showSidebar("Tournaments:")}>
+        <button tabindex="0" class:sidebarSelected="{showTournaments}" on:click={() => showSidebar("Tournaments:")}>
             <img src="sidebar-icons/tournaments.png" style="width: 40px; height: 45px" alt="tournaments"></button>
 
-        <button class:sidebarSelected="{showAccount}" on:click={() =>  showSidebar("Account:")}>
+        <button tabindex="0" class:sidebarSelected="{showAccount}" on:click={() =>  showSidebar("Account:")}>
             <img src="sidebar-icons/account.png" style="width: 40px; height: 40px" alt="accounts">
         </button>
 

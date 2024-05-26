@@ -1,7 +1,6 @@
 <script>
+    import {slide} from "svelte/transition";
     import {mapResult} from "../stores.js";
-
-    console.log($mapResult);
 
     export let map;
     export let sidebarTitleHeight;
@@ -14,7 +13,7 @@
     }
 </script>
 
-<div>
+<div out:slide|global in:slide|global>
     <div class="search" style="--sidebarTitleHeight: {sidebarTitleHeight}px">
         <input bind:value={search} type="text" placeholder="Search tournament"/>
     </div>
@@ -22,11 +21,11 @@
     {#each $mapResult.filter(tournament =>
         tournament.name.toLowerCase().includes(search.trimStart().toLowerCase())
         || tournament.venueAddress.toLowerCase().includes(search.trimStart().toLowerCase()))
-            as tournament}
+            as tournament, i}
         <!--Tournament card-->
-        <div on:click={() => setMapCentre(tournament.lat, tournament.lng)} class="tournament">
-
-            <a href={tournament.url} target="_blank">{tournament.name}</a>
+        <button tabindex="0" on:keydown={() => setMapCentre(tournament.lat, tournament.lng)}
+                on:click={() => setMapCentre(tournament.lat, tournament.lng)} class="tournament">
+            <a tabindex="-1" href={tournament.url} target="_blank">{tournament.name}</a>
 
             <p class="address">
                 <img width="30px" height="30px" src="tournament-card-icons/map-marker.png" alt="map-marker">
@@ -46,7 +45,7 @@
                 </p>
             </div>
 
-        </div>
+        </button>
     {/each}
 
 </div>
@@ -93,9 +92,11 @@
         cursor: pointer;
         background: #1c1c1c;
         border: #2c343c solid 2px;
-        margin: 5px;
-        padding: 5px;
+        margin: 5px 5px 5px 3px;
+        padding: 5px 5px 2px 5px;
         display: grid;
+        width: 98%;
+        color: white;
     }
 
     .address, .attendees, .clock {

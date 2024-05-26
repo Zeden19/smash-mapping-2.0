@@ -3,48 +3,43 @@
 </script>
 
 
-<div on:click={() => window.open("mailto:ashar562@uwo.ca")}>
+<a class="box" target="_blank" href="mailto:ashar562@uwo.ca">
     <img alt="outlook" src="outlook.png">
-    <a target="_blank" href="mailto:ashar562@uwo.ca">Mail</a>
-</div>
+    <p>Mail</p>
+</a>
 
 
 <style>
-    div {
-        background-size: 1.5em;
+    .box {
         background: #005ea2;
         border-radius: 30px;
-        width: 7.5em;
-        height: 2.4em;
-        line-height: 2;
+        width: 5.5em;
+        height: 2.2em;
+        padding: 0 10px;
         display: flex;
-    }
+        border: black solid 2px;
+        align-items: center;
 
-    div:hover {
-        background-color: #002844FF;
-    }
-
-    a {
         font-weight: bold;
         text-decoration: none;
         color: white;
         margin-left: auto;
-        margin-right: 0.95em;
+        margin-right: 15px;
+    }
+
+    .box:hover {
+        background-color: #002844FF;
+    }
+
+    .box > p {
+        margin-left: auto;
+        font-size: 1em;
+        margin-right: 5px;
     }
 
     img {
-        margin-right: auto;
-    }
-
-    @media (max-width: 500px) {
-        div {
-            width: 30vw;
-        }
-
-        img {
-            /*margin-right: 1em;*/
-        }
-
+        width: 40px;
+        height: 40px;
     }
 
 </style>

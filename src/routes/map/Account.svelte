@@ -17,7 +17,7 @@
         <label>Username: <input value={form?.username ?? ""} required name="username" type="text"></label>
         <label>Password: <input value={form?.password ?? ""}  required name="password" type="password"></label>
 
-        <a>Create Account</a>
+        <a href="/">Create Account</a>
         <button>Submit</button>
     </form>
 </div>

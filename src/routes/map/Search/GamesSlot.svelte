@@ -1,7 +1,6 @@
-<script lang="ts">
-  export let option
-  export let idx
-  export let height = `16px`
+<script lang>
+  export let option;
+  export let height = `16px`;
 
   let hidden = false
 
