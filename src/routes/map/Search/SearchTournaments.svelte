@@ -139,13 +139,12 @@
                         $loading = false;
                         reject(error);
                     },
-                    {timeout: 3000, enableHighAccuracy: true, maximumAge:60000}
+                    {timeout: 6000, enableHighAccuracy: true, maximumAge:Infinity}
                 );
             } else {
                 $loading = false;
                 $useCurrentLocationSearch = false;
                 browserFailure = true;
-
                 reject(new Error('Geolocation is not supported in this browser.'));
             }
         });
