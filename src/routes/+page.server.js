@@ -39,7 +39,7 @@ async function getData(query, variables, minAttendees) {
         }) : tournamentsData;
 
     } catch (error) {
-        throw new Error("There getting the data. Please try again.")
+        throw new Error("There was an getting the data. Please try again.")
     }
 }
 
