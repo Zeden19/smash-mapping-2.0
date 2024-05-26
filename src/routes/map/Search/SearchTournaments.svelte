@@ -38,6 +38,7 @@
     let innerCircle;
     let outerCircle;
     let pos;
+    let browserFailure = false;
 
     let formRoute = "?/countrySearch"
 
@@ -142,6 +143,9 @@
                 );
             } else {
                 $loading = false;
+                $useCurrentLocationSearch = false;
+                browserFailure = true;
+
                 reject(new Error('Geolocation is not supported in this browser.'));
             }
         });
@@ -163,6 +167,7 @@
         $errorMessage = false;
         $noData = false;
         $locationDeniedError = false;
+        browserFailure = false;
 
         if (form?.error) {
             form.error = undefined
@@ -369,6 +374,8 @@
         <p>{$loading ? "Loading..." : ""}</p>
 
         <p class="error">{form?.error ? form.error : ""}</p>
+
+        <p class="error">{browserFailure ? "This browser does not support this feature" : ""}</p>
 
         <p class="error">{$errorMessage ? "There was an error loading the map" : ""}</p>
 
