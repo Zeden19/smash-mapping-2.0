@@ -5,7 +5,9 @@ export const games = [{label: "Ultimate", id: "1386", src: "game-icons/ultimate.
     {label: "GG: Strive", id: '33945', src: "game-icons/GGS.png"},
     {label: "MK 1", id: "48599", src: "game-icons/MK1.png"},
     {label: "Tekken 8", id: "49783", src: "game-icons/tekken8.png"},
-    {label: "SC VI", id: "904", src: "game-icons/SK6.png"}
+    {label: "SC VI", id: "904", src: "game-icons/SK6.png"},
+    {label: "Skullgirls", id: "32", src: "game-icons/skullgirls.png"}
+
 ]
 
 export let SEARCH_BY_COUNTRY = 'query TournamentsByCountry($cCode: String!, $perPage: Int!, $after: Timestamp!, $before: Timestamp, $state: String, $game: [ID]) {' +
