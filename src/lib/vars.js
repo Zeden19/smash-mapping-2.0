@@ -1,10 +1,11 @@
 export const games = [{label: "Ultimate", id: "1386", src: "game-icons/ultimate.png"},
     {label: "Melee", id: "1", src: "game-icons/melee.png"},
-    {label: "Project +", id: "33602", src: "game-icons/p+.png"},
+    {label: "P+", id: "33602", src: "game-icons/p+.png"},
     {label: "SF6", id: "43868", src: "game-icons/SF6.png"},
     {label: "GG: Strive", id: '33945', src: "game-icons/GGS.png"},
     {label: "MK 1", id: "48599", src: "game-icons/MK1.png"},
-    {label: "Tekken 8", id: "49783", src: "game-icons/tekken8.png"}
+    {label: "Tekken 8", id: "49783", src: "game-icons/tekken8.png"},
+    {label: "SC VI", id: "904", src: "game-icons/SK6.png"}
 ]
 
 export let SEARCH_BY_COUNTRY = 'query TournamentsByCountry($cCode: String!, $perPage: Int!, $after: Timestamp!, $before: Timestamp, $state: String, $game: [ID]) {' +
