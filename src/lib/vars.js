@@ -23,6 +23,8 @@ export let SEARCH_BY_COUNTRY = 'query TournamentsByCountry($cCode: String!, $per
     '                  state' +
     '                  isOnline' +
     '                  countryCode' +
+    '                  lat' +
+    '                  lng' +
     '                   images(type: "profile") {' +
     '                      url' +
     '                   }' +
@@ -44,6 +46,8 @@ export let SEARCH_BY_LOCATION = 'query TournamentsByLocation($coordinates: Strin
     '                  state' +
     '                  isOnline' +
     '                  countryCode' +
+    '                  lat' +
+    '                  lng' +
     '                  images(type: "profile") {' +
     '                    url' +
     '                  }' +
@@ -68,6 +72,8 @@ export let SEARCH_BY_PLAYER = 'query tournamentByPlayerID($id: ID!) {' +
     '          state' +
     '          isOnline' +
     '          countryCode' +
+    '          lat' +
+    '          lng' +
     '          images(type: "profile") {' +
     '            url' +
     '          }' +

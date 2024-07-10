@@ -1,17 +1,14 @@
-import {GOOGLE_MAPS_API_KEY, npm_config_node_gyp, SMASH_GG_API_KEY, SUPABASE_KEY} from "$env/static/private";
+import {GOOGLE_MAPS_API_KEY, SMASH_GG_API_KEY, SUPABASE_KEY} from "$env/static/private";
 import {createClient} from '@supabase/supabase-js'
 import {games, SEARCH_BY_COUNTRY, SEARCH_BY_LOCATION, SEARCH_BY_PLAYER} from "$lib/vars.js";
 import {GraphQLClient} from "graphql-request";
-import {Client} from "@googlemaps/google-maps-services-js";
 import {fail} from "@sveltejs/kit";
-import {minAttendees} from "./stores.js";
 
 
 export const prerender = false;
 const supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co',
     SUPABASE_KEY)
 
-const client = new Client({});
 
 async function getData(query, variables, minAttendees) {
     try {
@@ -39,6 +36,7 @@ async function getData(query, variables, minAttendees) {
         }) : tournamentsData;
 
     } catch (error) {
+        console.log(error)
         throw new Error("There was an getting the data. Please try again.")
     }
 }
@@ -78,12 +76,8 @@ async function createTournamentsArray(tournamentsData, minAttendees) {
         });
     }
 
-
-    const {data} = await supabase.from('tournaments').select().in('venue_address',
-        tournamentsData.map(item => item.venueAddress));
     // getting the lat/lng for each tournament & creating mapResult object
     for (let tournament of tournamentsData) {
-        let latlng;
         // fixing date format
         const timestamp = tournament.startAt;
         const date = new Date(timestamp * 1000);
@@ -94,29 +88,21 @@ async function createTournamentsArray(tournamentsData, minAttendees) {
             year: 'numeric'
         });
 
-        if (tournament.venueAddress !== null) {
-            // getting latlng
-            try {
-                latlng = await geocode_address(tournament, tournament.countryCode, data);
-
-            } catch (e) {
-                console.log(e);
-                continue;
-            }
-        } else if (tournament.isOnline === true) {
+        if (tournament.isOnline === true) {
             tournament.venueAddress = "Online"
-            latlng = {lat: null, lng: null};
+            tournament.lat = null;
+            tournament.lng = null;
         }
 
 
         // pushing data to array
         const url = "https://start.gg" + tournament.url;
-        if (latlng !== undefined) {
+        if (tournament.lat !== undefined || tournament.lng !== undefined) {
             tournamentsArray.push(
                 {
                     name: tournament.name,
-                    lat: latlng.lat,
-                    lng: latlng.lng,
+                    lat: tournament.lat,
+                    lng: tournament.lng,
                     primaryContact: tournament.primaryContact,
                     venueAddress: tournament.venueAddress,
                     url: url,
@@ -128,60 +114,6 @@ async function createTournamentsArray(tournamentsData, minAttendees) {
         }
     }
     return tournamentsArray;
-}
-
-async function geocode_address(tournament, country, tournamentData) {
-    // returning latlng from the database (no geocoding)
-    const foundAddresses = (tournamentData.map(tournament => tournament.venue_address));
-    if (foundAddresses.includes(tournament.venueAddress)) {
-        let latLng = tournamentData.find((item) => item.venue_address === tournament.venueAddress)
-        return {lat: latLng.lat, lng: latLng.lng};
-
-    } else {
-        try {
-            //geocoding the address
-            console.log("Geocoding address")
-            const results = (await client.geocode({
-                params: {
-                    key: GOOGLE_MAPS_API_KEY,
-                    address: tournament.venueAddress,
-                }
-            }))
-
-            let result = results.data.results[0].geometry.location
-
-            let attendees = tournament.numAttendees;
-            if (attendees === "unknown") {
-                attendees = null;
-            }
-
-            // inserting into database
-            const {error} = await supabase
-                .from('tournaments')
-                .insert({
-                    name: tournament.name,
-                    lat: result.lat,
-                    lng: result.lng,
-                    start_at: tournament.startAt,
-                    primary_contact: tournament.primaryContact,
-                    url: tournament.url,
-                    num_attendees: attendees,
-                    state: tournament.state,
-                    venue_address: tournament.venueAddress,
-                    country: country
-                });
-
-            if (error) {
-                console.log("Error inserting into database:", error);
-            }
-
-            return {lat: result.lat, lng: result.lng};
-
-        } catch (error) {
-            console.log("Error geocoding address:", error);
-            return undefined;
-        }
-    }
 }
 
 export async function load({cookies}) {
