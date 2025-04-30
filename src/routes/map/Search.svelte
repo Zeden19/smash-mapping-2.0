@@ -23,7 +23,6 @@
 
 
 <style>
-
     .search-area {
         height: 100%;
         width: 100%;

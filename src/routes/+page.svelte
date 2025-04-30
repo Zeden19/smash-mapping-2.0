@@ -3,14 +3,12 @@
     import Search from "./map/Search.svelte";
     import Help from "./map/Help.svelte"
     import TournamentsCard from "./map/TournamentsCard.svelte";
-    import {createClient} from '@supabase/supabase-js'
     import {onMount, onDestroy} from "svelte";
     import Account from "./map/Account.svelte";
     import {loading, mapResult} from "./stores.js"
 
     export let data;
     export let form;
-    export let supabase = createClient('https://mifvquxknwmbszdrqwio.supabase.co', data.SUPABASE_KEY)
     let addMarkers;
 
     let sidebarClosed = false;
@@ -118,7 +116,7 @@
         </div>
 
         {#if showFilters}
-            <Search bind:form bind:supabase bind:data bind:map/>
+            <Search bind:form bind:data bind:map/>
         {/if}
 
         {#if showTournaments && $mapResult !== undefined}
