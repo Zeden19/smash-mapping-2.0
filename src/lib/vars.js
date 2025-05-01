@@ -87,3 +87,44 @@ export const GET_PLAYER_DATA = `query PlayerSearch($id: ID!) {
   }
 }
 `;
+
+export const SEARCH_BY_GAMER_TAG = `query SearchByGamerTag($search: PlayerQuery!) {
+  players(query: $search) {
+    pageInfo {
+      page
+      totalPages
+    }
+    nodes {
+      gamerTag
+      prefix
+      user {
+        slug
+        location {
+          country
+        }
+        images(type: "profile") {
+          url
+        }
+        tournaments(query: {filter: {upcoming: true}}) {
+          nodes {
+            name
+            venueAddress
+            startAt
+            primaryContact
+            url
+            numAttendees
+            state
+            isOnline
+            countryCode
+            lat
+            lng
+            images(type: "profile") {
+              url
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`;

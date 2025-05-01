@@ -36,7 +36,6 @@
       }
     }, 750);
   }
-
 </script>
 
 <svelte:window bind:innerWidth={screenSize}/>
@@ -66,13 +65,18 @@
       {#if $loading}
         <p>Searching...</p>
       {:else if $playerSearchResults && $playerSearchResults.length > 0}
-        {#each $playerSearchResults as player}
-          <button on:click={() => {form.data = player.tournaments; $selectedPlayer = player}} class="player">
+        {#each $playerSearchResults as player, index}
+          <button on:click={() => {form.data = player.tournaments; $selectedPlayer = {player, index}}}
+                  class={`player ${$selectedPlayer?.index === index ? "selected" : ''}`}>
             {#if player.prefix}
               <p class="prefix">{player.prefix}
             {/if}
 
             {player.gamerTag}
+
+            {#if player.pfp}
+              <img alt="pfp" src={player.pfp} class="icons">
+            {/if}
 
             {#if player.country}
               <img alt="flag" src="flag-icons/{player.country.toLowerCase()}.svg"
@@ -92,7 +96,7 @@
   {#if $selectedPlayer}
     <p>Selected Player:
       <a style="color: white" class="player-link" target="_blank"
-         href="https://www.start.gg/{$selectedPlayer.slug}">{$selectedPlayer.gamerTag}</a>
+         href="https://www.start.gg/{$selectedPlayer.player.slug}">{$selectedPlayer.player.gamerTag}</a>
     </p>
   {:else}
     <p>No player selected</p>
@@ -185,6 +189,13 @@
 
   .search-results:first-child {
     margin-top: 0;
+  }
+
+  .selected {
+   background-color: #ffe5e5 !important;
+  border-left: 4px solid #cc0000 !important;
+  font-weight: bold !important;
+  color: #cc0000 !important;
   }
 
   .prefix {
