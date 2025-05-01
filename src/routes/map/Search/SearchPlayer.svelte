@@ -6,6 +6,7 @@
     loading,
     noData,
     playerDoesNotExistError,
+    playerSearchResults,
     search,
     selectedPlayer,
     showSearchPlayer,
@@ -18,17 +19,15 @@
   let showResults = false;
   let screenSize;
   let inputElement;
-  let promise;
   let timer;
-
 
   const debounce = (key) => {
     clearTimeout(timer);
 
     if ($search === '') {
       showResults = false;
-      promise = null;
-      return
+      $playerSearchResults = null;
+      return;
     }
 
     timer = setTimeout(() => {
@@ -37,11 +36,6 @@
       }
     }, 750);
   }
-
-  $: if (form?.playerData) {
-    promise = form.playerData;
-  }
-
 
 </script>
 
@@ -53,10 +47,10 @@
     <form class="search-player-form" on:submit={() => clearTimeout(timer)} action="?/findPlayers" method="post"
           bind:this={inputElement} use:enhance={async ({}) => {
             // "dummy" promise here to make sure "Searching..." works
-            promise = new Promise(() => {});
             $loading = true;
-            return async ({update}) => {
+            return async ({update, result : {data : {playerData}}}) => {
                 await update({reset: false});
+                $playerSearchResults = playerData
                 $loading = false;
                 showResults = true;
             };
@@ -68,34 +62,28 @@
     </form>
 
 
-    <div on:focusout={() => showResults=false}
-         role="searchbox" tabindex="0" class={`search-results ${!showResults && "hidden"}`}>
-      {#await promise}
+    <div class={`search-results ${!showResults && "hidden"}`}>
+      {#if $loading}
         <p>Searching...</p>
-      {:then data}
-        {#if data && data.length > 0}
-          {#each data as player}
-            <button on:click={() => {form.data = player.tournaments; $selectedPlayer = player}} class="player">
-              {#if player.prefix}
-                <p class="prefix">{player.prefix}
-              {/if}
+      {:else if $playerSearchResults && $playerSearchResults.length > 0}
+        {#each $playerSearchResults as player}
+          <button on:click={() => {form.data = player.tournaments; $selectedPlayer = player}} class="player">
+            {#if player.prefix}
+              <p class="prefix">{player.prefix}
+            {/if}
 
-              {player.gamerTag}
+            {player.gamerTag}
 
-              {#if player.country}
-                <img alt="flag" src="flag-icons/{player.country.toLowerCase()}.svg"
-                     class="icons flags">
-              {/if}
-            </button>
-          {/each}
+            {#if player.country}
+              <img alt="flag" src="flag-icons/{player.country.toLowerCase()}.svg"
+                   class="icons flags">
+            {/if}
+          </button>
+        {/each}
 
-        {:else if data && data.length === 0}
-          <p>No results found</p>
-        {/if}
-
-      {:catch error}
-        <p>There was an error.</p>
-      {/await}
+      {:else if $playerSearchResults && $playerSearchResults.length === 0}
+        <p>No results found</p>
+      {/if}
     </div>
 
   </div>
@@ -126,7 +114,8 @@
 
     <p class="error">{$tooManyRequestsError ? "You cannot search for more than 90 tournaments" : ""}</p>
 
-    <p class="error">{$playerDoesNotExistError ? "Player does not exist, please select a different player." : ""}</p>
+    <p
+      class="error">{$playerDoesNotExistError ? "Player does not exist, please select a different player." : ""}</p>
   </div>
 
 </aside>
@@ -200,7 +189,7 @@
 
   .prefix {
     font-size: 0.7em;
-    color: grey;
+    color: #808080;
     align-self: flex-end;
   }
 
@@ -219,7 +208,6 @@
     gap: 2px;
     background: white;
     border: black solid 1px;
-    color: black;
 
     font-size: 1em;
   }
@@ -227,7 +215,6 @@
   .player > p, .player-link {
     margin-block-start: 0;
     margin-block-end: 0;
-    color: black;
     padding-left: 5px;
   }
 

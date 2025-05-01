@@ -24,6 +24,7 @@ export const useCurrentLocationSearch = writable(false);
 // Search variables
 export const selectedPlayer = writable("");
 export const search = writable("");
+export const playerSearchResults = writable("")
 export const circles = writable([]);
 export const radius = writable();
 

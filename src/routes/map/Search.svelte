@@ -5,7 +5,6 @@
     import {slide} from "svelte/transition";
     import {showSearchPlayer, showSearchTournament} from "../stores";
 
-    export let data;
     export let map;
     export let form;
 
@@ -17,7 +16,7 @@
     {/if}
 
     {#if $showSearchPlayer}
-        <SearchPlayer {data} bind:form/>
+        <SearchPlayer bind:form/>
     {/if}
 </div>
 
