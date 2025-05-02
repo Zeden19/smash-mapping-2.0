@@ -13,7 +13,6 @@ export const loading = writable(false);
 export const errorMessage = writable(false);
 export const tooManyRequestsError = writable(false);
 export const noData = writable(false);
-export const playerDoesNotExistError = writable(false);
 export const locationDeniedError = writable(false)
 
 // player or country or location search

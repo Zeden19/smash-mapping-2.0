@@ -5,12 +5,9 @@
     errorMessage,
     loading,
     noData,
-    playerDoesNotExistError,
     playerSearchResults,
     search,
     selectedPlayer,
-    showSearchPlayer,
-    showSearchTournament,
     tooManyRequestsError
   } from "../../stores.js"
 
@@ -45,8 +42,8 @@
   <div class="search">
     <form class="search-player-form" on:submit={() => clearTimeout(timer)} action="?/findPlayers" method="post"
           bind:this={inputElement} use:enhance={async ({}) => {
-            // "dummy" promise here to make sure "Searching..." works
             $loading = true;
+            if ($selectedPlayer) $selectedPlayer.index = null;
             return async ({update, result : {data : {playerData}}}) => {
                 await update({reset: false});
                 $playerSearchResults = playerData
@@ -101,12 +98,7 @@
   {:else}
     <p>No player selected</p>
   {/if}
-
   <div class="bottom">
-    <button class="search-button" disabled={$loading}
-            on:click={() => {$showSearchPlayer = false; $showSearchTournament = true;}}>
-      Tournament Search
-    </button>
 
     <p>{$loading ? "Loading..." : ""}</p>
 
@@ -117,9 +109,6 @@
     <p class="error">{$noData ? "No tournaments found" : ""}</p>
 
     <p class="error">{$tooManyRequestsError ? "You cannot search for more than 90 tournaments" : ""}</p>
-
-    <p
-      class="error">{$playerDoesNotExistError ? "Player does not exist, please select a different player." : ""}</p>
   </div>
 
 </aside>
@@ -192,10 +181,10 @@
   }
 
   .selected {
-   background-color: #ffe5e5 !important;
-  border-left: 4px solid #cc0000 !important;
-  font-weight: bold !important;
-  color: #cc0000 !important;
+    background-color: #ffe5e5 !important;
+    border-left: 4px solid #cc0000 !important;
+    font-weight: bold !important;
+    color: #cc0000 !important;
   }
 
   .prefix {

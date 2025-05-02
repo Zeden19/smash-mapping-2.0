@@ -17,8 +17,6 @@
     noData,
     tooManyRequestsError,
     locationDeniedError,
-    showSearchPlayer,
-    showSearchTournament,
     useCurrentLocationSearch,
     circles,
     radius,
@@ -78,7 +76,7 @@
 
   function removeCircles() {
     for (const i in $circles) {
-      $circles[i].setMap(null);
+      $circles[i].setMap(null, map);
     }
     $circles = [];
   }
@@ -177,7 +175,6 @@
          if ($game.length === 0) {
             $game = games;
         }
-
           if ($useCurrentLocationSearch) {
                 await getPosition();
                 $loading = true;
@@ -185,7 +182,6 @@
                 formData.set("lng", pos.lng)
                 map.panTo(pos);
         }
-
 
         if (!validationChecks()) {
             $loading = false;
@@ -200,33 +196,21 @@
 
     <!--Games-->
     <div class="filter-item">
-      <p>Game(s):</p>
-      {#if screenSize > 500}
-        <MultiSelect --sms-width="75%" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
-                     --sms-remove-btn-hover-color="red" placeholder="Select Game(s)"
-                     --sms-border="1.5px solid black" --sms-options-border="1px solid black"
-                     --sms-font-size="13px" --sms-selected-li-padding="2px"
-                     bind:selected={$game} options={games} let:idx let:option name="game">
-          <GamesSlot {idx} {option}/>
-        </MultiSelect>
-      {/if}
-      {#if screenSize <= 500}
-        <MultiSelect --sms-width="39vw" --sms-text-color="black" --sms-bg="white" --sms-margin="auto"
-                     --sms-remove-btn-hover-color="red" --sms-font-size="16px" placeholder="Select Game(s)"
-                     --sms-border="1.5px solid black" --sms-options-border="1px solid black"
-                     --sms-selected-li-padding="2px"
-                     bind:value={$game} options={games} let:idx let:option name="game">
-          <GamesSlot {idx} {option}/>
-        </MultiSelect>
-
-      {/if}
+      <label for="games">Game(s):</label>
+      <MultiSelect id="games" --sms-width="50%" --sms-text-color="black" --sms-bg="white"
+                   --sms-remove-btn-hover-color="red" placeholder="Select Game(s)"
+                   --sms-border="2px solid black" --sms-options-border="1px solid black"
+                   --sms-font-size="12px" --sms-selected-li-padding="2px"
+                   bind:selected={$game} options={games} let:option name="game">
+        <GamesSlot {option}/>
+      </MultiSelect>
     </div>
 
 
     <!--Country-->
     <div class="filter-item">
-      <p>Country: </p>
-      <select name="country" disabled="{$useCurrentLocationSearch}" bind:value={$country}>
+      <label for="country">Country: </label>
+      <select class="input" id="country" name="country" disabled="{$useCurrentLocationSearch}" bind:value={$country}>
         <option disabled>---NORTH AMERICA---</option>
         <option selected value="US">USA</option>
         <option value="CA">Canada</option>
@@ -255,8 +239,8 @@
     <!--State-->
     {#if $country === 'US'}
       <div transition:fade={{duration: 250}} class="filter-item">
-        <p>State:</p>
-        <select name="state" disabled="{$useCurrentLocationSearch}" bind:value={$state}>
+        <label for="state">State:</label>
+        <select class="input" id="state" name="state" disabled="{$useCurrentLocationSearch}" bind:value={$state}>
           <option selected disabled>Choose State</option>
           <option value="AL">Alabama</option>
           <option value="AK">Alaska</option>
@@ -316,9 +300,9 @@
 
     <!--Using Current Location-->
     <div class="filter-item">
-      <p>Use Current Location:</p>
+      <label for="useCurrentLocation">Use Current Location:</label>
       <!-- reverse value of  useCurrentLocationSearch because on:input gets run b4 variable changes -->
-      <input name="useCurrentLocation" class="current-location-checkbox" type="checkbox"
+      <input id="useCurrentLocation" name="useCurrentLocation" class="current-location-checkbox input" type="checkbox"
              bind:checked={$useCurrentLocationSearch}
              on:input={() => !$useCurrentLocationSearch ? drawCircles() : removeCircles()}/>
 
@@ -327,8 +311,8 @@
     <!--Radius-->
     {#if $useCurrentLocationSearch}
       <div transition:fade={{duration: 150}} class="filter-item">
-        <p>Radius: </p>
-        <select name="radius" on:input={() => drawCircles()} bind:value={$radius}>x
+        <label for="radius">Radius: </label>
+        <select class="input" id="radius" name="radius" on:input={() => drawCircles()} bind:value={$radius}>x
           <option selected value="25">25 miles</option>
           <option value="50">50 miles</option>
           <option value="100">100 miles</option>
@@ -342,20 +326,20 @@
 
     <!--From Date-->
     <div class="filter-item">
-      <p> From: </p>
-      <input required name="startDate" min={minDate} bind:value={$startDate} type="date">
+      <label for="startDate"> From: </label>
+      <input class="input" required id="startDate" name="startDate" min={minDate} bind:value={$startDate} type="date">
     </div>
 
     <!--To Date-->
     <div class="filter-item">
-      <p> To: </p>
-      <input required name="endDate" min="{$startDate}" bind:value={$endDate} type="date">
+      <label for="endDate"> To: </label>
+      <input class="input" required id="endDate" name="endDate" min="{$startDate}" bind:value={$endDate} type="date">
     </div>
 
     <!--Attendees-->
-    <div class="filter-item attendees-filter">
-      <p>Attendees: </p>
-      <input required name="attendees" type="number" min="0" step="1" bind:value={$minAttendees}>
+    <div class="filter-item">
+      <label for="attendees">Attendees: </label>
+      <input class="input" required id="attendees" name="attendees" type="number" min="0" step="1" bind:value={$minAttendees}>
     </div>
 
     <button class="search-button" disabled={$loading}>Search</button>
@@ -363,16 +347,6 @@
 
 
   <div class="bottom">
-
-
-    <button class="search-button" disabled={$loading} on:click={() => {
-            $showSearchPlayer = true;
-            $showSearchTournament = false;
-            $useCurrentLocationSearch = false;
-            removeCircles();}}>
-      Player Search
-    </button>
-
     <p>{$loading ? "Loading..." : ""}</p>
 
     <p class="error">{form?.error ? form.error : ""}</p>
@@ -386,38 +360,45 @@
     <p class="error">{$tooManyRequestsError ? "You cannot search for more than 150 tournaments" : ""}</p>
 
     <p class="error">{$locationDeniedError ? "You must allow location access to use this feature" : ""}</p>
-
   </div>
 </aside>
 
 
 <style>
+  form {
+    width: 100%;
+  }
+
   aside {
-    overflow: visible;
-    overflow-x: scroll;
     font-family: "Kanit", serif;
     padding: 5px 0 5px 5px;
-    white-space: nowrap;
     justify-items: left;
     text-align: left;
   }
 
   .filter-item {
+    white-space: normal;
+    width: 100%;
     display: flex;
+    justify-content: space-between;
     margin-bottom: 5px;
+    gap: 5px;
   }
 
-  .filter-item select, .filter-item input {
-    margin-left: auto;
-    margin-right: 2vw;
+  .input {
     border-radius: 5px;
-    width: 10vw;
-    border: 1.5px solid black;
+    border: 2px solid black;
+    margin-right: 5px;
+    width: 50%;
   }
 
-  .filter-item p {
-    margin-block-start: 5px;
-    margin-block-end: 5px;
+  .current-location-checkbox {
+    width: 10%;
+  }
+
+  label {
+    margin-bottom: 5px;
+    margin-top: 5px;
   }
 
   .error {
@@ -425,48 +406,35 @@
     white-space: normal;
   }
 
-  .attendees-filter {
-    font-size: 16px;
-  }
 
   .bottom {
     display: block;
     white-space: normal;
   }
 
+  :global(div.multiselect) {
+    margin-right: 5px !important;
+  }
+
   :global(div.multiselect > ul.options > li) {
     border-bottom: 1px black solid;
   }
 
-  :global(div.multiselect) {
-    padding: 0;
-  }
-
   @media (max-width: 500px) {
-    .filter-item {
-      white-space: normal;
+
+    .input {
+      width: 70%;
     }
 
-    .filter-item select, .filter-item input {
-      width: 30vw;
-    }
-
-    .filter-item .current-location-checkbox {
-      width: 5vw;
+    .current-location-checkbox {
+      width: 10%;
     }
   }
 
   @media (min-width: 500px) and (max-width: 1000px) {
-    .filter-item {
-      white-space: normal;
-    }
 
-    .filter-item select, .filter-item input {
-      width: 20vw;
-    }
-
-    .filter-item .current-location-checkbox {
-      width: 5vw;
+    .current-location-checkbox {
+      width: 10%;
     }
   }
 </style>

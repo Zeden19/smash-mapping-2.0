@@ -1,6 +1,6 @@
 <script lang>
   export let option;
-  export let height = `16px`;
+  export let height =  `12px`;
 
   let hidden = false
 

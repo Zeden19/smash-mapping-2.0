@@ -225,14 +225,19 @@ export const actions = {
       const data = await getData(SEARCH_BY_GAMER_TAG, playerQuery, 0, true);
 
 
-      const playerData = data.map((player) => ({
-        gamerTag: player.gamerTag,
-        prefix: player.prefix,
-        slug: player.user.slug,
-        country: player.user.location?.country,
-        tournaments: createTournamentsArray(player.user.tournaments.nodes),
-        pfp: player.user.images[0]?.url ?? null
-      }));
+      const playerData = data.map((player) => {
+        if (!player.user) {
+          return null;
+        }
+       return {
+          gamerTag: player.gamerTag,
+          prefix: player.prefix,
+          slug: player.user.slug,
+          country: player.user.location?.country,
+          tournaments: createTournamentsArray(player.user.tournaments.nodes),
+          pfp: player.user.images[0]?.url ?? null
+        }
+      }).filter((player) => player !== null);
       console.log(playerData)
 
 
