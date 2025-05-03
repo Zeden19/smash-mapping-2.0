@@ -53,18 +53,18 @@ function getUnixTimes(startDate, endDate) {
 
 }
 
-function createTournamentsArray(tournamentsData, minAttendees) {
+function createTournamentsArray(tournamentsData, minAttendees, throwNoTournaments = true) {
   let tournamentsArray = [];
-  // // returning if no tournaments found
-  // if (tournamentsData.length === 0) {
-  //     throw new Error("No tournaments found");
-  // }
-  //
-  // // returning if too many tournaments found
-  // if (tournamentsData.length > 150) {
-  //     throw new Error("You cannot search for more than 150 tournaments. \n" +
-  //         "Tournaments found: " + tournamentsData.length);
-  // }
+  // returning if no tournaments found
+  if (tournamentsData.length === 0 && throwNoTournaments) {
+    throw new Error("No tournaments found");
+  }
+
+  // returning if too many tournaments found
+  if (tournamentsData.length > 300) {
+    throw new Error("You cannot search for more than 300 tournaments. \n" +
+      "Tournaments found: " + tournamentsData.length);
+  }
 
   // If attendees is not known, change the attendees to be unknown
   if (minAttendees !== 0) {
@@ -159,7 +159,7 @@ export const actions = {
         query = query.replace(/addrState: \$state,?/, "").replace(", $state: String", "");
       }
       const tournamentsData = await getData(query, variables, minAttendees);
-      const data = createTournamentsArray(tournamentsData, minAttendees);
+      const data = createTournamentsArray(tournamentsData, minAttendees, true);
       return {data};
 
     } catch (error) {
@@ -194,7 +194,7 @@ export const actions = {
         game: game.map(({id}) => id)
       }
       const tournamentsData = await getData(SEARCH_BY_LOCATION, variables, minAttendees);
-      const data = createTournamentsArray(tournamentsData, minAttendees);
+      const data = createTournamentsArray(tournamentsData, minAttendees, true);
       return {data: data};
 
     } catch (error) {
@@ -229,12 +229,12 @@ export const actions = {
         if (!player.user) {
           return null;
         }
-       return {
+        return {
           gamerTag: player.gamerTag,
           prefix: player.prefix,
           slug: player.user.slug,
           country: player.user.location?.country,
-          tournaments: createTournamentsArray(player.user.tournaments.nodes),
+          tournaments: createTournamentsArray(player.user.tournaments.nodes, 0, false),
           pfp: player.user.images[0]?.url ?? null
         }
       }).filter((player) => player !== null);

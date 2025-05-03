@@ -63,7 +63,12 @@
         <p>Searching...</p>
       {:else if $playerSearchResults && $playerSearchResults.length > 0}
         {#each $playerSearchResults as player, index}
-          <button on:click={() => {form.data = player.tournaments; $selectedPlayer = {player, index}}}
+          <button on:click={() => {
+            form.data = player.tournaments;
+            player.tournaments.length === 0 ? $noData = true : $noData = false;
+            $selectedPlayer = {player, index};
+
+          }}
                   class={`player ${$selectedPlayer?.index === index ? "selected" : ''}`}>
             {#if player.prefix}
               <p class="prefix">{player.prefix}
@@ -156,7 +161,9 @@
   }
 
   .search-results {
+    max-height: 30vh;
     overflow-y: scroll;
+
     width: 97%;
     background: white;
 

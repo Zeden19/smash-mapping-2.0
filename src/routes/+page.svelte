@@ -4,7 +4,6 @@
   import Help from "./map/Help.svelte"
   import TournamentsCard from "./map/TournamentsCard.svelte";
   import {onMount, onDestroy} from "svelte";
-  import Account from "./map/Account.svelte";
   import {loading, mapResult} from "./stores.js"
 
   export let data;
@@ -15,10 +14,8 @@
   let showFilters = true;
   let showTournaments = false;
   let showHelp = false;
-  let showAccount = false;
 
   let sidebarTitle = "Filters:";
-  let sidebarTitleHeight;
   let map;
 
   let showBookmarksDialog;
@@ -28,7 +25,6 @@
     showFilters = title === "Filters:";
     showTournaments = title === "Tournaments:";
     showHelp = title === "Help:";
-    showAccount = title === "Account:";
     sidebarTitle = title;
   }
 
@@ -40,8 +36,6 @@
       showBookmarksDialog.showModal();
       document.cookie = "visited=true; path=/";
     }
-
-    sidebarTitleHeight = document.getElementById("sidebar-title").offsetHeight;
   })
 
   onDestroy(() => {
@@ -95,10 +89,6 @@
     <button tabindex="0" class:sidebarSelected="{showTournaments}" on:click={() => showSidebar("Tournaments:")}>
       <img src="sidebar-icons/tournaments.png" style="width: 40px; height: 45px" alt="tournaments"></button>
 
-    <button tabindex="0" class:sidebarSelected="{showAccount}" on:click={() =>  showSidebar("Account:")}>
-      <img src="sidebar-icons/account.png" style="width: 40px; height: 40px" alt="accounts">
-    </button>
-
     <button class:sidebarSelected="{showHelp}" on:click={() =>  showSidebar("Help:")}>
       <img src="sidebar-icons/questionmark.png" style="width: 40px; height: 40px" alt="question mark">
     </button>
@@ -119,12 +109,8 @@
       <Search bind:form bind:data bind:map/>
     {/if}
 
-    {#if showTournaments && $mapResult !== undefined}
-      <TournamentsCard {sidebarTitleHeight} map={map}/>
-    {/if}
-
-    {#if showAccount}
-      <Account/>
+    {#if showTournaments}
+      <TournamentsCard map={map}/>
     {/if}
 
     {#if showHelp}
@@ -190,6 +176,7 @@
     overflow: hidden;
     height: 95vh;
     overflow-y: auto;
+    overscroll-behavior: auto;
   }
 
   a {

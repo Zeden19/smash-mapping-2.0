@@ -1,8 +1,7 @@
 <script>
+  import {slide} from "svelte/transition";
   import SearchPlayer from "./Search/SearchPlayer.svelte";
   import SearchTournaments from "./Search/SearchTournaments.svelte";
-  import {backOut} from "svelte/easing";
-  import {slide} from "svelte/transition";
   import {circles, showSearchPlayer, showSearchTournament, useCurrentLocationSearch} from "../stores";
 
   export let map;
@@ -16,8 +15,7 @@
   }
 </script>
 
-<div class="search-area" in:slide={{delay: 450, duration: 350, axis: 'x', easing: backOut}}
-     out:slide={{duration: 350, axis: 'x'}}>
+<div transition:slide class="search-area">
   <div class="tab-bar">
     <button class={`tab ${$showSearchTournament ? 'selected' : ''}`} on:click={() => {
       showSearchTournament.set(true);
