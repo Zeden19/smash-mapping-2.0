@@ -6,7 +6,9 @@ export const games = [{label: "Ultimate", id: "1386", src: "game-icons/ultimate.
   {label: "MK 1", id: "48599", src: "game-icons/MK1.png"},
   {label: "Tekken 8", id: "49783", src: "game-icons/tekken8.png"},
   {label: "SC VI", id: "904", src: "game-icons/SK6.png"},
-  {label: "Skullgirls", id: "32", src: "game-icons/skullgirls.png"}
+  {label: "Skullgirls", id: "32", src: "game-icons/skullgirls.png"},
+  {label: "Rivals 2", id: "53945", src: "game-icons/rivals2.png"},
+  {label: "DBFZ", id: "287", src: "game-icons/DBFZ.png"},
 
 ]
 

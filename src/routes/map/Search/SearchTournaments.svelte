@@ -208,37 +208,39 @@
 
 
     <!--Country-->
-    <div class="filter-item">
-      <label for="country">Country: </label>
-      <select class="input" id="country" name="country" disabled="{$useCurrentLocationSearch}" bind:value={$country}>
-        <option disabled>---NORTH AMERICA---</option>
-        <option selected value="US">USA</option>
-        <option value="CA">Canada</option>
-        <option value="MX">Mexico</option>
-        <option disabled>---EUROPE---</option>
-        <option value="ES">Spain</option>
-        <option value="GB">United Kingdom</option>
-        <option value="IE">Ireland</option>
-        <option value="FR">France</option>
-        <option value="NL">Netherlands</option>
-        <option value="DK">Denmark</option>
-        <option value="DE">Germany</option>
-        <option value="CH">Switzerland</option>
-        <option value="IT">Italy</option>
-        <option value="SE">Sweden</option>
-        <option value="NO">Norway</option>
-        <option value="FI">Finland</option>
-        <option disabled>---OTHER---</option>
-        <option value="JP">Japan</option>
-        <option value="CN">China</option>
-        <option value="AU">Australia</option>
-        <option value="BR">Brazil</option>
-      </select>
-    </div>
+    {#if !$useCurrentLocationSearch}
+      <div class="filter-item">
+        <label for="country">Country: </label>
+        <select class="input" id="country" name="country" disabled="{$useCurrentLocationSearch}" bind:value={$country}>
+          <option disabled>---NORTH AMERICA---</option>
+          <option selected value="US">USA</option>
+          <option value="CA">Canada</option>
+          <option value="MX">Mexico</option>
+          <option disabled>---EUROPE---</option>
+          <option value="ES">Spain</option>
+          <option value="GB">United Kingdom</option>
+          <option value="IE">Ireland</option>
+          <option value="FR">France</option>
+          <option value="NL">Netherlands</option>
+          <option value="DK">Denmark</option>
+          <option value="DE">Germany</option>
+          <option value="CH">Switzerland</option>
+          <option value="IT">Italy</option>
+          <option value="SE">Sweden</option>
+          <option value="NO">Norway</option>
+          <option value="FI">Finland</option>
+          <option disabled>---OTHER---</option>
+          <option value="JP">Japan</option>
+          <option value="CN">China</option>
+          <option value="AU">Australia</option>
+          <option value="BR">Brazil</option>
+        </select>
+      </div>
+    {/if}
 
     <!--State-->
-    {#if $country === 'US'}
-      <div transition:fade={{duration: 250}} class="filter-item">
+    {#if !$useCurrentLocationSearch && $country === 'US'}
+      <div class="filter-item">
         <label for="state">State:</label>
         <select class="input" id="state" name="state" disabled="{$useCurrentLocationSearch}" bind:value={$state}>
           <option selected disabled>Choose State</option>
@@ -310,7 +312,7 @@
 
     <!--Radius-->
     {#if $useCurrentLocationSearch}
-      <div transition:fade={{duration: 150}} class="filter-item">
+      <div class="filter-item">
         <label for="radius">Radius: </label>
         <select class="input" id="radius" name="radius" on:input={() => drawCircles()} bind:value={$radius}>x
           <option selected value="25">25 miles</option>
@@ -339,7 +341,8 @@
     <!--Attendees-->
     <div class="filter-item">
       <label for="attendees">Attendees: </label>
-      <input class="input" required id="attendees" name="attendees" type="number" min="0" step="1" bind:value={$minAttendees}>
+      <input class="input" required id="attendees" name="attendees" type="number" min="0" step="1"
+             bind:value={$minAttendees}>
     </div>
 
     <button class="search-button" disabled={$loading}>Search</button>
