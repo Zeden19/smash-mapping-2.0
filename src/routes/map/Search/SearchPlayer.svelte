@@ -66,10 +66,11 @@
           <button on:click={() => {
             form.data = player.tournaments;
             player.tournaments.length === 0 ? $noData = true : $noData = false;
-            $selectedPlayer = {player, index};
+            $selectedPlayer = {player, index};}} class={`player ${$selectedPlayer?.index === index ? "selected" : ''}`}>
 
-          }}
-                  class={`player ${$selectedPlayer?.index === index ? "selected" : ''}`}>
+            {#if player.tournaments.length > 0}
+              <img alt="player attending tournament" src="/checkmark.png" class="icons">
+            {/if}
             {#if player.prefix}
               <p class="prefix">{player.prefix}
             {/if}

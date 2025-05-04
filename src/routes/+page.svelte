@@ -1,6 +1,6 @@
 <script>
   import Map from "./map/Map.svelte";
-  import Search from "./map/Search.svelte";
+  import Search from "./map/Search/Search.svelte";
   import Help from "./map/Help.svelte"
   import TournamentsCard from "./map/TournamentsCard.svelte";
   import {onMount, onDestroy} from "svelte";

@@ -43,3 +43,96 @@ button:hover {
 button:disabled {
     background-color: grey;
 }
+
+/* Google Maps InfoWindow Styles*/
+
+.gm-style-iw-d {
+    overflow: hidden !important;
+}
+
+.gm-style-iw {
+    background: #1c1c1c !important;
+    color: white !important;
+    max-width: 400px !important;
+    padding-bottom: 20px !important;
+    padding-right: 20px !important;
+}
+
+/*Making X button white*/
+.gm-style-iw-chr > button > span {
+    background-color: white;
+}
+
+.info-window-header {
+    display: flex;
+    align-items: center;
+}
+
+.info-window-title {
+    margin-right: auto;
+    font-size: 1.5em;
+    font-family: "Bebas Neue", serif;
+    text-decoration: underline;
+    color: white;
+}
+
+.info-window-thumbnail {
+    width: 3em;
+    height: 3em;
+    margin-right: auto;
+}
+
+.info-window-content {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.info-window-data {
+    display: flex;
+    text-align: left;
+    align-items: center;
+    gap: 5px;
+    word-break: break-word; /* Allows words to break and wrap */
+    min-width: 0; /* Allows content to shrink below its minimum content size */
+}
+
+.info-window-data {
+    display: flex;
+    text-align: left;
+    align-items: center;
+    gap: 5px;
+    word-break: break-word;
+    min-width: 0;
+}
+
+.info-window-address {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.info-window-contact {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+.info-window-icons {
+    width: 2em;
+    height: 2em;
+}
+
+@media (max-width: 500px) {
+    .info-window-content {
+        grid-template-columns: 1fr;
+    }
+
+    .gm-style-iw {
+        max-width: 80vw !important;
+    }
+
+}

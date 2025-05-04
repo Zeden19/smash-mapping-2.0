@@ -197,7 +197,7 @@
     <!--Games-->
     <div class="filter-item">
       <label for="games">Game(s):</label>
-      <MultiSelect id="games" --sms-width="50%" --sms-text-color="black" --sms-bg="white"
+      <MultiSelect id="games" --sms-width="70%" --sms-text-color="black" --sms-bg="white"
                    --sms-remove-btn-hover-color="red" placeholder="Select Game(s)"
                    --sms-border="2px solid black" --sms-options-border="1px solid black"
                    --sms-font-size="12px" --sms-selected-li-padding="2px"

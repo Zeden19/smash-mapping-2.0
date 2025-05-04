@@ -25,9 +25,12 @@ export let SEARCH_BY_COUNTRY = 'query TournamentsByCountry($cCode: String!, $per
   '                  countryCode' +
   '                  lat' +
   '                  lng' +
-  '                   images(type: "profile") {' +
-  '                      url' +
-  '                   }' +
+  '                  thumbnail: images(type: "profile") {' +
+  '                    url' +
+  '                  }' +
+  '                  banner: images(type: "banner") {' +
+  '                    url' +
+  '                  }' +
   '                }' +
   '              }' +
   '            }';
@@ -48,45 +51,16 @@ export let SEARCH_BY_LOCATION = 'query TournamentsByLocation($coordinates: Strin
   '                  countryCode' +
   '                  lat' +
   '                  lng' +
-  '                  images(type: "profile") {' +
+  '                  thumbnail: images(type: "profile") {' +
+  '                    url' +
+  '                  }' +
+  '                  banner: images(type: "banner") {' +
   '                    url' +
   '                  }' +
   '                }' +
   '              }' +
   '            }' +
   '            ';
-
-export const GET_PLAYER_DATA = `query PlayerSearch($id: ID!) {
-  player(id: $id) {
-    gamerTag
-    prefix
-    user {
-      slug
-      location {
-        country
-      }
-      tournaments(query: {filter: {upcoming: true}}) {
-        nodes {
-          name
-          venueAddress
-          startAt
-          primaryContact
-          url
-          numAttendees
-          state
-          isOnline
-          countryCode
-          lat
-          lng
-          images(type: "profile") {
-            url
-          }
-        }
-      }
-    }
-  }
-}
-`;
 
 export const SEARCH_BY_GAMER_TAG = `query SearchByGamerTag($search: PlayerQuery!) {
   players(query: $search) {
@@ -118,7 +92,10 @@ export const SEARCH_BY_GAMER_TAG = `query SearchByGamerTag($search: PlayerQuery!
             countryCode
             lat
             lng
-            images(type: "profile") {
+            banner: images(type: "banner") {
+              url
+            }
+        thumbnail: images(type: "profile") {
               url
             }
           }

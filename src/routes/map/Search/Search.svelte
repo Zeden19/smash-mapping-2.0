@@ -1,8 +1,8 @@
 <script>
   import {slide} from "svelte/transition";
-  import SearchPlayer from "./Search/SearchPlayer.svelte";
-  import SearchTournaments from "./Search/SearchTournaments.svelte";
-  import {circles, showSearchPlayer, showSearchTournament, useCurrentLocationSearch} from "../stores";
+  import SearchPlayer from "./SearchPlayer.svelte";
+  import SearchTournaments from "./SearchTournaments.svelte";
+  import {circles, showSearchPlayer, showSearchTournament, useCurrentLocationSearch} from "../../stores.js";
 
   export let map;
   export let form;

@@ -111,7 +111,8 @@ function createTournamentsArray(tournamentsData, minAttendees, throwNoTournament
           startAt: tournament.startAt,
           numAttendees: tournament.numAttendees,
           state: tournament.state,
-          image: tournament.images[0] ? tournament.images[0].url : "/trophy.png",
+          thumbnail: tournament.thumbnail[0] ? tournament.thumbnail[0].url : "/trophy.png",
+          banner: tournament.banner[0] ? tournament.banner[0].url : null,
         });
     }
   }
