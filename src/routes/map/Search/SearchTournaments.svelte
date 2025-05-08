@@ -2,25 +2,24 @@
   import {onMount} from "svelte";
   import {enhance} from "\$app/forms";
   import MultiSelect from 'svelte-multiselect'
-  import {fade} from 'svelte/transition';
   import {blur} from "svelte/transition";
   import GamesSlot from "./GamesSlot.svelte";
   import {
-    startDate,
-    endDate,
+    circles,
     country,
+    endDate,
     errorMessage,
-    minAttendees,
-    state,
     game,
     loading,
-    noData,
-    tooManyRequestsError,
     locationDeniedError,
-    useCurrentLocationSearch,
-    circles,
+    minAttendees,
+    noData,
     radius,
-    selectedPlayer
+    selectedPlayer,
+    startDate,
+    state,
+    tooManyRequestsError,
+    useCurrentLocationSearch
   } from "../../stores.js";
   import {games} from "$lib/vars.js";
 

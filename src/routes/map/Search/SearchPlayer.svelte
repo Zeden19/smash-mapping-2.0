@@ -35,8 +35,6 @@
   }
 </script>
 
-<svelte:window bind:innerWidth={screenSize}/>
-
 <aside in:blur={{duration: 300}}>
 
   <div class="search">

@@ -18,6 +18,7 @@ export const locationDeniedError = writable(false)
 // player or country or location search
 export const showSearchPlayer = writable(false);
 export const showSearchTournament = writable(true);
+export const showSearchName = writable(false);
 export const useCurrentLocationSearch = writable(false);
 
 // Search variables

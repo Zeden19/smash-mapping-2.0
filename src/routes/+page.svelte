@@ -106,7 +106,7 @@
     </div>
 
     {#if showFilters}
-      <Search bind:form bind:data bind:map/>
+      <Search bind:form bind:map/>
     {/if}
 
     {#if showTournaments}
